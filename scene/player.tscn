@@ -1,28 +1,90 @@
 [gd_scene format=3 uid="uid://ctb4uxuqmkdxu"]
 
-[ext_resource type="Script" uid="uid://b5dtuq0mt5601" path="res://scripts/player.gd" id="1_xo3ru"]
+[ext_resource type="Script" uid="uid://b5dtuq0mt5601" path="res://scripts/entities/player.gd" id="1_xo3ru"]
+[ext_resource type="Texture2D" uid="uid://dfnkws4a3gvu6" path="res://resources/texture/W.png" id="2_hjaqi"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_hjaqi"]
+atlas = ExtResource("2_hjaqi")
+region = Rect2(0, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_fvtld"]
+atlas = ExtResource("2_hjaqi")
+region = Rect2(32, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ct4mp"]
+atlas = ExtResource("2_hjaqi")
+region = Rect2(64, 128, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_s4jxa"]
+atlas = ExtResource("2_hjaqi")
+region = Rect2(96, 128, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_esmnr"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_hjaqi")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_fvtld")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ct4mp")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_s4jxa")
+}],
+"loop": 1,
+"name": &"default",
+"speed": 5.0
+}]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_pitpm"]
-radius = 6.0
-height = 18.0
+radius = 7.0
+height = 16.0
 
-[sub_resource type="SpriteFrames" id="SpriteFrames_pitpm"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_esmnr"]
+size = Vector2(12, 12)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_hjaqi"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_fvtld"]
 
 [node name="Player" type="CharacterBody2D" unique_id=1163828062]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_xo3ru")
 
+[node name="BodySprite" type="AnimatedSprite2D" parent="." unique_id=141420357]
+sprite_frames = SubResource("SpriteFrames_esmnr")
+
+[node name="ArmedEffectSprite" type="AnimatedSprite2D" parent="BodySprite" unique_id=933674165]
+
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=992027451]
+position = Vector2(0, 1)
 shape = SubResource("CapsuleShape2D_pitpm")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=141420357]
-sprite_frames = SubResource("SpriteFrames_pitpm")
-
-[node name="ArmedEffectSprite" type="AnimatedSprite2D" parent="AnimatedSprite2D" unique_id=933674165]
-
 [node name="Hurtbox" type="Area2D" parent="." unique_id=1297205060]
+collision_layer = 4
+collision_mask = 0
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hurtbox" unique_id=1252179522]
+shape = SubResource("RectangleShape2D_esmnr")
 
 [node name="PickupArea" type="Area2D" parent="." unique_id=1702239798]
+collision_layer = 0
+collision_mask = 16
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="PickupArea" unique_id=661733622]
+rotation = -1.5739113
+shape = SubResource("CircleShape2D_hjaqi")
 
 [node name="InteractionArea" type="Area2D" parent="." unique_id=447168970]
+collision_layer = 0
+collision_mask = 32
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="InteractionArea" unique_id=1218515278]
+rotation = -1.5739113
+shape = SubResource("CircleShape2D_fvtld")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=2033085836]
