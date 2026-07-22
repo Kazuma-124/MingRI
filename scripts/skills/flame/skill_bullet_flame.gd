@@ -1,0 +1,2 @@
+extends SkillLogicBase
+class_name SkillBulletFlame

@@ -7,7 +7,6 @@ class_name Player
 # ==================== 状态变量 ====================
 enum MoveState { IDLE, MOVE }
 var move_state: MoveState = MoveState.IDLE
-
 var facing_suffix: StringName = &"down"  # 朝向后缀：up/down/left/right
 
 # ==================== 节点引用 ====================

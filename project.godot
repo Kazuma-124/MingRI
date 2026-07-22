@@ -18,6 +18,14 @@ config/icon="res://icon.svg"
 [autoload]
 
 EventBus="*uid://drlb1x8jdfncy"
+UiManager="*uid://b8bgmjjwca7q2"
+BattleManager="*uid://bsdfi5lp8nrv4"
+GameManager="*uid://cnauhakl6oepo"
+RoomManager="*uid://dbt4dvyih0of8"
+BuffSystem="*uid://dqrf06i3anw8k"
+EnergySystem="*uid://gm5bis1d4v7l"
+ForgeSystem="*uid://bnl828725y0qr"
+InventorySystem="*uid://6vi2a5ic61jx"
 SkillSystem="*uid://cetbqwvams68v"
 
 [display]
