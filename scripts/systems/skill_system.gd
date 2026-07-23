@@ -51,8 +51,9 @@ func execute_skill(skill_id: String, caster: EntityBase) -> bool:
         skill_cast_failed.emit(skill_id, caster, "条件不满足")
         return false
     
-    # 3. 扣能量，扣指定角色，指定属性，指定技能需求的能量
-    EnergySystem.consume_energy(caster, data.element, data.energy_cost)
+    if not data.custom_energy_cost:
+        # 3. 扣能量，扣指定角色，指定属性，指定技能需求的能量
+        EnergySystem.consume_energy(caster, data.element, data.energy_cost)
     
     # 4. 调用对应技能逻辑执行效果，技能不存在就返回null
     var logic = _skill_logic_cache.get(skill_id, null)

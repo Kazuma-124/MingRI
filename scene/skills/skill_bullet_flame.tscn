@@ -1,0 +1,22 @@
+[gd_scene format=3 uid="uid://c2daae2cqcabr"]
+
+[ext_resource type="Script" uid="uid://d2bp2a5wjxnek" path="res://scripts/skills/flame/bullet_flame.gd" id="1_o7emy"]
+[ext_resource type="Texture2D" uid="uid://ca65d27crgaol" path="res://resources/texture/道具ui.png" id="1_o7h4w"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1hgbr"]
+atlas = ExtResource("1_o7h4w")
+region = Rect2(22, 23, 4, 4)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pitpm"]
+radius = 2.0
+
+[node name="SkillBulletFlame" type="Area2D" unique_id=242286006]
+collision_layer = 8
+collision_mask = 4
+script = ExtResource("1_o7emy")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1268714832]
+texture = SubResource("AtlasTexture_1hgbr")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1371132241]
+shape = SubResource("CircleShape2D_pitpm")
