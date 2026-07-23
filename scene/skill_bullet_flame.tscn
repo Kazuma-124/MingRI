@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://d3jcja4881vpl"]
 
-[ext_resource type="Script" uid="uid://ccaiamqd65yhi" path="res://scene/bullet_flame.gd" id="1_c6meu"]
+[ext_resource type="Script" uid="uid://ccaiamqd65yhi" path="res://scene/skill_bullet_flame.gd" id="1_c6meu"]
 [ext_resource type="Texture2D" uid="uid://du81o81hnwmse" path="res://resources/texture/爆炸特效.png" id="2_c6meu"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4slac"]
@@ -19,9 +19,10 @@ radius = 6.0
 
 [node name="BulletFlame" type="Area2D" unique_id=1686347967]
 collision_layer = 0
+collision_mask = 3
 script = ExtResource("1_c6meu")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=854789447]
+[node name="BulletSprite" type="Sprite2D" parent="." unique_id=854789447]
 position = Vector2(-3.5527137e-15, 0)
 scale = Vector2(0.21276861, 0.221398)
 texture = SubResource("AtlasTexture_4slac")
@@ -30,12 +31,16 @@ texture = SubResource("AtlasTexture_4slac")
 shape = SubResource("CircleShape2D_c6meu")
 
 [node name="ExplosionArea" type="Area2D" parent="." unique_id=661201115]
+collision_layer = 8
+collision_mask = 4
+monitoring = false
+monitorable = false
 
-[node name="Sprite2D" type="Sprite2D" parent="ExplosionArea" unique_id=885541508]
+[node name="ExplosionSprite" type="Sprite2D" parent="ExplosionArea" unique_id=885541508]
 visible = false
 position = Vector2(-9.536743e-07, -9.536743e-07)
 scale = Vector2(0.4, 0.4)
 texture = SubResource("AtlasTexture_c6meu")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea" unique_id=1085324955]
+[node name="ExplosionCollisionShape" type="CollisionShape2D" parent="ExplosionArea" unique_id=1085324955]
 shape = SubResource("CircleShape2D_pitpm")

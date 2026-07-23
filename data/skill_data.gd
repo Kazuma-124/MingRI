@@ -11,7 +11,7 @@ class_name SkillData
 @export var cast_range:float
 
 
-
+@export var duration_time:float
 
 # ==================== 投射物专属 ====================
 @export_group("投射物专属")

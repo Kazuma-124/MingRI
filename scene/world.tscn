@@ -2,8 +2,8 @@
 
 [ext_resource type="Texture2D" uid="uid://dcl3t0epf8ajx" path="res://resources/texture/瓦片.png" id="1_txmk2"]
 [ext_resource type="Texture2D" uid="uid://d252dkt0lm3n4" path="res://resources/texture/动态瓦片.png" id="2_w4qq1"]
-[ext_resource type="Texture2D" uid="uid://0yn4bhxgu4pw" path="res://resources/kenney_tiny-town/Tilemap/tilemap_packed.png" id="3_m5mgf"]
-[ext_resource type="Texture2D" uid="uid://yv74upb5g2ep" path="res://resources/kenney_tiny-battle/Tilemap/tilemap_packed.png" id="4_emkrx"]
+[ext_resource type="Texture2D" uid="uid://x56qg34bw6l8" path="res://resources/texture/tilemap_packed.png" id="3_m5mgf"]
+[ext_resource type="Texture2D" uid="uid://c6i5xyosmnejl" path="res://resources/texture/aaa.png" id="4_emkrx"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_m5mgf"]
 texture = ExtResource("1_txmk2")

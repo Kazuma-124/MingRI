@@ -1,14 +1,14 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://c4bjohp4xlpy5"]
 
-[ext_resource type="Script" uid="uid://b4ng7uinnlfag" path="res://data/skill_data.gd" id="1_adfl0"]
-[ext_resource type="PackedScene" uid="uid://d3jcja4881vpl" path="res://scene/skill_bullet_flame.tscn" id="1_hwl05"]
+[ext_resource type="Script" uid="uid://b4ng7uinnlfag" path="res://data/skill_data.gd" id="1_hwrvf"]
 
 [resource]
-script = ExtResource("1_adfl0")
+script = ExtResource("1_hwrvf")
 id = &"bullet_flame"
 name = "火弹"
 damage = 10.0
 cooldown = 0.5
-cast_range = 600.0
-effect_scene = ExtResource("1_hwl05")
+cast_range = 2000.0
+duration_time = 0.3
+damage_range = 6.0
 metadata/_custom_type_script = "uid://b4ng7uinnlfag"

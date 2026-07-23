@@ -1,6 +1,8 @@
 extends CharacterBody2D
 
 @export var speed:float = 120.0
+@export var max_hp:float = 100.0
+var _cur_hp:float
 
 @onready var body_sprite: AnimatedSprite2D = $BodySprite
 @onready var weapon_pivot: Node2D = $WeaponPivot
@@ -12,6 +14,7 @@ var _mouse_dir:Vector2
 var _move_dir:Vector2
 
 func _ready() -> void:
+    _cur_hp = max_hp
     _update_player_status()
     _update_animation()
 
@@ -21,8 +24,17 @@ func _physics_process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("attack_primary"):
-        
+        _shoot()
 
+func _shoot():
+    var bullet = SkillBulletFlameScene.instantiate()
+    bullet.set_direction(_mouse_dir)
+    get_parent().add_child(bullet)
+    bullet.global_position = global_position+_mouse_dir*20
+        
+func take_damage(damage:float):
+    _cur_hp-=damage
+    
 
 func _update_player_status():
     # 玩家鼠标方向，决定动画朝向和武器指向
