@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://cv2ga1mqi4l41"]
 
 [ext_resource type="Texture2D" uid="uid://ca65d27crgaol" path="res://resources/texture/道具ui.png" id="1_6j3fn"]
-[ext_resource type="Script" uid="uid://bh486rkd6ckna" path="res://scripts/data/skill_data.gd" id="1_hwrvf"]
-[ext_resource type="PackedScene" uid="uid://c2daae2cqcabr" path="res://scene/skills/skill_bullet_flame.tscn" id="1_she6i"]
+[ext_resource type="Script" uid="uid://bh486rkd6ckna" path="res://old/scripts/data/skill_data.gd" id="1_hwrvf"]
+[ext_resource type="PackedScene" uid="uid://c2daae2cqcabr" path="res://old/scene/skills/skill_bullet_flame.tscn" id="1_she6i"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_hwrvf"]
 atlas = ExtResource("1_6j3fn")

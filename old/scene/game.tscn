@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://borec3gdywsfp"]
 
-[ext_resource type="PackedScene" uid="uid://ctb4uxuqmkdxu" path="res://scene/entities/player.tscn" id="1_5kiuu"]
+[ext_resource type="PackedScene" uid="uid://ctb4uxuqmkdxu" path="res://old/scene/entities/player.tscn" id="1_5kiuu"]
 
 [node name="Game" type="Node2D" unique_id=322379414]
 
