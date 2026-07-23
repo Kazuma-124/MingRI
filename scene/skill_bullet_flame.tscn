@@ -1,0 +1,41 @@
+[gd_scene format=3 uid="uid://d3jcja4881vpl"]
+
+[ext_resource type="Script" uid="uid://ccaiamqd65yhi" path="res://scene/bullet_flame.gd" id="1_c6meu"]
+[ext_resource type="Texture2D" uid="uid://du81o81hnwmse" path="res://resources/texture/爆炸特效.png" id="2_c6meu"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_4slac"]
+atlas = ExtResource("2_c6meu")
+region = Rect2(103, 11, 32, 26)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_c6meu"]
+radius = 3.0
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6meu"]
+atlas = ExtResource("2_c6meu")
+region = Rect2(150, 7, 34, 32)
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_pitpm"]
+radius = 6.0
+
+[node name="BulletFlame" type="Area2D" unique_id=1686347967]
+collision_layer = 0
+script = ExtResource("1_c6meu")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=854789447]
+position = Vector2(-3.5527137e-15, 0)
+scale = Vector2(0.21276861, 0.221398)
+texture = SubResource("AtlasTexture_4slac")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1377735035]
+shape = SubResource("CircleShape2D_c6meu")
+
+[node name="ExplosionArea" type="Area2D" parent="." unique_id=661201115]
+
+[node name="Sprite2D" type="Sprite2D" parent="ExplosionArea" unique_id=885541508]
+visible = false
+position = Vector2(-9.536743e-07, -9.536743e-07)
+scale = Vector2(0.4, 0.4)
+texture = SubResource("AtlasTexture_c6meu")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="ExplosionArea" unique_id=1085324955]
+shape = SubResource("CircleShape2D_pitpm")
