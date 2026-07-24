@@ -30,10 +30,11 @@ func _shoot():
     var bullet = SkillBulletFlameScene.instantiate()
     bullet.set_direction(_mouse_dir)
     get_parent().add_child(bullet)
-    bullet.global_position = global_position+_mouse_dir*20
+    bullet.global_position = global_position+_mouse_dir*8
         
 func take_damage(damage:float):
     _cur_hp-=damage
+    print_debug("玩家血量：",_cur_hp)
     
 
 func _update_player_status():

@@ -8,14 +8,14 @@ atlas = ExtResource("2_c6meu")
 region = Rect2(103, 11, 32, 26)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c6meu"]
-radius = 3.0
+radius = 2.236068
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_c6meu"]
 atlas = ExtResource("2_c6meu")
 region = Rect2(150, 7, 34, 32)
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pitpm"]
-radius = 6.0
+radius = 2386.047
 
 [node name="BulletFlame" type="Area2D" unique_id=1686347967]
 collision_layer = 0
@@ -31,10 +31,8 @@ texture = SubResource("AtlasTexture_4slac")
 shape = SubResource("CircleShape2D_c6meu")
 
 [node name="ExplosionArea" type="Area2D" parent="." unique_id=661201115]
-collision_layer = 8
-collision_mask = 4
-monitoring = false
-monitorable = false
+collision_layer = 0
+collision_mask = 6
 
 [node name="ExplosionSprite" type="Sprite2D" parent="ExplosionArea" unique_id=885541508]
 visible = false

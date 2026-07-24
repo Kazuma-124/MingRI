@@ -10,5 +10,5 @@ damage = 10.0
 cooldown = 0.5
 cast_range = 2000.0
 duration_time = 0.3
-damage_range = 6.0
+damage_range = 600.0
 metadata/_custom_type_script = "uid://b4ng7uinnlfag"

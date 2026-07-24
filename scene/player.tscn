@@ -223,13 +223,12 @@ animation = &"idle_up"
 [node name="WeaponPivot" type="Node2D" parent="." unique_id=1547626547]
 
 [node name="WeaponSprite" type="Sprite2D" parent="WeaponPivot" unique_id=243604181]
+visible = false
 position = Vector2(17, 0)
 texture = ExtResource("2_hjaqi")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=915760582]
-visible = false
 shape = SubResource("CapsuleShape2D_xo3ru")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=567032642]
-visible = false
 zoom = Vector2(2, 2)

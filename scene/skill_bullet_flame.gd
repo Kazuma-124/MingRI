@@ -47,11 +47,16 @@ func _explode()->void:
     # get_tree()返回当前游戏的场景树实例(全局游戏的根节点)
     # ，process_frame,SceneTree的一个信号，每一帧渲染开始前都会发射一次
     # await暂停当前函数的执行，等后面的信号/计时器触发了再回来继续执行
-    await get_tree().process_frame
+    await get_tree().physics_frame
+    await get_tree().physics_frame
 
+    print_debug("爆炸范围：",explosion_collision_shape.shape.radius)
+    print_debug("爆炸地点",global_position)
     # 伤害爆炸范围内的可受伤对象
     for body in explosion_area.get_overlapping_bodies():
+        print_debug("获得可攻击body")
         if body.has_method("take_damage"):
+            print_debug("take_damage")
             body.take_damage(data.damage)    
     
     var duration:float = data.get("duration_time")
