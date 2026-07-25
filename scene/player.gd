@@ -3,27 +3,29 @@ extends CharacterBody2D
 signal hp_changed(new_hp: float, max_hp: float)
 signal mp_changed(new_mp:float,max_mp:float)
 
-@export var speed:float = 120.0
-@export var max_hp:float = 100.0
-@export var max_mp:float = 100.0
-@export var hp_regen_per_second: float = 2.0
-
-var _cur_hp:float
-var _cur_mp:float
-
-@onready var body_sprite: AnimatedSprite2D = $BodySprite
-@onready var weapon_pivot: Node2D = $WeaponPivot
-
 # ===== 技能
 # 普攻火焰弹场景
 const SkillBUlletFlameData = preload("res://data/skills/skill_bullet_flame.tres")
 const SkillBulletFlameScene = preload("res://scene/skill_bullet_flame.tscn")
+
+
+@export var speed:float = 120.0
+@export var max_hp:float = 100.0
+@export var max_mp:float = 100.0
+@export var hp_regen_per_second: float = 2.0
+@export var mp_regen_per_second: float = 5.0
+
+var _cur_hp:float
+var _cur_mp:float
 # 普攻技能槽
 var _skill_primary:SkillSlot
-
 # ====== 玩家状态
 var _mouse_dir:Vector2
 var _move_dir:Vector2
+
+@onready var body_sprite: AnimatedSprite2D = $BodySprite
+@onready var weapon_pivot: Node2D = $WeaponPivot
+
 
 func _ready() -> void:
     # 血量
@@ -32,14 +34,14 @@ func _ready() -> void:
     emit_update_hp()
     emit_update_mp()
     # 技能
-    _skill_primary = SkillSlot.new(SkillBUlletFlameData,SkillBulletFlameScene)
+    _skill_primary = SkillSlot.new(SkillBUlletFlameData,SkillBulletFlameScene,self)
     _update_dir_status()
     _update_animation()
 
 func _physics_process(delta: float) -> void:
     _update_dir_status()
     _update_skill_status(delta)
-    _update_hp_regen(delta)
+    _update_hp_and_mp_regen(delta)
     _update_animation()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -50,6 +52,11 @@ func _unhandled_input(event: InputEvent) -> void:
 func emit_update_hp():
     hp_changed.emit(_cur_hp,max_hp)
 func emit_update_mp():
+    mp_changed.emit(_cur_mp,max_mp)
+func get_mp()->float:
+    return _cur_mp
+func cost_mp(mp_cost:float):
+    _cur_mp-=mp_cost
     mp_changed.emit(_cur_mp,max_mp)
 func take_damage(damage: float) -> void:
     _cur_hp -= damage
@@ -82,13 +89,19 @@ func _update_dir_status():
 func _update_skill_status(delta:float)->void:
     _skill_primary.update(delta)
 
-func _update_hp_regen(delta: float) -> void:
+func _update_hp_and_mp_regen(delta: float) -> void:
     if _cur_hp < max_hp:
         _cur_hp += hp_regen_per_second * delta
         # 不能超过最大血量
         if _cur_hp > max_hp:
             _cur_hp = max_hp
         hp_changed.emit(_cur_hp,max_hp)
+    if _cur_mp < max_mp:
+        _cur_mp += mp_regen_per_second * delta
+        # 不能超过最大血量
+        if _cur_mp > max_mp:
+            _cur_mp = max_mp
+        mp_changed.emit(_cur_mp,max_mp)
 
 # ======= 动画
 func _update_animation():

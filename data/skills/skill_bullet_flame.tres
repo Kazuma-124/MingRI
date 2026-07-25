@@ -9,5 +9,6 @@ name = "火弹"
 damage = 10.0
 cooldown = 0.3
 cast_range = 250.0
+flame_mp_cost = 5.0
 fly_speed = 500.0
 metadata/_custom_type_script = "uid://b4ng7uinnlfag"

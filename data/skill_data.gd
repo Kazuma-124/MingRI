@@ -9,6 +9,7 @@ class_name SkillData
 @export var damage:float
 @export var cooldown:float
 @export var cast_range:float
+@export var flame_mp_cost:float
 
 # ==================== 投射物专属 ====================
 @export_group("投射物专属")
