@@ -10,16 +10,14 @@ class_name SkillData
 @export var cooldown:float
 @export var cast_range:float
 
-
-@export var duration_time:float
-
 # ==================== 投射物专属 ====================
 @export_group("投射物专属")
 @export var fly_speed: float = 400.0
 
-# ==================== 资源关联 ====================
-@export_group("资源关联")
-#@export var effect_scene: PackedScene
 
-@export_group("范围伤害")
-@export var damage_range:float
+@export_group("bullet_flame")
+@export var damage_range:float = 20 # 伤害范围，直径
+@export_subgroup("子弹动画配置")
+@export var anime_duration_time:float = 0.3
+@export var bullet_diameter:float = 4.0 # 子弹直径（像素）
+@export var explosion_diameter:float = 20.0 # 爆炸特效直径（像素）

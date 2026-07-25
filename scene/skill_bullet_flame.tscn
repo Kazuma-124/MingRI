@@ -7,15 +7,12 @@
 atlas = ExtResource("2_c6meu")
 region = Rect2(103, 11, 32, 26)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_c6meu"]
-radius = 2.236068
-
 [sub_resource type="AtlasTexture" id="AtlasTexture_c6meu"]
 atlas = ExtResource("2_c6meu")
 region = Rect2(150, 7, 34, 32)
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_pitpm"]
-radius = 2386.047
+[sub_resource type="CircleShape2D" id="CircleShape2D_c6meu"]
+radius = 2.0
 
 [node name="BulletFlame" type="Area2D" unique_id=1686347967]
 collision_layer = 0
@@ -23,22 +20,15 @@ collision_mask = 3
 script = ExtResource("1_c6meu")
 
 [node name="BulletSprite" type="Sprite2D" parent="." unique_id=854789447]
-position = Vector2(-3.5527137e-15, 0)
-scale = Vector2(0.21276861, 0.221398)
+position = Vector2(0, -9.536743e-07)
+scale = Vector2(0.15, 0.15)
 texture = SubResource("AtlasTexture_4slac")
+
+[node name="ExplosionSprite" type="Sprite2D" parent="." unique_id=885541508]
+visible = false
+position = Vector2(-9.536743e-07, -9.536743e-07)
+scale = Vector2(0.465, 0.465)
+texture = SubResource("AtlasTexture_c6meu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1377735035]
 shape = SubResource("CircleShape2D_c6meu")
-
-[node name="ExplosionArea" type="Area2D" parent="." unique_id=661201115]
-collision_layer = 0
-collision_mask = 6
-
-[node name="ExplosionSprite" type="Sprite2D" parent="ExplosionArea" unique_id=885541508]
-visible = false
-position = Vector2(-9.536743e-07, -9.536743e-07)
-scale = Vector2(0.4, 0.4)
-texture = SubResource("AtlasTexture_c6meu")
-
-[node name="ExplosionCollisionShape" type="CollisionShape2D" parent="ExplosionArea" unique_id=1085324955]
-shape = SubResource("CircleShape2D_pitpm")

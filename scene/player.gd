@@ -1,43 +1,72 @@
 extends CharacterBody2D
 
+signal hp_changed(new_hp: float, max_hp: float)
+signal mp_changed(new_mp:float,max_mp:float)
+
 @export var speed:float = 120.0
 @export var max_hp:float = 100.0
+@export var max_mp:float = 100.0
+@export var hp_regen_per_second: float = 2.0
+
 var _cur_hp:float
+var _cur_mp:float
 
 @onready var body_sprite: AnimatedSprite2D = $BodySprite
 @onready var weapon_pivot: Node2D = $WeaponPivot
 
+# ===== 技能
+# 普攻火焰弹场景
+const SkillBUlletFlameData = preload("res://data/skills/skill_bullet_flame.tres")
 const SkillBulletFlameScene = preload("res://scene/skill_bullet_flame.tscn")
+# 普攻技能槽
+var _skill_primary:SkillSlot
 
 # ====== 玩家状态
 var _mouse_dir:Vector2
 var _move_dir:Vector2
 
 func _ready() -> void:
+    # 血量
     _cur_hp = max_hp
-    _update_player_status()
+    _cur_mp = max_mp
+    emit_update_hp()
+    emit_update_mp()
+    # 技能
+    _skill_primary = SkillSlot.new(SkillBUlletFlameData,SkillBulletFlameScene)
+    _update_dir_status()
     _update_animation()
 
 func _physics_process(delta: float) -> void:
-    _update_player_status()
+    _update_dir_status()
+    _update_skill_status(delta)
+    _update_hp_regen(delta)
     _update_animation()
 
 func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("attack_primary"):
         _shoot()
 
+
+func emit_update_hp():
+    hp_changed.emit(_cur_hp,max_hp)
+func emit_update_mp():
+    mp_changed.emit(_cur_mp,max_mp)
+func take_damage(damage: float) -> void:
+    _cur_hp -= damage
+    hp_changed.emit(_cur_hp, max_hp) # 血量变了就发信号
+    print_debug("玩家血量：",_cur_hp)
+
+
 func _shoot():
-    var bullet = SkillBulletFlameScene.instantiate()
+    var bullet = _skill_primary.cast(self)
+    if bullet==null:
+        return
+    bullet.global_position = global_position+_mouse_dir*10
     bullet.set_direction(_mouse_dir)
     get_parent().add_child(bullet)
-    bullet.global_position = global_position+_mouse_dir*8
-        
-func take_damage(damage:float):
-    _cur_hp-=damage
-    print_debug("玩家血量：",_cur_hp)
     
 
-func _update_player_status():
+func _update_dir_status():
     # 玩家鼠标方向，决定动画朝向和武器指向
     _mouse_dir = get_global_mouse_position()-global_position
     if _mouse_dir!=Vector2.ZERO:
@@ -49,6 +78,19 @@ func _update_player_status():
     velocity = _move_dir * speed
     move_and_slide()
     
+
+func _update_skill_status(delta:float)->void:
+    _skill_primary.update(delta)
+
+func _update_hp_regen(delta: float) -> void:
+    if _cur_hp < max_hp:
+        _cur_hp += hp_regen_per_second * delta
+        # 不能超过最大血量
+        if _cur_hp > max_hp:
+            _cur_hp = max_hp
+        hp_changed.emit(_cur_hp,max_hp)
+
+# ======= 动画
 func _update_animation():
     _update_body_animation()
     _update_weapon_animation()

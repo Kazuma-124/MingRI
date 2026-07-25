@@ -223,7 +223,6 @@ animation = &"idle_up"
 [node name="WeaponPivot" type="Node2D" parent="." unique_id=1547626547]
 
 [node name="WeaponSprite" type="Sprite2D" parent="WeaponPivot" unique_id=243604181]
-visible = false
 position = Vector2(17, 0)
 texture = ExtResource("2_hjaqi")
 
