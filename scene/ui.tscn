@@ -3,6 +3,9 @@
 [ext_resource type="Script" uid="uid://dcgfmrud6lbrg" path="res://scene/ui.gd" id="1_kee8w"]
 [ext_resource type="Texture2D" uid="uid://cx0ednpe68lrm" path="res://resources/texture/icon.png" id="1_onfsl"]
 [ext_resource type="Script" uid="uid://t3gtb7f8kwfk" path="res://scene/hp_and_mp_status.gd" id="2_xh8xk"]
+[ext_resource type="Script" uid="uid://byqen706gdiwq" path="res://scene/primary_attack_slot.gd" id="4_ajaei"]
+[ext_resource type="Texture2D" uid="uid://c4gluhm8dgahw" path="res://resources/植物明星大乱斗/sun_ex_1.png" id="4_xh8xk"]
+[ext_resource type="Texture2D" uid="uid://ciygchho7fi5n" path="res://resources/texture/windows.png" id="5_ytdjg"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kee8w"]
 border_width_left = 1
@@ -50,3 +53,30 @@ layout_mode = 2
 size_flags_horizontal = 3
 theme_override_styles/background = SubResource("StyleBoxFlat_ytdjg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_ajaei")
+
+[node name="PrimaryAttackSlot" type="Control" parent="." unique_id=809225076]
+layout_mode = 3
+anchors_preset = 0
+offset_top = 608.0
+offset_right = 40.0
+offset_bottom = 648.0
+script = ExtResource("4_ajaei")
+
+[node name="SkillIcon" type="TextureRect" parent="PrimaryAttackSlot" unique_id=1439613401]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("4_xh8xk")
+expand_mode = 1
+
+[node name="SlotBg" type="TextureRect" parent="PrimaryAttackSlot" unique_id=137726887]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+texture = ExtResource("5_ytdjg")
+expand_mode = 1
+
+[node name="ClickArea" type="TextureButton" parent="PrimaryAttackSlot" unique_id=1786770310]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
