@@ -1,8 +1,8 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://bpktdpbw1hqn3"]
 
-[ext_resource type="Texture2D" uid="uid://dynbx6v3jmvpc" path="res://resources/texture/hand.png" id="1_as08x"]
-[ext_resource type="Script" uid="uid://b4ng7uinnlfag" path="res://data/skill_data.gd" id="1_ras67"]
-[ext_resource type="PackedScene" uid="uid://dgvkw7t37ax6k" path="res://scene/skill_empty_hand.tscn" id="2_as08x"]
+[ext_resource type="Texture2D" uid="uid://dynbx6v3jmvpc" path="res://assets/icons/hand.png" id="1_as08x"]
+[ext_resource type="Script" uid="uid://b4ng7uinnlfag" path="res://data/skills/skill_data.gd" id="1_ras67"]
+[ext_resource type="PackedScene" uid="uid://dgvkw7t37ax6k" path="res://scene/skills/skill_empty_hand.tscn" id="2_as08x"]
 
 [resource]
 script = ExtResource("1_ras67")

@@ -1,0 +1,49 @@
+[gd_scene format=3 uid="uid://c20ajgta22mpa"]
+
+[ext_resource type="Script" uid="uid://cfhvx4yhxkdbl" path="res://scene/characters/test_enemy.gd" id="1_ab55u"]
+[ext_resource type="Texture2D" uid="uid://c0byiwy66wolt" path="res://resources/texture/源石虫.png" id="1_tdhsh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_tdhsh"]
+atlas = ExtResource("1_tdhsh")
+region = Rect2(0, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_ab55u"]
+atlas = ExtResource("1_tdhsh")
+region = Rect2(32, 0, 32, 32)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_anoyr"]
+atlas = ExtResource("1_tdhsh")
+region = Rect2(64, 0, 32, 32)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_pitpm"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_tdhsh")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ab55u")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_anoyr")
+}],
+"loop": 1,
+"name": &"move_right",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tdhsh"]
+radius = 5.0
+height = 18.0
+
+[node name="TestEnemy" type="CharacterBody2D" unique_id=877186476]
+script = ExtResource("1_ab55u")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=315557597]
+sprite_frames = SubResource("SpriteFrames_pitpm")
+animation = &"move_right"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1878476414]
+position = Vector2(0, 1)
+rotation = 1.5707964
+shape = SubResource("CapsuleShape2D_tdhsh")
