@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://bpktdpbw1hqn3"]
+
+[ext_resource type="Texture2D" uid="uid://ciygchho7fi5n" path="res://resources/texture/windows.png" id="1_pcqir"]
+[ext_resource type="Script" uid="uid://b4ng7uinnlfag" path="res://data/skill_data.gd" id="1_ras67"]
+[ext_resource type="PackedScene" uid="uid://dgvkw7t37ax6k" path="res://scene/skill_empty_hand.tscn" id="2_as08x"]
+
+[resource]
+script = ExtResource("1_ras67")
+id = &"empty_hand"
+name = "空手"
+icon = ExtResource("1_pcqir")
+scene = ExtResource("2_as08x")
+fly_speed = 0.0
+metadata/_custom_type_script = "uid://b4ng7uinnlfag"

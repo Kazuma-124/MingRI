@@ -5,9 +5,8 @@ signal mp_changed(new_mp:float,max_mp:float)
 
 # ===== 技能
 # 普攻火焰弹场景
-const SkillBUlletFlameData = preload("res://data/skills/skill_bullet_flame.tres")
-const SkillBulletFlameScene = preload("res://scene/skill_bullet_flame.tscn")
-
+const SkillEmptyHandData:SkillData = preload("res://data/skills/skill_empty_hand.tres")
+const SkillBulletFlameData:SkillData =    preload("res://data/skills/skill_bullet_flame.tres")
 
 @export var speed:float = 120.0
 @export var max_hp:float = 100.0
@@ -18,7 +17,10 @@ const SkillBulletFlameScene = preload("res://scene/skill_bullet_flame.tscn")
 var _cur_hp:float
 var _cur_mp:float
 # 普攻技能槽
-var _skill_primary:SkillSlot
+var primary_attack_slot:SkillSlot
+var _primary_attack_skill_options:Array = []
+var _current_primary_attack_index:int = 0
+
 # ====== 玩家状态
 var _mouse_dir:Vector2
 var _move_dir:Vector2
@@ -34,7 +36,13 @@ func _ready() -> void:
     emit_update_hp()
     emit_update_mp()
     # 技能
-    _skill_primary = SkillSlot.new(SkillBUlletFlameData,SkillBulletFlameScene,self)
+    _primary_attack_skill_options = [
+        SkillEmptyHandData,
+        SkillBulletFlameData
+    ]
+    var init_data = _primary_attack_skill_options[_current_primary_attack_index]
+    primary_attack_slot = SkillSlot.new(init_data,self)
+    # 方向和动画
     _update_dir_status()
     _update_animation()
 
@@ -45,10 +53,16 @@ func _physics_process(delta: float) -> void:
     _update_animation()
 
 func _unhandled_input(event: InputEvent) -> void:
-    if event.is_action_pressed("primary_attack"):
+    if primary_attack_slot.skill_data.id==&"bullet_flame" && event.is_action_pressed("primary_attack"):
         _shoot()
 
+func switch_primary_attack_skill()->void:
+    _current_primary_attack_index = (_current_primary_attack_index+1)%_primary_attack_skill_options.size()
 
+    var new_data = _primary_attack_skill_options[_current_primary_attack_index]
+    primary_attack_slot.set_skill(new_data)
+
+# 血条与蓝条
 func emit_update_hp():
     hp_changed.emit(_cur_hp,max_hp)
 func emit_update_mp():
@@ -58,6 +72,7 @@ func get_mp()->float:
 func cost_mp(mp_cost:float):
     _cur_mp-=mp_cost
     mp_changed.emit(_cur_mp,max_mp)
+# 受伤
 func take_damage(damage: float) -> void:
     _cur_hp -= damage
     hp_changed.emit(_cur_hp, max_hp) # 血量变了就发信号
@@ -65,7 +80,7 @@ func take_damage(damage: float) -> void:
 
 
 func _shoot():
-    var bullet = _skill_primary.cast(self)
+    var bullet = primary_attack_slot.cast(self)
     if bullet==null:
         return
     bullet.global_position = global_position+_mouse_dir*10
@@ -87,7 +102,7 @@ func _update_dir_status():
     
 
 func _update_skill_status(delta:float)->void:
-    _skill_primary.update(delta)
+    primary_attack_slot.update(delta)
 
 func _update_hp_and_mp_regen(delta: float) -> void:
     if _cur_hp < max_hp:

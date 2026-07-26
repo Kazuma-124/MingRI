@@ -62,13 +62,6 @@ offset_right = 40.0
 offset_bottom = 648.0
 script = ExtResource("4_ajaei")
 
-[node name="SkillIcon" type="TextureRect" parent="PrimaryAttackSlot" unique_id=1439613401]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
-texture = ExtResource("4_xh8xk")
-expand_mode = 1
-
 [node name="SlotBg" type="TextureRect" parent="PrimaryAttackSlot" unique_id=137726887]
 layout_mode = 0
 offset_right = 40.0
@@ -76,7 +69,10 @@ offset_bottom = 40.0
 texture = ExtResource("5_ytdjg")
 expand_mode = 1
 
-[node name="ClickArea" type="TextureButton" parent="PrimaryAttackSlot" unique_id=1786770310]
+[node name="SkillIcon" type="TextureRect" parent="PrimaryAttackSlot" unique_id=1439613401]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
+texture = ExtResource("4_xh8xk")
+expand_mode = 1
+stretch_mode = 5

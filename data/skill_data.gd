@@ -4,6 +4,8 @@ class_name SkillData
 @export_group("基础信息")
 @export var id:StringName
 @export var name:String
+@export var icon:Texture2D
+@export var scene:PackedScene
 
 @export_group("数值")
 @export var damage:float
@@ -17,8 +19,8 @@ class_name SkillData
 
 
 @export_group("bullet_flame")
-@export var damage_range:float = 20 # 伤害范围，直径
+@export var damage_range:float = 0 # 伤害范围，直径
 @export_subgroup("子弹动画配置")
-@export var anime_duration_time:float = 0.3
-@export var bullet_diameter:float = 4.0 # 子弹直径（像素）
-@export var explosion_diameter:float = 20.0 # 爆炸特效直径（像素）
+@export var anime_duration_time:float = 0
+@export var bullet_diameter:float = 0 # 子弹直径（像素）
+@export var explosion_diameter:float = 0 # 爆炸特效直径（像素）

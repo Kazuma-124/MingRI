@@ -1,14 +1,22 @@
 [gd_resource type="Resource" script_class="SkillData" format=3 uid="uid://c4bjohp4xlpy5"]
 
+[ext_resource type="Texture2D" uid="uid://c4gluhm8dgahw" path="res://resources/植物明星大乱斗/sun_ex_1.png" id="1_6j3fn"]
 [ext_resource type="Script" uid="uid://b4ng7uinnlfag" path="res://data/skill_data.gd" id="1_hwrvf"]
+[ext_resource type="PackedScene" uid="uid://d3jcja4881vpl" path="res://scene/skill_bullet_flame.tscn" id="2_she6i"]
 
 [resource]
 script = ExtResource("1_hwrvf")
 id = &"bullet_flame"
 name = "火弹"
+icon = ExtResource("1_6j3fn")
+scene = ExtResource("2_she6i")
 damage = 10.0
 cooldown = 0.3
 cast_range = 250.0
 flame_mp_cost = 5.0
 fly_speed = 500.0
+damage_range = 20.0
+anime_duration_time = 0.3
+bullet_diameter = 4.0
+explosion_diameter = 20.0
 metadata/_custom_type_script = "uid://b4ng7uinnlfag"
