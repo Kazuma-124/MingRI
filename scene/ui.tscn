@@ -55,24 +55,32 @@ theme_override_styles/background = SubResource("StyleBoxFlat_ytdjg")
 theme_override_styles/fill = SubResource("StyleBoxFlat_ajaei")
 
 [node name="PrimaryAttackSlot" type="Control" parent="." unique_id=809225076]
+propagate_maximum_size = true
 layout_mode = 3
 anchors_preset = 0
-offset_top = 608.0
-offset_right = 40.0
+offset_top = 592.0
+offset_right = 56.0
 offset_bottom = 648.0
 script = ExtResource("4_ajaei")
 
 [node name="SlotBg" type="TextureRect" parent="PrimaryAttackSlot" unique_id=137726887]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("5_ytdjg")
 expand_mode = 1
+stretch_mode = 6
 
 [node name="SkillIcon" type="TextureRect" parent="PrimaryAttackSlot" unique_id=1439613401]
-layout_mode = 0
-offset_right = 40.0
-offset_bottom = 40.0
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 texture = ExtResource("4_xh8xk")
 expand_mode = 1
 stretch_mode = 5
