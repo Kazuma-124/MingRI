@@ -38,8 +38,11 @@ radius = 5.0
 height = 18.0
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_pitpm"]
+radius = 22.0
 
 [node name="TestEnemy" type="CharacterBody2D" unique_id=877186476]
+collision_layer = 2
+collision_mask = 3
 script = ExtResource("1_ab55u")
 data = ExtResource("2_765w6")
 
@@ -53,6 +56,8 @@ rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_tdhsh")
 
 [node name="VisionArea" type="Area2D" parent="." unique_id=749517813]
+collision_layer = 0
+collision_mask = 3
 
 [node name="VisionCollisionShape" type="CollisionShape2D" parent="VisionArea" unique_id=701377465]
 shape = SubResource("CircleShape2D_pitpm")

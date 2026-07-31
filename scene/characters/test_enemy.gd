@@ -1,11 +1,12 @@
-extends CharacterBody2D
+extends CharacterBase
 
 # 状态枚举
 enum STATE{
     WANDER,
     WANDER_PAUSE,
     CHARGE,
-    SLIDE
+    BOUNCE, # 撞击弹开
+    RECOVERY # 撞击后恢复/准备
 }
 
 @export var data:EnemyData
@@ -17,23 +18,27 @@ var current_state:STATE
 var move_dir:Vector2 = Vector2.RIGHT
 
 var state_timer:float = 0.0
-var slide_remaining:float = 0.0 # 剩余滑行距离
+var bounce_dir:Vector2
+var bounce_remaining:float = 0.0 # 剩余滑行距离
 
 @onready var vision_area: Area2D = $VisionArea
 @onready var vision_collision_shape: CollisionShape2D = $VisionArea/VisionCollisionShape
 
 func _ready() -> void:
+    super._ready()
     cur_hp = data.max_hp
 
     # 视野半径和信号设置
     vision_collision_shape.shape.radius = data.vision_radius
-    # vision_area.body_entered.connect(_on_body_enter_vision)
-    # vision_area.body_exited.connect(_on_body_exit_vision)
+    # print_debug("视野大小:",vision_collision_shape.shape.radius)
+    vision_area.body_entered.connect(_on_body_enter_vision)
+    vision_area.body_exited.connect(_on_body_exit_vision)
 
     # 初始状态，游荡
     _switch_state(STATE.WANDER_PAUSE)
 
 func _physics_process(delta: float) -> void:
+    # print_debug("state:",current_state,"; velocity:",velocity,";velLen:",velocity.length(),"; dir:",move_dir)
     if cur_hp <= 0:
         queue_free()
         return
@@ -44,8 +49,10 @@ func _physics_process(delta: float) -> void:
             _update_wander_pause(delta)
         STATE.CHARGE:
             _update_charge(delta)
-        STATE.SLIDE:
-            _update_slide(delta)
+        STATE.BOUNCE:
+            _update_bounce(delta)
+        STATE.RECOVERY:
+            _update_recovery(delta)
     move_and_slide()
     # 检测撞击目标
     _check_contact_damage()
@@ -55,6 +62,7 @@ func take_damage(damage:float)->void:
 
 
 func _switch_state(new_state:STATE)->void:
+    print_debug("cur->new:",current_state,"->",new_state)
     current_state = new_state
     match current_state:
         STATE.WANDER:
@@ -69,23 +77,36 @@ func _switch_state(new_state:STATE)->void:
             # 冲向目标
             _update_charge_direction()
             velocity = move_dir*data.charge_speed
-        STATE.SLIDE:
-            slide_remaining = data.max_slide_distance
-            velocity = move_dir*data.charge_speed
+        STATE.BOUNCE:
+            # bounce_dir由_check_contact_damage设置
+            bounce_remaining = data.bounce_distance
+            velocity = bounce_dir*data.bounce_speed
+        STATE.RECOVERY:
+            velocity = Vector2.ZERO
+            state_timer = data.recovery_time
 
 # ============= 各状态逻辑,接收时间
 func _update_wander(delta:float)->void:
+    # 游荡中发现目标，立即中断游荡开始冲锋
+    if is_instance_valid(target):
+        _switch_state(STATE.CHARGE)
+        return
+
     state_timer -= delta
     if state_timer<=0:
         _switch_state(STATE.WANDER_PAUSE)
 
 func _update_wander_pause(delta:float)->void:
+    # 空闲警戒状态，发现目标立即冲锋
+    if is_instance_valid(target):
+        _switch_state(STATE.CHARGE)
+        return
     state_timer-=delta
     if state_timer<=0:
         _switch_state(STATE.WANDER)
 
 func _update_charge(delta:float)->void:
-    # 检查目标是否有效
+    # 目标失效则退回游荡状态
     if not is_instance_valid(target):
         target = null
         _switch_state(STATE.WANDER)
@@ -95,30 +116,38 @@ func _update_charge(delta:float)->void:
     _update_charge_direction()
     velocity = move_dir*data.charge_speed
 
-func _update_slide(delta:float)->void:
+func _update_bounce(delta:float)->void:
+    # 摊开状态属于后摇，自己无法控制，必须做整个流程
     # 速度按摩擦系数衰减
-    velocity*=data.slide_friction
+    # velocity = bounce_dir*velocity.length()*(data.bounce_friction*delta)
+    # print_debug("velocity方向:", velocity, " 实际速度方向:", get_real_velocity())
+    # print_debug("velocity长度:", velocity.length(), " 实际速度长度:", get_real_velocity().length())
     # 本帧移动距离
-    var move_this_frame = velocity.length()*delta
-    slide_remaining -= move_this_frame
+    var move_this_frame = get_real_velocity().length()*delta
+    bounce_remaining -= move_this_frame
 
-    if velocity.length()<=data.slide_min_speed or slide_remaining<=0:
-        if target:
+    if velocity.length()<=data.bounce_min_speed or bounce_remaining<=0:
+        _switch_state(STATE.RECOVERY)
+
+func _update_recovery(delta:float)->void:
+    state_timer -= delta
+    if state_timer<=0:
+        if is_instance_valid(target):
             _switch_state(STATE.CHARGE)
         else:
             _switch_state(STATE.WANDER)
 
 # 物体进入视野
 func _on_body_enter_vision(body:Node)->void:
+    # print_debug("body_entered")
     if body.is_in_group("player") and target == null:
+        # print_debug("player_entered")
         target = body
-        _switch_state(STATE.CHARGE)
 
 # 目标离开视野
 func _on_body_exit_vision(body:Node)->void:
     if body == target:
         target = null
-        _switch_state(STATE.WANDER)
 
 # =========== 工具函数
 
@@ -134,19 +163,30 @@ func _check_contact_damage()->void:
     
     # 记录本次移动是否发生有效撞击
     var hit_occurred = false
-    # get_slide_collision_count()最近一次调用move_and_slide()时发生碰撞并改变方向的次数
+    # 记录已经攻击过的对象，避免重复扣血
+    var hited_targets = []
+    var last_hit_dir:Vector2
+    # get_bounce_collision_count()最近一次调用move_and_slide()时发生碰撞并改变方向的次数
     for i in get_slide_collision_count():
         # 获取碰撞信息,可能发生多次碰撞，用i指定获取哪次
         var collision = get_slide_collision(i)
         # 返回射线相交的第一个物体
         var collider = collision.get_collider()
-        if collider.has_method("take_damage"):
-            collider.take_damage(data.contact_damage)
-        # 碰撞点的发现，垂直于碰撞表面，从被碰撞体指向我方,通常会与自己的移动方向夹角大于90度
-        var hit_normal = collision.get_normal()
-        # 将法线反转，变成从我方指向被撞物体，接着点积，判断此次碰撞是否是正面撞击，是否要进入滑行模式
-        var dot = move_dir.dot(-hit_normal)
-        if dot>0.5:
-            hit_occurred = true
+
+        if not hited_targets.has(collider):
+            if collider.has_method("take_damage"):
+                collider.take_damage(data.contact_damage)
+            hited_targets.append(collider)
+            # print_debug("collider[",i,"]:",collider)
+
+            # 碰撞点的发现，垂直于碰撞表面，从被碰撞体指向我方,通常会与自己的移动方向夹角大于90度
+            var hit_normal = collision.get_normal()
+            # 将法线反转，变成从我方指向被撞物体，接着点积，判断此次碰撞是否是正面撞击，是否要进入滑行模式
+            var dot = move_dir.dot(-hit_normal)
+            if dot>0.5:
+                hit_occurred = true
+                last_hit_dir = hit_normal
     if hit_occurred:
-        _switch_state(STATE.SLIDE)
+        # 入射方向.bounce(法线) == 反射方向
+        bounce_dir = move_dir.bounce(last_hit_dir)
+        _switch_state(STATE.BOUNCE)

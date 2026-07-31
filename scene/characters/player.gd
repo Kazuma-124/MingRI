@@ -1,4 +1,4 @@
-extends CharacterBody2D
+extends CharacterBase
 
 signal hp_changed(new_hp: float, max_hp: float)
 signal mp_changed(new_mp:float,max_mp:float)
@@ -30,6 +30,7 @@ var move_dir:Vector2
 
 
 func _ready() -> void:
+    super._ready()
     # 血量
     cur_hp = max_hp
     cur_mp = max_mp
@@ -97,6 +98,7 @@ func _update_dir_status():
     # 更新玩家速度，移动
     velocity = move_dir * speed
     move_and_slide()
+    print_debug("player:",velocity)
     
 
 func _update_skill_status(delta:float)->void:
@@ -104,6 +106,8 @@ func _update_skill_status(delta:float)->void:
 
 func _update_hp_and_mp_regen(delta: float) -> void:
     if cur_hp < max_hp:
+        if cur_hp <=0:
+            cur_hp = 0;
         cur_hp += hp_regen_per_second * delta
         # 不能超过最大血量
         if cur_hp > max_hp:
