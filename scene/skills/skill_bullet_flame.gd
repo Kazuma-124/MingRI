@@ -1,8 +1,8 @@
 extends Area2D
 
 var data:SkillData
-var _dir:Vector2 = Vector2(0,0)
-var _start_pos:Vector2
+var dir:Vector2 = Vector2(0,0)
+var start_pos:Vector2
 var _exploded:bool = false
 
 @onready var bullet_sprite: Sprite2D = $BulletSprite
@@ -16,21 +16,24 @@ func _ready() -> void:
     # 显示子弹，隐藏爆炸特效
     bullet_sprite.show()
     explosion_sprite.hide()
-    # 记录子弹起始位置
-    _start_pos = global_position
     # 连接信号
     body_entered.connect(_on_hit_body)
     
 func _physics_process(delta: float) -> void:
     if _exploded:
         return
-    global_position += _dir * data.fly_speed * delta
-    if global_position.distance_to(_start_pos) >= data.cast_range:
+    global_position += dir * data.fly_speed * delta
+    if global_position.distance_to(start_pos) >= data.cast_range:
         _explode()
 
+func setup(context:CastContext)->void:
+    global_position = context.caster_position+context.cast_direction*10
+    start_pos = global_position
+    dir = context.cast_direction
 
-func set_direction(dir:Vector2)->void:
-    _dir = dir.normalized()
+
+func set_direction(d:Vector2)->void:
+    dir = d.normalized()
 
 
     
@@ -78,5 +81,5 @@ func _explode()->void:
 # =========== 工具函数 ===================
 func _judge_sprite2D_scale(sprite:Sprite2D,target_diameter:float):
     var tex_size:Vector2 = sprite.texture.get_size()
-    var scale:float = target_diameter/tex_size.x
-    sprite.scale = Vector2(scale,scale)
+    var target_scale:float = target_diameter/tex_size.x
+    sprite.scale = Vector2(target_scale,target_scale)

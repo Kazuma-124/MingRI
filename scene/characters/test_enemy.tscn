@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cfhvx4yhxkdbl" path="res://scene/characters/test_enemy.gd" id="1_ab55u"]
 [ext_resource type="Texture2D" uid="uid://c0byiwy66wolt" path="res://resources/texture/源石虫.png" id="1_tdhsh"]
+[ext_resource type="Resource" uid="uid://b1v7b6072khju" path="res://data/enemies/test_enemy_data.tres" id="2_765w6"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_tdhsh"]
 atlas = ExtResource("1_tdhsh")
@@ -36,14 +37,22 @@ animations = [{
 radius = 5.0
 height = 18.0
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_pitpm"]
+
 [node name="TestEnemy" type="CharacterBody2D" unique_id=877186476]
 script = ExtResource("1_ab55u")
+data = ExtResource("2_765w6")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=315557597]
+[node name="BodySprite" type="AnimatedSprite2D" parent="." unique_id=315557597]
 sprite_frames = SubResource("SpriteFrames_pitpm")
 animation = &"move_right"
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1878476414]
+[node name="BodyCollisonShape" type="CollisionShape2D" parent="." unique_id=1878476414]
 position = Vector2(0, 1)
 rotation = 1.5707964
 shape = SubResource("CapsuleShape2D_tdhsh")
+
+[node name="VisionArea" type="Area2D" parent="." unique_id=749517813]
+
+[node name="VisionCollisionShape" type="CollisionShape2D" parent="VisionArea" unique_id=701377465]
+shape = SubResource("CircleShape2D_pitpm")

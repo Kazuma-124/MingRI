@@ -2,68 +2,59 @@
 
 [ext_resource type="Script" uid="uid://dcgfmrud6lbrg" path="res://scene/ui/ui.gd" id="1_kee8w"]
 [ext_resource type="Texture2D" uid="uid://cx0ednpe68lrm" path="res://assets/icons/icon.png" id="1_onfsl"]
+[ext_resource type="Theme" uid="uid://j5c5qocrx31m" path="res://assets/themes/default_theme.tres" id="2_4e0l7"]
 [ext_resource type="Script" uid="uid://t3gtb7f8kwfk" path="res://scene/ui/hp_and_mp_status.gd" id="2_xh8xk"]
 [ext_resource type="Script" uid="uid://byqen706gdiwq" path="res://scene/ui/primary_attack_slot.gd" id="4_ajaei"]
 [ext_resource type="Texture2D" uid="uid://c4gluhm8dgahw" path="res://resources/植物明星大乱斗/sun_ex_1.png" id="4_xh8xk"]
 [ext_resource type="Texture2D" uid="uid://ciygchho7fi5n" path="res://assets/icons/windows.png" id="5_ytdjg"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_kee8w"]
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_xh8xk"]
-bg_color = Color(1, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ytdjg"]
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0, 0, 0, 1)
-
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ajaei"]
-bg_color = Color(0, 0, 1, 1)
-
-[node name="Ui" type="CanvasLayer" unique_id=562004772]
+[node name="Ui" type="CanvasLayer" unique_id=917833657]
 script = ExtResource("1_kee8w")
 
-[node name="HpAndMpStatus" type="HBoxContainer" parent="." unique_id=749560375]
+[node name="UiRoot" type="Control" parent="." unique_id=794965278]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme = ExtResource("2_4e0l7")
+
+[node name="HpAndMpStatus" type="HBoxContainer" parent="UiRoot" unique_id=749560375]
+layout_mode = 0
 offset_right = 369.0
 offset_bottom = 40.0
+theme = ExtResource("2_4e0l7")
 script = ExtResource("2_xh8xk")
 
-[node name="TextureRect" type="TextureRect" parent="HpAndMpStatus" unique_id=2133923630]
+[node name="TextureRect" type="TextureRect" parent="UiRoot/HpAndMpStatus" unique_id=2133923630]
 custom_minimum_size = Vector2(32, 32)
 custom_maximum_size = Vector2(32, 32)
 layout_mode = 2
 texture = ExtResource("1_onfsl")
 
-[node name="HPBar" type="ProgressBar" parent="HpAndMpStatus" unique_id=1620890983]
+[node name="HPBar" type="ProgressBar" parent="UiRoot/HpAndMpStatus" unique_id=1620890983]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/background = SubResource("StyleBoxFlat_kee8w")
-theme_override_styles/fill = SubResource("StyleBoxFlat_xh8xk")
+theme_type_variation = &"HPBar"
 
-[node name="MPBar" type="ProgressBar" parent="HpAndMpStatus" unique_id=1856513293]
+[node name="MPBar" type="ProgressBar" parent="UiRoot/HpAndMpStatus" unique_id=1856513293]
 layout_mode = 2
 size_flags_horizontal = 3
-theme_override_styles/background = SubResource("StyleBoxFlat_ytdjg")
-theme_override_styles/fill = SubResource("StyleBoxFlat_ajaei")
+theme_type_variation = &"MPBar"
+value = 41.27
 
-[node name="PrimaryAttackSlot" type="Control" parent="." unique_id=809225076]
+[node name="PrimaryAttackSlot" type="Control" parent="UiRoot" unique_id=809225076]
 propagate_maximum_size = true
-layout_mode = 3
 anchors_preset = 0
-offset_top = 592.0
+offset_top = 664.0
 offset_right = 56.0
-offset_bottom = 648.0
+offset_bottom = 720.0
 script = ExtResource("4_ajaei")
 
-[node name="SlotBg" type="TextureRect" parent="PrimaryAttackSlot" unique_id=137726887]
+[node name="SlotBg" type="TextureRect" parent="UiRoot/PrimaryAttackSlot" unique_id=137726887]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -74,7 +65,7 @@ texture = ExtResource("5_ytdjg")
 expand_mode = 1
 stretch_mode = 6
 
-[node name="SkillIcon" type="TextureRect" parent="PrimaryAttackSlot" unique_id=1439613401]
+[node name="SkillIcon" type="TextureRect" parent="UiRoot/PrimaryAttackSlot" unique_id=1439613401]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -84,3 +75,29 @@ grow_vertical = 2
 texture = ExtResource("4_xh8xk")
 expand_mode = 1
 stretch_mode = 5
+
+[node name="CooldownMask" type="ProgressBar" parent="UiRoot/PrimaryAttackSlot" unique_id=650518811]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_type_variation = &"CooldownMask"
+max_value = 1.0
+step = 0.0
+value = 1.0
+fill_mode = 3
+show_percentage = false
+
+[node name="CooldownLabel" type="Label" parent="UiRoot/PrimaryAttackSlot" unique_id=1448494618]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "test"
+horizontal_alignment = 1
+vertical_alignment = 1

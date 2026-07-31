@@ -193,5 +193,5 @@ texture = ExtResource("3_rrjs7")
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=915760582]
 shape = SubResource("CapsuleShape2D_xo3ru")
 
-[node name="Camera2D" type="Camera2D" parent="." unique_id=567032642]
-zoom = Vector2(2, 2)
+[node name="Camera2D" type="Camera2D" parent="." unique_id=567032642 groups=["player"]]
+zoom = Vector2(1.8, 1.8)

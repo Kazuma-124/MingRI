@@ -2,13 +2,11 @@
 
 [ext_resource type="Texture2D" uid="uid://dynbx6v3jmvpc" path="res://assets/icons/hand.png" id="1_as08x"]
 [ext_resource type="Script" uid="uid://b4ng7uinnlfag" path="res://data/skills/skill_data.gd" id="1_ras67"]
-[ext_resource type="PackedScene" uid="uid://dgvkw7t37ax6k" path="res://scene/skills/skill_empty_hand.tscn" id="2_as08x"]
 
 [resource]
 script = ExtResource("1_ras67")
 id = &"empty_hand"
 name = "空手"
 icon = ExtResource("1_as08x")
-scene = ExtResource("2_as08x")
 fly_speed = 0.0
 metadata/_custom_type_script = "uid://b4ng7uinnlfag"
