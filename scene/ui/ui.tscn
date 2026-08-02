@@ -48,10 +48,13 @@ value = 41.27
 
 [node name="PrimaryAttackSlot" type="Control" parent="UiRoot" unique_id=809225076]
 propagate_maximum_size = true
-anchors_preset = 0
-offset_top = 664.0
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_top = -56.0
 offset_right = 56.0
-offset_bottom = 720.0
+grow_vertical = 0
 script = ExtResource("4_ajaei")
 
 [node name="SlotBg" type="TextureRect" parent="UiRoot/PrimaryAttackSlot" unique_id=137726887]

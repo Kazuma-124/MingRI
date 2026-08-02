@@ -8,11 +8,10 @@ signal mp_changed(new_mp:float,max_mp:float)
 const SkillEmptyHandData:SkillData = preload("res://data/skills/skill_empty_hand.tres")
 const SkillBulletFlameData:SkillData =    preload("res://data/skills/skill_bullet_flame.tres")
 
-@export var speed:float = 120.0
-@export var max_hp:float = 100.0
-@export var max_mp:float = 1000.0
-@export var hp_regen_per_second: float = 2.0
-@export var mp_regen_per_second: float = 10.0
+@export var data:PlayerData
+
+@export var hp_regen_per_second: float
+@export var mp_regen_per_second: float
 
 var cur_hp:float
 var cur_mp:float
@@ -32,8 +31,8 @@ var move_dir:Vector2
 func _ready() -> void:
     super._ready()
     # 血量
-    cur_hp = max_hp
-    cur_mp = max_mp
+    cur_hp = data.max_hp
+    cur_mp = data.max_mp
     emit_update_hp()
     emit_update_mp()
     # 技能
@@ -71,18 +70,18 @@ func switch_primary_attack_skill()->void:
 
 # 血条与蓝条
 func emit_update_hp():
-    hp_changed.emit(cur_hp,max_hp)
+    hp_changed.emit(cur_hp,data.max_hp)
 func emit_update_mp():
-    mp_changed.emit(cur_mp,max_mp)
+    mp_changed.emit(cur_mp,data.max_mp)
 func get_mp()->float:
     return cur_mp
 func cost_mp(mp_cost:float):
     cur_mp-=mp_cost
-    mp_changed.emit(cur_mp,max_mp)
+    mp_changed.emit(cur_mp,data.max_mp)
 # 受伤
 func take_damage(damage: float) -> void:
     cur_hp -= damage
-    hp_changed.emit(cur_hp, max_hp) # 血量变了就发信号
+    hp_changed.emit(cur_hp,data.max_hp) # 血量变了就发信号
     # print_debug("玩家血量：",cur_hp)
 
 
@@ -96,7 +95,7 @@ func _update_dir_status():
     move_dir = Input.get_vector("move_left","move_right","move_up","move_down").normalized()
     
     # 更新玩家速度，移动
-    velocity = move_dir * speed
+    velocity = move_dir * data.speed
     move_and_slide()
     print_debug("player:",velocity)
     
@@ -105,20 +104,20 @@ func _update_skill_status(delta:float)->void:
     primary_attack_slot.update(delta)
 
 func _update_hp_and_mp_regen(delta: float) -> void:
-    if cur_hp < max_hp:
+    if cur_hp < data.max_hp:
         if cur_hp <=0:
             cur_hp = 0;
         cur_hp += hp_regen_per_second * delta
         # 不能超过最大血量
-        if cur_hp > max_hp:
-            cur_hp = max_hp
-        hp_changed.emit(cur_hp,max_hp)
-    if cur_mp < max_mp:
+        if cur_hp > data.max_hp:
+            cur_hp = data.max_hp
+        hp_changed.emit(cur_hp,data.max_hp)
+    if cur_mp < data.max_mp:
         cur_mp += mp_regen_per_second * delta
         # 不能超过最大血量
-        if cur_mp > max_mp:
-            cur_mp = max_mp
-        mp_changed.emit(cur_mp,max_mp)
+        if cur_mp > data.max_mp:
+            cur_mp = data.max_mp
+        mp_changed.emit(cur_mp,data.max_mp)
 
 # ======= 动画
 func _update_animation():

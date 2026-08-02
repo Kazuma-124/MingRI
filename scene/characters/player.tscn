@@ -171,9 +171,8 @@ animations = [{
 "speed": 5.0
 }]
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_xo3ru"]
-radius = 8.0
-height = 18.0
+[sub_resource type="CircleShape2D" id="CircleShape2D_wq7vr"]
+radius = 6.0
 
 [node name="Player" type="CharacterBody2D" unique_id=1002450125 groups=["player"]]
 collision_layer = 6
@@ -191,7 +190,7 @@ position = Vector2(17, 0)
 texture = ExtResource("3_rrjs7")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=915760582]
-shape = SubResource("CapsuleShape2D_xo3ru")
+shape = SubResource("CircleShape2D_wq7vr")
 
 [node name="Camera2D" type="Camera2D" parent="." unique_id=567032642 groups=["player"]]
-zoom = Vector2(1.8, 1.8)
+zoom = Vector2(1.5, 1.5)

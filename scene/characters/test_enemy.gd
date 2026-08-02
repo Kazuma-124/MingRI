@@ -30,7 +30,6 @@ func _ready() -> void:
 
     # 视野半径和信号设置
     vision_collision_shape.shape.radius = data.vision_radius
-    # print_debug("视野大小:",vision_collision_shape.shape.radius)
     vision_area.body_entered.connect(_on_body_enter_vision)
     vision_area.body_exited.connect(_on_body_exit_vision)
 
@@ -38,7 +37,6 @@ func _ready() -> void:
     _switch_state(STATE.WANDER_PAUSE)
 
 func _physics_process(delta: float) -> void:
-    # print_debug("state:",current_state,"; velocity:",velocity,";velLen:",velocity.length(),"; dir:",move_dir)
     if cur_hp <= 0:
         queue_free()
         return
@@ -116,17 +114,18 @@ func _update_charge(delta:float)->void:
     _update_charge_direction()
     velocity = move_dir*data.charge_speed
 
-func _update_bounce(delta:float)->void:
-    # 摊开状态属于后摇，自己无法控制，必须做整个流程
-    # 速度按摩擦系数衰减
-    # velocity = bounce_dir*velocity.length()*(data.bounce_friction*delta)
-    # print_debug("velocity方向:", velocity, " 实际速度方向:", get_real_velocity())
-    # print_debug("velocity长度:", velocity.length(), " 实际速度长度:", get_real_velocity().length())
+func _update_bounce(delta: float) -> void:
+    # 弹开状态属于后摇，自己无法控制，必须走完整个流程
+    
+    # 速度按摩擦系数衰减（帧率无关）
+    # bounce_friction 表示每秒的衰减比例（0.5 = 每秒衰减到50%）
+    velocity = bounce_dir * velocity.length() * pow(data.bounce_friction, delta)
+    print("速度",velocity,"长度",velocity.length()) 
     # 本帧移动距离
-    var move_this_frame = get_real_velocity().length()*delta
+    var move_this_frame = get_real_velocity().length() * delta
     bounce_remaining -= move_this_frame
-
-    if velocity.length()<=data.bounce_min_speed or bounce_remaining<=0:
+    
+    if velocity.length() <= data.bounce_min_speed or bounce_remaining <= 0:
         _switch_state(STATE.RECOVERY)
 
 func _update_recovery(delta:float)->void:
@@ -139,9 +138,7 @@ func _update_recovery(delta:float)->void:
 
 # 物体进入视野
 func _on_body_enter_vision(body:Node)->void:
-    # print_debug("body_entered")
     if body.is_in_group("player") and target == null:
-        # print_debug("player_entered")
         target = body
 
 # 目标离开视野
@@ -177,7 +174,6 @@ func _check_contact_damage()->void:
             if collider.has_method("take_damage"):
                 collider.take_damage(data.contact_damage)
             hited_targets.append(collider)
-            # print_debug("collider[",i,"]:",collider)
 
             # 碰撞点的发现，垂直于碰撞表面，从被碰撞体指向我方,通常会与自己的移动方向夹角大于90度
             var hit_normal = collision.get_normal()
