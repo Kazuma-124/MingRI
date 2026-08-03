@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://ctb4uxuqmkdxu"]
 
 [ext_resource type="Script" uid="uid://fhfd3qnv6das" path="res://scene/characters/player.gd" id="1_5utgv"]
+[ext_resource type="Resource" uid="uid://dmylvdyv8vpx3" path="res://data/characters/player_data.tres" id="2_qbs7g"]
 [ext_resource type="Texture2D" uid="uid://dfnkws4a3gvu6" path="res://resources/texture/W.png" id="2_w2ep0"]
 [ext_resource type="Texture2D" uid="uid://bu1n43vkxw4t3" path="res://resources/texture/weapon.png" id="3_rrjs7"]
 
@@ -178,6 +179,7 @@ radius = 6.0
 collision_layer = 6
 collision_mask = 3
 script = ExtResource("1_5utgv")
+data = ExtResource("2_qbs7g")
 
 [node name="BodySprite" type="AnimatedSprite2D" parent="." unique_id=583726038]
 sprite_frames = SubResource("SpriteFrames_pitpm")

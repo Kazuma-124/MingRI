@@ -6,12 +6,15 @@ enum STATE{
     WANDER_PAUSE,
     CHARGE,
     BOUNCE, # 撞击弹开
-    RECOVERY # 撞击后恢复/准备
+    RECOVERY, # 撞击后恢复/准备
+    RETURN_HOME
 }
 
 @export var data:EnemyData
 
 
+var home_position:Vector2
+var home_radius:float
 var cur_hp:float
 var target:CharacterBody2D = null # 当前追击目标
 var current_state:STATE
