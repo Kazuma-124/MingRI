@@ -1,7 +1,7 @@
-[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://dmylvdyv8vpx3"]
+[gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://wcg6f35os2ku"]
 
-[ext_resource type="Script" uid="uid://sdnkn0mbegjs" path="res://data/player_data.gd" id="1_wd03v"]
+[ext_resource type="Script" uid="uid://5qwocjh76bce" path="res://data/characters/player_data.gd" id="1_lkx0q"]
 
 [resource]
-script = ExtResource("1_wd03v")
-metadata/_custom_type_script = "uid://sdnkn0mbegjs"
+script = ExtResource("1_lkx0q")
+metadata/_custom_type_script = "uid://5qwocjh76bce"

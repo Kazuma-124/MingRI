@@ -3,11 +3,9 @@
 [ext_resource type="Script" uid="uid://bpupn450kmvhu" path="res://scene/core/game.gd" id="1_4kiuy"]
 [ext_resource type="PackedScene" uid="uid://u7whggihwch4" path="res://scene/core/world.tscn" id="2_2o4tn"]
 [ext_resource type="PackedScene" uid="uid://ctb4uxuqmkdxu" path="res://scene/characters/player.tscn" id="3_mo7ay"]
+[ext_resource type="Resource" path="res://data/player_data.tres" id="4_2o4tn"]
 [ext_resource type="PackedScene" uid="uid://c3oyqyoaehcdq" path="res://scene/ui/ui.tscn" id="5_7f3c4"]
 [ext_resource type="PackedScene" uid="uid://c20ajgta22mpa" path="res://scene/characters/test_enemy.tscn" id="6_2o4tn"]
-
-[sub_resource type="Resource" id="Resource_4kiuy"]
-metadata/__load_path__ = "res://data/player_data.tres"
 
 [node name="Game" type="Node2D" unique_id=2022735529]
 script = ExtResource("1_4kiuy")
@@ -18,7 +16,7 @@ tile_map_data = PackedByteArray("AAAAAAAABQABAAIAAAAAAAEABQABAAIAAAAAAAIABQABAAI
 
 [node name="Player" parent="." unique_id=1487487930 instance=ExtResource("3_mo7ay")]
 position = Vector2(545, 263)
-data = SubResource("Resource_4kiuy")
+data = ExtResource("4_2o4tn")
 
 [node name="Ui" parent="." unique_id=562004772 instance=ExtResource("5_7f3c4")]
 
