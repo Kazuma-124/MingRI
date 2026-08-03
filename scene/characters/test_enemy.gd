@@ -1,14 +1,33 @@
 extends CharacterBase
 
-# 状态枚举
-enum STATE{
+# ==== 大状态
+
+extends CharacterBase
+
+# ========== 大状态（组） ==========
+enum SUPER_STATE {
+    IDLE,       # 游荡组：WANDER + WANDER_PAUSE
+    COMBAT,     # 战斗组：CHARGE + BOUNCE + RECOVERY
+    RETURNING   # 返回组：RETURN_HOME
+}
+
+# ========== 子状态
+enum SUB_STATE {
+    # IDLE 组的子状态
     WANDER,
     WANDER_PAUSE,
+    # COMBAT 组的子状态
     CHARGE,
-    BOUNCE, # 撞击弹开
-    RECOVERY, # 撞击后恢复/准备
+    BOUNCE,
+    RECOVERY,
+    # RETURNING 组的子状态（只有一个）
     RETURN_HOME
 }
+
+# ========== 当前状态
+var current_super_state: SUPER_STATE
+var current_sub_state: SUB_STATE
+
 
 @export var data:EnemyData
 
@@ -37,53 +56,123 @@ func _ready() -> void:
     vision_area.body_exited.connect(_on_body_exit_vision)
 
     # 初始状态，游荡
-    _switch_state(STATE.WANDER_PAUSE)
+    # _switch_state(STATE.WANDER_PAUSE)===
 
 func _physics_process(delta: float) -> void:
     if cur_hp <= 0:
         queue_free()
         return
-    match current_state:
-        STATE.WANDER:
-            _update_wander(delta)
-        STATE.WANDER_PAUSE:
-            _update_wander_pause(delta)
-        STATE.CHARGE:
-            _update_charge(delta)
-        STATE.BOUNCE:
-            _update_bounce(delta)
-        STATE.RECOVERY:
-            _update_recovery(delta)
+    
+    # 第一步：执行当前大状态的公共逻辑
+    # （可能会触发大状态切换）
+    _update_super_state(delta)
+    
     move_and_slide()
-    # 检测撞击目标
     _check_contact_damage()
 
 func take_damage(damage:float)->void:
     cur_hp-=damage
 
+func _update_super_state(delta: float) -> void:
+    match current_super_state:
+        SUPER_STATE.IDLE:
+            _update_idle_super(delta)
+        SUPER_STATE.COMBAT:
+            _update_combat_super(delta)
+        SUPER_STATE.RETURNING:
+            _update_returning_super(delta)
 
-func _switch_state(new_state:STATE)->void:
-    current_state = new_state
-    match current_state:
-        STATE.WANDER:
-            # 向随机方向游荡
-            move_dir = Vector2(randf_range(-1,1),randf_range(-1,1)).normalized()
-            state_timer = data.wander_distance/data.wander_speed
-            velocity = move_dir*data.wander_speed
-        STATE.WANDER_PAUSE:
-            velocity = Vector2.ZERO
-            state_timer = randf_range(data.wander_pause_min,data.wander_pause_max)
-        STATE.CHARGE:
-            # 冲向目标
-            _update_charge_direction()
-            velocity = move_dir*data.charge_speed
-        STATE.BOUNCE:
-            # bounce_dir由_check_contact_damage设置
-            bounce_remaining = data.bounce_distance
-            velocity = bounce_dir*data.bounce_speed
-        STATE.RECOVERY:
-            velocity = Vector2.ZERO
-            state_timer = data.recovery_time
+func _update_idle_super(delta:float)->void:
+    # 如果发现玩家则进入战斗
+    if is_instance_valid(target):
+        _switch_super_state(SUPER_STATE.COMBAT)
+        return
+    # 如果离开领地则返回
+    if global_position.distance_to(home_position)>home_radius:
+        _switch_super_state(SUPER_STATE.RETURNING)
+        return
+    _update_idle_sub(delta)
+
+func _update_combat_super(delta:float)->void:
+    # 追出领地则放弃追击，回家
+    if global_position.distance_to(home_position)>home_radius:
+        target = null
+        _switch_super_state(SUPER_STATE.RETURNING)
+        return
+    # 目标丢失
+    if not is_instance_valid(target):
+        target = null
+        _switch_super_state(SUPER_STATE.IDLE)
+        return
+    _update_combat_sub(delta)
+    
+func _update_returning_super(delta:float)->void:
+    if global_position.distance_to(home_position)<(home_radius/2):
+        _switch_super_state(SUPER_STATE.IDLE)
+        return
+    _update_returning_sub(delta)
+
+func _switch_super_state(new_super: SUPER_STATE) -> void:
+    # 退出旧的大状态
+    match current_super_state:
+        SUPER_STATE.IDLE:
+            _exit_idle_super()
+        SUPER_STATE.COMBAT:
+            _exit_combat_super()
+        SUPER_STATE.RETURNING:
+            _exit_returning_super()
+    
+    # 切换状态
+    current_super_state = new_super
+    current_sub_state = new_sub
+    
+    # 进入新的大状态
+    match current_super_state:
+        SUPER_STATE.IDLE:
+            _enter_idle_super()
+        SUPER_STATE.COMBAT:
+            _enter_combat_super()
+        SUPER_STATE.RETURNING:
+            _enter_returning_super()
+
+
+func _enter_idle_super()->void:
+    current_sub_state = SUB_STATE.WANDER_PAUSE
+    _switch_sub_state(new_sub:SUB_STATE)
+func _enter_combat_super()->void:
+    current_sub_state = SUB_STATE.CHARGE
+func _enter_returning_super()->void:
+    current_sub_state = SUB_STATE.RETURN_HOME
+func _exit_idle_super()->void:
+    pass
+func _exit_combat_super()->void:
+    pass
+func _exit_returning_super()->void:
+    pass
+func _update_idle_sub(delta)->void:
+    match current_sub_state:
+        SUB_STATE.WANDER:
+            _update_wander(delta)
+        SUB_STATE.WANDER_PAUSE:
+            _update_wander_pause(delta)
+        _:
+            push_warning("super state idle has wrong sub state: ",current_sub_state)
+func _update_combat_sub(delta)->void:
+    match current_sub_state:
+        SUB_STATE.CHARGE:
+            _update_charge(delta)
+        SUB_STATE.BOUNCE:
+            _update_bounce(delta)
+        SUB_STATE.RECOVERY:
+            _update_recovery(delta)
+        _:
+            push_warning("super state combat has wrong sub state: ",current_sub_state)
+func _update_returning_sub(delta)->void:
+    match current_sub_state:
+        SUB_STATE.RETURN_HOME:
+            _update_return_home(delta)
+        _:
+            push_warning("super state returning has wrong sub state: ",current_sub_state)
 
 # ============= 各状态逻辑,接收时间
 func _update_wander(delta:float)->void:
@@ -136,6 +225,30 @@ func _update_recovery(delta:float)->void:
             _switch_state(STATE.CHARGE)
         else:
             _switch_state(STATE.WANDER)
+
+
+# func _switch_state(new_state:STATE)->void:
+    # current_state = new_state
+    # match current_state:
+    #     STATE.WANDER:
+    #         # 向随机方向游荡
+    #         move_dir = Vector2(randf_range(-1,1),randf_range(-1,1)).normalized()
+    #         state_timer = data.wander_distance/data.wander_speed
+    #         velocity = move_dir*data.wander_speed
+    #     STATE.WANDER_PAUSE:
+    #         velocity = Vector2.ZERO
+    #         state_timer = randf_range(data.wander_pause_min,data.wander_pause_max)
+    #     STATE.CHARGE:
+    #         # 冲向目标
+    #         _update_charge_direction()
+    #         velocity = move_dir*data.charge_speed
+    #     STATE.BOUNCE:
+    #         # bounce_dir由_check_contact_damage设置
+    #         bounce_remaining = data.bounce_distance
+    #         velocity = bounce_dir*data.bounce_speed
+    #     STATE.RECOVERY:
+    #         velocity = Vector2.ZERO
+    #         state_timer = data.recovery_time
 
 # 物体进入视野
 func _on_body_enter_vision(body:Node)->void:
