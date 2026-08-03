@@ -1,10 +1,11 @@
+@tool
 extends Node2D
 class_name EnemySpawnPoint
 
 # 生成的敌人的场景
 @export var enemy_scene:PackedScene
 @export var max_count:int = 6 # 最多生成几只
-@export var spawn_radius:float = 60
+@export var spawn_radius:float = 500
 @export var respawn_delay: float = 8.0 # 刷新冷却
 
 
@@ -20,7 +21,18 @@ func _exit_tree() -> void:
     if EnemyManager:
         EnemyManager.unregister_spawn_point(self)
 
+func _draw() -> void:
+    # 只在编辑器里画，运行时不画
+    if not Engine.is_editor_hint():
+        return
+    # 画一个居中的矩形生成范围
+    var rect = Rect2(Vector2(-spawn_radius,-spawn_radius),Vector2(spawn_radius*2,spawn_radius*2))
+    draw_rect(rect, Color(0, 1, 0, 0.2))  # 填充
+    draw_rect(rect, Color(0, 1, 0, 0.8), false, 2.0)  # 边框
+
 func _process(delta:float)->void:
+    if Engine.is_editor_hint():
+            queue_redraw()
     if not is_spawn_active:
         return
     
@@ -66,6 +78,8 @@ func _spawn_one()->void:
         randf_range(-spawn_radius,spawn_radius)
     )
     enemy.global_position = global_position+offset
+    enemy.home_position = global_position
+    enemy.home_radius = spawn_radius*2
 
     # 添加到场景树
     spawned_enemies.append(enemy)

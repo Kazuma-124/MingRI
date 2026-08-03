@@ -10,8 +10,8 @@ const SkillBulletFlameData:SkillData =    preload("res://data/skills/skill_bulle
 
 @export var data:PlayerData
 
-@export var hp_regen_per_second: float
-@export var mp_regen_per_second: float
+@export var hp_regen_per_second: float = 5
+@export var mp_regen_per_second: float = 10
 
 var cur_hp:float
 var cur_mp:float
@@ -110,6 +110,8 @@ func _update_hp_and_mp_regen(delta: float) -> void:
             cur_hp = data.max_hp
         hp_changed.emit(cur_hp,data.max_hp)
     if cur_mp < data.max_mp:
+        if cur_hp <=0:
+            cur_hp = 0;
         cur_mp += mp_regen_per_second * delta
         # 不能超过最大血量
         if cur_mp > data.max_mp:

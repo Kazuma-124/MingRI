@@ -1,9 +1,9 @@
 extends Node
 
 # player vision,1000
-@export var slience_radius:float = 100.0
-@export var spawn_radius:float = 240.0
-@export var destory_radius:float = 260.0 # 销毁半径
+@export var slience_radius:float = 600.0
+@export var spawn_radius:float = 1600.0
+@export var destory_radius:float = 2200.0 # 销毁半径
 # 销毁半径稍微>激活半径
 
 var player:CharacterBase = null
@@ -26,9 +26,9 @@ func _process(delta: float) -> void:
     var player_pos = player.global_position
     for sp in spawn_points:
         var dist = player_pos.distance_to(sp.global_position)
-        if (dist-slience_radius)>sp.spawn_radius and sp.is_spawn_active:
+        if (dist-slience_radius) < sp.spawn_radius and sp.is_spawn_active:
             sp.spawn_deactivate()
-        elif dist < spawn_radius and not sp.is_spawn_active:
+        elif (dist-slience_radius)>sp.spawn_radius and dist <spawn_radius and not sp.is_spawn_active:
             sp.spawn_activate()
         # spawn_radius与destory_radius之间有一段空隙用于生成和销毁的的缓冲
         elif dist > destory_radius:

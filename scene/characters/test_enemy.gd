@@ -33,7 +33,6 @@ var home_radius:float
 var cur_hp:float
 var target:CharacterBody2D = null # 当前追击目标
 var move_dir:Vector2 = Vector2.RIGHT
-
 var state_timer:float = 0.0
 var bounce_dir:Vector2
 var bounce_remaining:float = 0.0 # 剩余滑行距离
@@ -51,8 +50,6 @@ func _ready() -> void:
     vision_area.body_entered.connect(_on_body_enter_vision)
     vision_area.body_exited.connect(_on_body_exit_vision)
 
-    home_position = Vector2.ZERO
-    home_radius = 200
     _switch_super_state(SUPER_STATE.IDLE)
 
 func _physics_process(delta: float) -> void:
@@ -65,8 +62,6 @@ func _physics_process(delta: float) -> void:
     _update_super_state(delta)
     
     move_and_slide()
-    # 游荡中碰撞或冲锋中碰撞不同需要分别处理==============
-    # _check_contact_damage()
 
 func take_damage(damage:float)->void:
     cur_hp-=damage
@@ -130,6 +125,7 @@ func _update_combat_sub(delta)->void:
         _:
             push_warning("super state combat has wrong sub state when update: ",current_sub_state)
 func _update_returning_sub(delta)->void:
+    print()
     match current_sub_state:
         SUB_STATE.RETURN_HOME:
             _update_return_home(delta)
@@ -201,7 +197,7 @@ func _update_recovery(delta:float)->void:
         _switch_sub_state_combat(SUB_STATE.CHARGE)
     
 func _update_return_home(delta:float)->void:
-    move_dir = (global_position-home_position).normalized()
+    move_dir = (home_position-global_position).normalized()
     velocity = move_dir*data.wander_speed
 
 func _switch_super_state(new_super: SUPER_STATE) -> void:
@@ -242,30 +238,35 @@ func _exit_returning_super()->void:
 
 # 各大父状态切换子状态
 func _switch_sub_state_idle(new_sub:SUB_STATE)->void:
-    match current_sub_state:
+    match new_sub:
         SUB_STATE.WANDER:
+            current_sub_state = new_sub
             move_dir = Vector2(randf_range(-1,1),randf_range(-1,1)).normalized()
             state_timer = data.wander_distance/data.wander_speed
         SUB_STATE.WANDER_PAUSE:
+            current_sub_state = new_sub
             move_dir = Vector2.ZERO
             velocity = Vector2.ZERO
             state_timer = randf_range(data.wander_pause_min,data.wander_pause_max)
         _:
             push_warning("super state idle has wrong sub state when switch: ",current_sub_state)
 func _switch_sub_state_combat(new_sub:SUB_STATE)->void:
-    match current_sub_state:
+    match new_sub:
         SUB_STATE.CHARGE:
+            current_sub_state = new_sub
             # 更新方向
             _update_charge_direction()
             # 更新速度
             velocity = move_dir*data.charge_speed
         SUB_STATE.BOUNCE:
+            current_sub_state = new_sub
             # bounce_dir由_check_contact_and_damage设置
             move_dir = bounce_dir
             curr_bounce_speed = data.bounce_speed
             bounce_remaining = data.bounce_distance
             velocity = move_dir*curr_bounce_speed
         SUB_STATE.RECOVERY:
+            current_sub_state = new_sub
             move_dir = Vector2.ZERO
             velocity = Vector2.ZERO
             state_timer = data.recovery_time
@@ -273,11 +274,13 @@ func _switch_sub_state_combat(new_sub:SUB_STATE)->void:
             push_warning("super state idle has wrong sub state when switch: ",current_sub_state)
 
 func _switch_sub_state_returning(new_sub:SUB_STATE)->void:
-    match current_sub_state:
+
+    match new_sub:
         SUB_STATE.RETURN_HOME:
+            current_sub_state = new_sub
             # 目前阶段地图上几乎没有什么障碍，
             # 但是之后地图正式做起来了，就要做寻路系统了
-            move_dir = (global_position-home_position).normalized()
+            move_dir = (home_position-global_position).normalized()
             velocity = move_dir*data.wander_speed
         _:
             push_warning("super state idle has wrong sub state when switch: ",current_sub_state)
