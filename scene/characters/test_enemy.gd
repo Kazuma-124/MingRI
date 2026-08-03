@@ -60,7 +60,6 @@ func take_damage(damage:float)->void:
 
 
 func _switch_state(new_state:STATE)->void:
-    print_debug("cur->new:",current_state,"->",new_state)
     current_state = new_state
     match current_state:
         STATE.WANDER:
@@ -120,7 +119,6 @@ func _update_bounce(delta: float) -> void:
     # 速度按摩擦系数衰减（帧率无关）
     # bounce_friction 表示每秒的衰减比例（0.5 = 每秒衰减到50%）
     velocity = bounce_dir * velocity.length() * pow(data.bounce_friction, delta)
-    print("速度",velocity,"长度",velocity.length()) 
     # 本帧移动距离
     var move_this_frame = get_real_velocity().length() * delta
     bounce_remaining -= move_this_frame

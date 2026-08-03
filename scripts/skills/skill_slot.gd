@@ -53,8 +53,6 @@ func can_cast()->bool:
     )
 
 func cast(context:CastContext)->Node2D:
-    # print_debug("最大冷却",cooldown)
-    # print_debug("剩余冷却",cooldown_remaining)
     if not can_cast():
         return null
 

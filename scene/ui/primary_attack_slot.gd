@@ -20,9 +20,7 @@ func _gui_input(event: InputEvent) -> void:
         accept_event()
 
 func set_cooldown(ratio:float,remaining:float)->void:
-    # print_debug("ratio",ratio)
     cooldown_mask.value = ratio
-    # print_debug("value",cooldown_mask.ratio)
     if remaining<=0.05:
         cooldown_label.text = ""
     else:

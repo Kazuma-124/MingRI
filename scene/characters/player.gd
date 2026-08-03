@@ -30,6 +30,7 @@ var move_dir:Vector2
 
 func _ready() -> void:
     super._ready()
+    EnemyManager.register_player(self)
     # 血量
     cur_hp = data.max_hp
     cur_mp = data.max_mp
@@ -54,11 +55,9 @@ func _physics_process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("primary_attack"):
-        # print_debug("get_primary_attack")
         var context = _generate_cast_context()
         var bullet = primary_attack_slot.cast(context)
         if bullet:
-            # print_debug("get_bullet_add_to_game")
             get_parent().add_child(bullet)
 
 
@@ -82,7 +81,6 @@ func cost_mp(mp_cost:float):
 func take_damage(damage: float) -> void:
     cur_hp -= damage
     hp_changed.emit(cur_hp,data.max_hp) # 血量变了就发信号
-    # print_debug("玩家血量：",cur_hp)
 
 
 
@@ -97,7 +95,6 @@ func _update_dir_status():
     # 更新玩家速度，移动
     velocity = move_dir * data.speed
     move_and_slide()
-    print_debug("player:",velocity)
     
 
 func _update_skill_status(delta:float)->void:

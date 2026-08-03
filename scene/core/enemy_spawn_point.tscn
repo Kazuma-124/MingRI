@@ -1,3 +1,8 @@
 [gd_scene format=3 uid="uid://dmxlq87ga5hm8"]
 
+[ext_resource type="Script" uid="uid://3qgehv4c0hre" path="res://scene/core/enemy_spawn_point.gd" id="1_srnyq"]
+[ext_resource type="PackedScene" uid="uid://c20ajgta22mpa" path="res://scene/characters/test_enemy.tscn" id="2_n72sl"]
+
 [node name="EnemySpawnPoint" type="Node2D" unique_id=480720489]
+script = ExtResource("1_srnyq")
+enemy_scene = ExtResource("2_n72sl")
