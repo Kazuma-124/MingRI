@@ -13,4 +13,5 @@ scene = ExtResource("2_she6i")
 damage = 10.0
 cooldown = 0.3
 flame_mp_cost = 20.0
+fly_speed = 550.0
 metadata/_custom_type_script = "uid://b4ng7uinnlfag"
