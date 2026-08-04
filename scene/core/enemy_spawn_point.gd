@@ -4,7 +4,7 @@ class_name EnemySpawnPoint
 
 # 生成的敌人的场景
 @export var enemy_scene:PackedScene
-@export var max_count:int = 6 # 最多生成几只
+@export var max_count:int = 12 # 最多生成几只
 @export var spawn_radius:float = 500
 @export var respawn_delay: float = 8.0 # 刷新冷却
 
