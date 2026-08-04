@@ -6,7 +6,8 @@ class_name SkillData
 @export var name:String
 @export var icon:Texture2D
 @export var scene:PackedScene
-
+@export_group("能量属性相关")
+@export var unlock_level:int
 @export_group("数值")
 @export var damage:float
 @export var cooldown:float

@@ -180,6 +180,8 @@ collision_layer = 6
 collision_mask = 3
 script = ExtResource("1_5utgv")
 data = ExtResource("2_qbs7g")
+hp_regen_per_second = null
+mp_regen_per_second = null
 
 [node name="BodySprite" type="AnimatedSprite2D" parent="." unique_id=583726038]
 sprite_frames = SubResource("SpriteFrames_pitpm")

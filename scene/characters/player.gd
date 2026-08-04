@@ -6,22 +6,23 @@ signal mp_changed(new_mp:float,max_mp:float)
 
 # ===== 技能
 # 普攻火焰弹场景
-const SkillEmptyHandData:SkillData = preload("res://data/skills/skill_empty_hand.tres")
-const SkillBulletFlameData:SkillData =    preload("res://data/skills/skill_bullet_flame.tres")
+# const SkillEmptyHandData:SkillData = preload("res://data/skills/skill_empty_hand.tres")
+# const SkillBulletFlameData:SkillData =    preload("res://data/skills/skill_bullet_flame.tres")
 
 @export var data:PlayerData
 
-@export var hp_regen_per_second: float = 5
-@export var mp_regen_per_second: float = 10
+# @export var hp_regen_per_second: float = 5
+# @export var mp_regen_per_second: float = 10
 
-var cur_hp:float
-var cur_mp:float
+var state:PlayerRuntimeState
 # 普攻技能槽
 var primary_attack_slot:SkillSlot
 var primary_attack_skill_options:Array = []
 var current_primary_attack_index:int = 0
+# 其它技能槽
 
 # ====== 玩家状态
+var move_speed
 var mouse_dir:Vector2
 var move_dir:Vector2
 
@@ -32,18 +33,25 @@ var move_dir:Vector2
 func _ready() -> void:
     super._ready()
     EnemyManager.register_player(self)
-    # 血量
-    cur_hp = data.max_hp
-    cur_mp = data.max_mp
+    # 玩家状态
+    move_speed = data.base_speed
+    # 下面的state相关以后要改为从存档中获取数据???
+    state = PlayerRuntimeState.new()
+    state.max_hp = data.max_hp
+    state.cur_hp = data.max_hp
+    state.max_mp = data.max_mp
+    state.cur_mp = data.max_mp
+    # 通知ui更新血量和蓝量
     emit_update_hp()
     emit_update_mp()
     # 技能
+    # 普攻
     primary_attack_skill_options = [
         SkillEmptyHandData,
         SkillBulletFlameData
     ]
-    var init_data = primary_attack_skill_options[current_primary_attack_index]
-    primary_attack_slot = SkillSlot.new(init_data,self)
+    var init_skill_data = primary_attack_skill_options[current_primary_attack_index]
+    primary_attack_slot = SkillSlot.new(init_skill_data,self)
     # 方向和动画
     _update_dir_status()
     _update_animation()
@@ -51,7 +59,7 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
     _update_dir_status()
     _update_skill_status(delta)
-    _update_hp_and_mp_regen(delta)
+    # _update_hp_and_mp_regen(delta)
     _update_animation()
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -70,9 +78,9 @@ func switch_primary_attack_skill()->void:
 
 # 血条与蓝条
 func emit_update_hp():
-    hp_changed.emit(cur_hp,data.max_hp)
+    hp_changed.emit(state.cur_hp,state.max_hp)
 func emit_update_mp():
-    mp_changed.emit(cur_mp,data.max_mp)
+    mp_changed.emit(state.cur_mp,state.max_mp)
 func get_mp()->float:
     return cur_mp
 func cost_mp(mp_cost:float):
@@ -94,30 +102,30 @@ func _update_dir_status():
     move_dir = Input.get_vector("move_left","move_right","move_up","move_down").normalized()
     
     # 更新玩家速度，移动
-    velocity = move_dir * data.speed
+    velocity = move_dir * move_speed
     move_and_slide()
     
 
 func _update_skill_status(delta:float)->void:
     primary_attack_slot.update(delta)
 
-func _update_hp_and_mp_regen(delta: float) -> void:
-    if cur_hp < data.max_hp:
-        if cur_hp <=0:
-            cur_hp = 0;
-        cur_hp += hp_regen_per_second * delta
-        # 不能超过最大血量
-        if cur_hp > data.max_hp:
-            cur_hp = data.max_hp
-        hp_changed.emit(cur_hp,data.max_hp)
-    if cur_mp < data.max_mp:
-        if cur_hp <=0:
-            cur_hp = 0;
-        cur_mp += mp_regen_per_second * delta
-        # 不能超过最大血量
-        if cur_mp > data.max_mp:
-            cur_mp = data.max_mp
-        mp_changed.emit(cur_mp,data.max_mp)
+# func _update_hp_and_mp_regen(delta: float) -> void:
+#     if cur_hp < data.max_hp:
+#         if cur_hp <=0:
+#             cur_hp = 0;
+#         cur_hp += hp_regen_per_second * delta
+#         # 不能超过最大血量
+#         if cur_hp > data.max_hp:
+#             cur_hp = data.max_hp
+#         hp_changed.emit(cur_hp,data.max_hp)
+#     if cur_mp < data.max_mp:
+#         if cur_hp <=0:
+#             cur_hp = 0;
+#         cur_mp += mp_regen_per_second * delta
+#         # 不能超过最大血量
+#         if cur_mp > data.max_mp:
+#             cur_mp = data.max_mp
+#         mp_changed.emit(cur_mp,data.max_mp)
 
 # ======= 动画
 func _update_animation():

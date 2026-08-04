@@ -19,41 +19,55 @@ script = ExtResource("1_4kiuy")
 [node name="Player" parent="." unique_id=1487487930 instance=ExtResource("3_mo7ay")]
 position = Vector2(56, 113)
 data = SubResource("Resource_4kiuy")
+hp_regen_per_second = null
+mp_regen_per_second = null
 
 [node name="RegionEnemySpawnPoints" type="Node2D" parent="." unique_id=308306260]
 
 [node name="EnemySpawnPoint" parent="RegionEnemySpawnPoints" unique_id=480720489 instance=ExtResource("7_mo7ay")]
 position = Vector2(496, -496)
+max_count = 6
 
 [node name="EnemySpawnPoint2" parent="RegionEnemySpawnPoints" unique_id=688556948 instance=ExtResource("7_mo7ay")]
 position = Vector2(1496, -496)
+max_count = 6
 
 [node name="EnemySpawnPoint3" parent="RegionEnemySpawnPoints" unique_id=1373966579 instance=ExtResource("7_mo7ay")]
 position = Vector2(1496, 504)
+max_count = 6
 
 [node name="EnemySpawnPoint4" parent="RegionEnemySpawnPoints" unique_id=512829858 instance=ExtResource("7_mo7ay")]
 position = Vector2(496, 504)
+max_count = 6
 
 [node name="EnemySpawnPoint5" parent="RegionEnemySpawnPoints" unique_id=580294213 instance=ExtResource("7_mo7ay")]
 position = Vector2(-496, 504)
+max_count = 6
 
 [node name="EnemySpawnPoint6" parent="RegionEnemySpawnPoints" unique_id=281155032 instance=ExtResource("7_mo7ay")]
 position = Vector2(-496, -504)
+max_count = 6
 
 [node name="EnemySpawnPoint7" parent="RegionEnemySpawnPoints" unique_id=1495203189 instance=ExtResource("7_mo7ay")]
 position = Vector2(-496, -1488)
+max_count = 6
 
 [node name="EnemySpawnPoint8" parent="RegionEnemySpawnPoints" unique_id=2075315041 instance=ExtResource("7_mo7ay")]
 position = Vector2(496, -1496)
+max_count = 6
 
 [node name="EnemySpawnPoint9" parent="RegionEnemySpawnPoints" unique_id=1018528663 instance=ExtResource("7_mo7ay")]
 position = Vector2(1496, -1496)
+max_count = 6
 
 [node name="EnemySpawnPoint10" parent="RegionEnemySpawnPoints" unique_id=646693504 instance=ExtResource("7_mo7ay")]
 position = Vector2(2496, -1496)
+max_count = 6
 
 [node name="EnemySpawnPoint11" parent="RegionEnemySpawnPoints" unique_id=1219376289 instance=ExtResource("7_mo7ay")]
 position = Vector2(2496, -496)
+max_count = 6
 
 [node name="EnemySpawnPoint12" parent="RegionEnemySpawnPoints" unique_id=171766425 instance=ExtResource("7_mo7ay")]
 position = Vector2(2496, 504)
+max_count = 6
