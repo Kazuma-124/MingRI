@@ -1,3 +1,4 @@
+# 修改玩家数据机制
 extends CharacterBase
 
 signal hp_changed(new_hp: float, max_hp: float)
