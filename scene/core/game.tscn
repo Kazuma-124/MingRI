@@ -14,13 +14,11 @@ script = ExtResource("1_4kiuy")
 
 [node name="World" parent="." unique_id=724723732 instance=ExtResource("2_2o4tn")]
 
-[node name="Ui" parent="." unique_id=562004772 instance=ExtResource("5_7f3c4")]
-
 [node name="Player" parent="." unique_id=1487487930 instance=ExtResource("3_mo7ay")]
 position = Vector2(56, 113)
 data = SubResource("Resource_4kiuy")
-hp_regen_per_second = null
-mp_regen_per_second = null
+
+[node name="Ui" parent="." unique_id=917833657 instance=ExtResource("5_7f3c4")]
 
 [node name="RegionEnemySpawnPoints" type="Node2D" parent="." unique_id=308306260]
 

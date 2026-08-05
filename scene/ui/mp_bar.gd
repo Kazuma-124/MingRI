@@ -20,7 +20,6 @@ var tween:Tween
 func _ready() -> void:
     background.size = size
     background.position = Vector2.ZERO
-    background.color = Color(0.2, 0.2, 0.2, 0.8)
     chiyan_mp_bar.color = AttributeTypes.CHIYAN_COLOR
     shengxi_mp_bar.color = AttributeTypes.SHENGXI_COLOR
     shuangxuan_mp_bar.color = AttributeTypes.SHUANGXUAN_COLOR

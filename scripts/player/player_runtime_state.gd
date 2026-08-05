@@ -3,7 +3,7 @@ class_name PlayerRuntimeState
 
 signal hp_changed(cur:float,max:float)
 signal mp_changed(attr:AttributeTypes.Type,cur:float)
-signal mp_update(
+signal mp_all_changed(
     chiyan:float,
     shengxi:float,
     shuangxuan:float,
@@ -34,6 +34,9 @@ var cur_hp:float = 100.0
 func _init_hp(cur:float,max:float)->void:
     cur_hp = cur
     max_hp = max
+    emit_hp_changed()
+
+func emit_hp_changed()->void:
     hp_changed.emit(cur_hp,max_hp)
 
 func take_damage(amount:float)->void:
@@ -53,6 +56,8 @@ var chiyan_mp: float = 250.0    # 赤焰能量
 var shengxi_mp: float = 250.0   # 生息能量
 var shuangxuan_mp: float = 250.0  # 霜玄能量
 var youying_mp: float = 250.0   # 幽影能量
+
+
 func _init_mp_from_max_mp(max:float)->void:
     max_mp = max
     var per_mp:float = max_mp/AttributeTypes.Type.size()
@@ -60,14 +65,18 @@ func _init_mp_from_max_mp(max:float)->void:
     shengxi_mp = per_mp   # 生息能量
     shuangxuan_mp = per_mp  # 霜玄能量
     youying_mp = per_mp   # 幽影能量
-    mp_update.emit(
+    emit_mp_all_changed()
+# func _init_mp(max:float)
+
+func emit_mp_all_changed()->void:
+    mp_all_changed.emit(
         chiyan_mp,
         shengxi_mp,
         shuangxuan_mp,
         youying_mp,
         max_mp
     )
-# func _init_mp(max:float)
+
 
 func get_mp(attr:AttributeTypes.Type)->float:
     match attr:
@@ -102,7 +111,7 @@ func cost_mp(attr:AttributeTypes.Type,amount:float)->bool:
             youying_mp -= amount
         _:
             push_warning("cost_mp has wrong atrr")
-    # mp_changed.emit(attr,get_mp(attr),max_mp)
+    mp_changed.emit(attr,get_mp(attr))
     return true
 
 # 吸收某属性能量
@@ -121,19 +130,18 @@ func absorb_mp(attr: AttributeTypes.Type, amount: float) -> void:
     # 2. 检查是否超出上限
     var total = get_total_mp()
     if total <= max_mp:
+        mp_changed.emit(attr,get_mp(attr))
         return  # 没超，不用消散
     
     # 3. 超出了，迭代消散
     var overflow = total - max_mp
     _dissipate_overflow(overflow)
-    # ???
-    # mp_changed.emit(attr,get_mp(attr),max_mp)
+    emit_mp_all_changed() 
 
 # 迭代消散超出的能量
 func _dissipate_overflow(overflow: float) -> void:
     var remaining = overflow
     
-    var threshold:float = 0.001
     # var count = AttributeTypes.Type.size()
     # 最多迭代 4 轮（四种能量），不会死循环
     for _i in 4:
@@ -197,8 +205,8 @@ func transfer_mp(from_attr: AttributeTypes.Type, to_attr: AttributeTypes.Type, a
             shuangxuan_mp += amount
         AttributeTypes.Type.YOUYING:
             youying_mp += amount
-    # ??? 
-    # mp_changed.emit()
+    mp_changed.emit(from_attr,get_mp(from_attr))
+    mp_changed.emit(to_attr,get_mp(to_attr))
     return true
         
 

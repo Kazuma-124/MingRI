@@ -19,6 +19,14 @@ func _gui_input(event: InputEvent) -> void:
         clicked.emit()
         accept_event()
 
+# primary_attack_slot.gd
+func bind_skill_slot(slot: SkillSlot) -> void:
+    slot.skill_changed.connect(set_skill)
+    slot.cooldown_updated.connect(set_cooldown)
+    set_skill(slot.skill_data)  # 立即刷新
+    
+    clicked.connect(slot.xxx)  # 这里要注意：UI 不应该调用 skill_slot 的方法
+
 func set_cooldown(ratio:float,remaining:float)->void:
     cooldown_mask.value = ratio
     if remaining<=0.05:
