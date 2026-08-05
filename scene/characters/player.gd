@@ -1,14 +1,6 @@
 # 修改玩家数据机制
 extends CharacterBase
 
-signal hp_changed(new_hp: float, max_hp: float)
-signal mp_changed(new_mp:float,max_mp:float)
-
-# ===== 技能
-# 普攻火焰弹场景
-# const SkillEmptyHandData:SkillData = preload("res://data/skills/skill_empty_hand.tres")
-# const SkillBulletFlameData:SkillData =    preload("res://data/skills/skill_bullet_flame.tres")
-
 @export var data:PlayerData
 
 # @export var hp_regen_per_second: float = 5
@@ -20,6 +12,7 @@ var primary_attack_slot:SkillSlot
 var primary_attack_skills:Array = []
 var current_primary_attack_index:int = 0
 # 其它技能槽
+var skill_slots:Array[SkillSlot]
 
 # ====== 玩家状态
 var move_speed
@@ -35,16 +28,17 @@ func _ready() -> void:
     EnemyManager.register_player(self)
     # 玩家状态
     move_speed = data.base_speed
-    # 下面的state相关以后要改为从存档中获取数据???
     _init_state_data()
-    # 装载普攻技能
+    # 装载技能槽，普攻技能槽和普通技能槽
     _init_defult_skills()
     # 方向和动画
     _update_dir_status()
     _update_animation()
 
 func _physics_process(delta: float) -> void:
+    # 鼠标方向等
     _update_dir_status()
+    # 更新技能冷却之类的
     _update_skill_status(delta)
     # _update_hp_and_mp_regen(delta)
     _update_animation()
@@ -63,22 +57,9 @@ func switch_primary_attack_skill()->void:
     var new_data = primary_attack_skills[current_primary_attack_index]
     primary_attack_slot.set_skill(new_data)
 
-# 血条与蓝条
-func emit_update_hp():
-    hp_changed.emit(state.cur_hp,state.max_hp)
-func emit_update_mp():
-    mp_changed.emit(state.cur_mp,state.max_mp)
-func get_mp()->float:
-    return cur_mp
-func cost_mp(mp_cost:float):
-    cur_mp-=mp_cost
-    mp_changed.emit(cur_mp,data.max_mp)
 # 受伤
-func take_damage(damage: float) -> void:
-    cur_hp -= damage
-    hp_changed.emit(cur_hp,data.max_hp) # 血量变了就发信号
-
-
+func take_damage(amount: float) -> void:
+    state.take_damage(amount)
 
 func _update_dir_status():
     # 玩家鼠标方向，决定动画朝向和武器指向
@@ -95,6 +76,8 @@ func _update_dir_status():
 
 func _update_skill_status(delta:float)->void:
     primary_attack_slot.update(delta)
+    for slot in skill_slots:
+        slot.update(delta)
 
 # func _update_hp_and_mp_regen(delta: float) -> void:
 #     if cur_hp < data.max_hp:
@@ -143,29 +126,31 @@ func _generate_cast_context()->CastContext:
 
 func _init_state_data()->void:
     state = PlayerRuntimeState.new()
-    state.max_hp = data.max_hp
-    state.cur_hp = data.max_hp
-    state.max_mp = data.max_mp
-    state.cur_mp = data.max_mp
-    # 通知ui更新血量和蓝量
-    emit_update_hp()
-    emit_update_mp()
+
     # learned_skill
     for skill in data.default_skills:
         if skill.unlock_level <= state.base_level:
             state.learned_skills.append(skill)
+    # primary_attack_skills
     for skill in state.learned_skills:
         if skill.skill_type == SkillData.SkillType.PRIMARY_ATTACK && skill.unlock_level==0:
             state.primary_attack_skills.append(skill)
 
 
 func _init_defult_skills()->void:
+    # 下面的state相关以后要改为从存档中获取数据???
     # 技能
     # 普攻，默认自动装备0级，普攻技能
     primary_attack_skills = state.primary_attack_skills
     current_primary_attack_index = 0
     var init_skill_data = primary_attack_skills[current_primary_attack_index]
-    primary_attack_slot = SkillSlot.new(init_skill_data,self)
+    primary_attack_slot = SkillSlot.from_data(init_skill_data,self)
+    # 普通技能
+    for skill in state.skill_slots:
+        skill_slots.append(SkillSlot.from_data(skill,self))
+    if state.skill_slots.size()<4:
+        for i in (4-state.skill_slots.size()):
+            skill_slots.append(SkillSlot.empty())
 
 # ============ 工具 =============
 func _vector_to_suffix(vec:Vector2)->StringName:
@@ -173,3 +158,14 @@ func _vector_to_suffix(vec:Vector2)->StringName:
         return &"right" if vec.x>=0 else &"left"
     else:
         return &"down" if vec.y>=0 else &"up"
+
+
+# 提供给 SkillSlot 调用的能量接口
+func has_enough_mp(attr: AttributeTypes.Type, amount: float) -> bool:
+    return state.has_enough_mp(attr, amount)
+
+func cost_mp(attr: AttributeTypes.Type, amount: float) -> bool:
+    return state.cost_mp(attr, amount)
+
+func get_mp(attr: AttributeTypes.Type) -> float:
+    return state.get_mp(attr)

@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://t3gtb7f8kwfk" path="res://scene/ui/hp_and_mp_status.gd" id="2_xh8xk"]
 [ext_resource type="Script" uid="uid://byqen706gdiwq" path="res://scene/ui/primary_attack_slot.gd" id="4_ajaei"]
 [ext_resource type="Texture2D" uid="uid://c4gluhm8dgahw" path="res://resources/植物明星大乱斗/sun_ex_1.png" id="4_xh8xk"]
+[ext_resource type="Script" uid="uid://dwba8nn3uyv11" path="res://scene/ui/mp_bar.gd" id="5_f7jfn"]
 [ext_resource type="Texture2D" uid="uid://ciygchho7fi5n" path="res://assets/icons/windows.png" id="5_ytdjg"]
 
 [node name="Ui" type="CanvasLayer" unique_id=917833657]
@@ -23,8 +24,9 @@ theme = ExtResource("2_4e0l7")
 
 [node name="HpAndMpStatus" type="HBoxContainer" parent="UiRoot" unique_id=749560375]
 layout_mode = 0
-offset_right = 369.0
-offset_bottom = 40.0
+offset_right = 424.0
+offset_bottom = 32.0
+mouse_filter = 2
 theme = ExtResource("2_4e0l7")
 script = ExtResource("2_xh8xk")
 
@@ -32,19 +34,57 @@ script = ExtResource("2_xh8xk")
 custom_minimum_size = Vector2(32, 32)
 custom_maximum_size = Vector2(32, 32)
 layout_mode = 2
+mouse_filter = 2
 texture = ExtResource("1_onfsl")
 
-[node name="HPBar" type="ProgressBar" parent="UiRoot/HpAndMpStatus" unique_id=1620890983]
+[node name="HpBar" type="ProgressBar" parent="UiRoot/HpAndMpStatus" unique_id=1620890983]
 custom_minimum_size = Vector2(0, 10)
 layout_mode = 2
 size_flags_horizontal = 3
+size_flags_vertical = 1
+mouse_filter = 2
 theme_type_variation = &"HPBar"
 
-[node name="MPBar" type="ProgressBar" parent="UiRoot/HpAndMpStatus" unique_id=1856513293]
+[node name="MpBar" type="Control" parent="UiRoot/HpAndMpStatus" unique_id=160149398]
+custom_minimum_size = Vector2(200, 24)
+clip_contents = true
 layout_mode = 2
 size_flags_horizontal = 3
-theme_type_variation = &"MPBar"
-value = 41.27
+mouse_filter = 2
+script = ExtResource("5_f7jfn")
+
+[node name="Background" type="ColorRect" parent="UiRoot/HpAndMpStatus/MpBar" unique_id=91578256]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.48452926, 0.48452926, 0.48452926, 1)
+
+[node name="ChiyanMpBar" type="ColorRect" parent="UiRoot/HpAndMpStatus/MpBar" unique_id=1414194601]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.95468724, 0.48452926, 0.48452926, 1)
+
+[node name="ShengxiMpBar" type="ColorRect" parent="UiRoot/HpAndMpStatus/MpBar" unique_id=551937807]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.48452926, 0.9063318, 0.58383155, 1)
+
+[node name="ShuangxuanMpBar" type="ColorRect" parent="UiRoot/HpAndMpStatus/MpBar" unique_id=1415106673]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.48452926, 0.735357, 0.95468724, 1)
+
+[node name="YouyingBar" type="ColorRect" parent="UiRoot/HpAndMpStatus/MpBar" unique_id=2001868041]
+layout_mode = 0
+offset_right = 40.0
+offset_bottom = 40.0
+color = Color(0.7977378, 0.48452926, 0.95468724, 1)
 
 [node name="PrimaryAttackSlot" type="Control" parent="UiRoot" unique_id=809225076]
 propagate_maximum_size = true

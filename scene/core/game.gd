@@ -4,6 +4,8 @@ extends Node2D
 @onready var hp_and_mp_status:HBoxContainer = $Ui/UiRoot/HpAndMpStatus
 @onready var primary_attack_slot: Control = $Ui/UiRoot/PrimaryAttackSlot
 
+
+
 func _ready() -> void:
     # 玩家血量和能量信息绑定ui
     player.hp_changed.connect(hp_and_mp_status.update_hp)

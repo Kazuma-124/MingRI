@@ -6,26 +6,21 @@ enum SkillType{
     PRIMARY_ATTACK,     # 普攻
     PASSIVE,            # 被动
 }
-enum AttributeType {
-    CHIYAN,      # 赤焰
-    SHENGXI,     # 生息
-    SHUANGXUAN,  # 霜玄
-    YOUYING,     # 幽影
-}
 @export_group("基础信息")
 @export var id:StringName
 @export var name:String
 @export var skill_type:SkillType = SkillType.NORMAL
-@export var attribute_type:AttributeType
+@export_group("资源")
 @export var icon:Texture2D
 @export var scene:PackedScene
 @export_group("能量属性相关")
+@export var attribute_type:AttributeTypes.Type
 @export var unlock_level:int
 @export_group("数值")
+@export var mp_cost:float
 @export var damage:float
 @export var cooldown:float
 @export var cast_range:float = 250
-@export var flame_mp_cost:float
 
 # ==================== 投射物专属 ====================
 @export_group("投射物专属")
