@@ -17,7 +17,7 @@ signal mp_changed(new_mp:float,max_mp:float)
 var state:PlayerRuntimeState
 # 普攻技能槽
 var primary_attack_slot:SkillSlot
-var primary_attack_skill_options:Array = []
+var primary_attack_skills:Array = []
 var current_primary_attack_index:int = 0
 # 其它技能槽
 
@@ -36,22 +36,9 @@ func _ready() -> void:
     # 玩家状态
     move_speed = data.base_speed
     # 下面的state相关以后要改为从存档中获取数据???
-    state = PlayerRuntimeState.new()
-    state.max_hp = data.max_hp
-    state.cur_hp = data.max_hp
-    state.max_mp = data.max_mp
-    state.cur_mp = data.max_mp
-    # 通知ui更新血量和蓝量
-    emit_update_hp()
-    emit_update_mp()
-    # 技能
-    # 普攻
-    primary_attack_skill_options = [
-        SkillEmptyHandData,
-        SkillBulletFlameData
-    ]
-    var init_skill_data = primary_attack_skill_options[current_primary_attack_index]
-    primary_attack_slot = SkillSlot.new(init_skill_data,self)
+    _init_state_data()
+    # 装载普攻技能
+    _init_defult_skills()
     # 方向和动画
     _update_dir_status()
     _update_animation()
@@ -71,9 +58,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 func switch_primary_attack_skill()->void:
-    current_primary_attack_index = (current_primary_attack_index+1)%primary_attack_skill_options.size()
+    current_primary_attack_index = (current_primary_attack_index+1)%primary_attack_skills.size()
 
-    var new_data = primary_attack_skill_options[current_primary_attack_index]
+    var new_data = primary_attack_skills[current_primary_attack_index]
     primary_attack_slot.set_skill(new_data)
 
 # 血条与蓝条
@@ -153,6 +140,32 @@ func _generate_cast_context()->CastContext:
     context.caster_position = global_position
     context.cast_direction = mouse_dir
     return context
+
+func _init_state_data()->void:
+    state = PlayerRuntimeState.new()
+    state.max_hp = data.max_hp
+    state.cur_hp = data.max_hp
+    state.max_mp = data.max_mp
+    state.cur_mp = data.max_mp
+    # 通知ui更新血量和蓝量
+    emit_update_hp()
+    emit_update_mp()
+    # learned_skill
+    for skill in data.default_skills:
+        if skill.unlock_level <= state.base_level:
+            state.learned_skills.append(skill)
+    for skill in state.learned_skills:
+        if skill.skill_type == SkillData.SkillType.PRIMARY_ATTACK && skill.unlock_level==0:
+            state.primary_attack_skills.append(skill)
+
+
+func _init_defult_skills()->void:
+    # 技能
+    # 普攻，默认自动装备0级，普攻技能
+    primary_attack_skills = state.primary_attack_skills
+    current_primary_attack_index = 0
+    var init_skill_data = primary_attack_skills[current_primary_attack_index]
+    primary_attack_slot = SkillSlot.new(init_skill_data,self)
 
 # ============ 工具 =============
 func _vector_to_suffix(vec:Vector2)->StringName:

@@ -1,9 +1,22 @@
 extends Resource
 class_name SkillData
 
+enum SkillType{
+    NORMAL,             # 普通技能
+    PRIMARY_ATTACK,     # 普攻
+    PASSIVE,            # 被动
+}
+enum AttributeType {
+    CHIYAN,      # 赤焰
+    SHENGXI,     # 生息
+    SHUANGXUAN,  # 霜玄
+    YOUYING,     # 幽影
+}
 @export_group("基础信息")
 @export var id:StringName
 @export var name:String
+@export var skill_type:SkillType = SkillType.NORMAL
+@export var attribute_type:AttributeType
 @export var icon:Texture2D
 @export var scene:PackedScene
 @export_group("能量属性相关")

@@ -8,6 +8,7 @@
 script = ExtResource("1_hwrvf")
 id = &"bullet_flame"
 name = "火弹"
+skill_type = 1
 icon = ExtResource("1_she6i")
 scene = ExtResource("2_she6i")
 damage = 10.0

@@ -1,7 +1,11 @@
 [gd_resource type="Resource" script_class="PlayerData" format=3 uid="uid://wcg6f35os2ku"]
 
+[ext_resource type="Script" uid="uid://b4ng7uinnlfag" path="res://data/skills/skill_data.gd" id="1_2qvq0"]
 [ext_resource type="Script" uid="uid://5qwocjh76bce" path="res://data/characters/player_data.gd" id="1_lkx0q"]
+[ext_resource type="Resource" uid="uid://bpktdpbw1hqn3" path="res://data/skills/skill_empty_hand.tres" id="2_o1ct4"]
+[ext_resource type="Resource" uid="uid://c4bjohp4xlpy5" path="res://data/skills/skill_bullet_flame.tres" id="3_px370"]
 
 [resource]
 script = ExtResource("1_lkx0q")
+default_skills = Array[ExtResource("1_2qvq0")]([ExtResource("2_o1ct4"), ExtResource("3_px370")])
 metadata/_custom_type_script = "uid://5qwocjh76bce"

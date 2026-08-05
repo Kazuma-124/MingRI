@@ -29,7 +29,7 @@ var cur_mp:float = 1000.0
 
 
 var learned_skills:Array[SkillData] = []
-
-var equiped_skills:Array[SkillData] = []
+var primary_attack_skills:Array[SkillData] = []
+var skill_slots:Array[SkillData] = [] # 索引是槽位号
 
 # var save_position:Vector2 = Vector2.ZERO
