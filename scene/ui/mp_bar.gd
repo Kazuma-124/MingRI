@@ -38,7 +38,7 @@ func set_mp(attr:AttributeTypes.Type,value:float):
             shuangxuan_mp = value
         AttributeTypes.Type.YOUYING:
             youying_mp = value
-    _update_bars_immediate()
+    _update_bars_animated()
 
 func set_all_mp(
     chiyan:float,
@@ -53,21 +53,7 @@ func set_all_mp(
     shengxi_mp = shengxi
     shuangxuan_mp = shuangxuan
     youying_mp = youying
-    _update_bars_animated()
-
-func bind_to_state(state:PlayerRuntimeState)->void:
-    state.mp_changed.connect(_on_mp_changed)
-    set_all_mp(
-        state.chiyan_mp,
-        state.shengxi_mp,
-        state.shuangxuan_mp,
-        state.youying_mp,
-        state.max_mp
-    )
-
-# == 信号
-func _on_mp_changed(attr:AttributeTypes.Type,cur:float)->void:
-    set_mp(attr,cur)
+    _update_bars_immediate()
 
 # == 内部方法，更新动画
 # 带动画地更新

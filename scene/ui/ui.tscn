@@ -4,10 +4,8 @@
 [ext_resource type="Texture2D" uid="uid://cx0ednpe68lrm" path="res://assets/icons/icon.png" id="1_onfsl"]
 [ext_resource type="Theme" uid="uid://j5c5qocrx31m" path="res://assets/themes/default_theme.tres" id="2_4e0l7"]
 [ext_resource type="Script" uid="uid://t3gtb7f8kwfk" path="res://scene/ui/hp_and_mp_status.gd" id="2_xh8xk"]
-[ext_resource type="Script" uid="uid://byqen706gdiwq" path="res://scene/ui/primary_attack_slot.gd" id="4_ajaei"]
-[ext_resource type="Texture2D" uid="uid://c4gluhm8dgahw" path="res://resources/植物明星大乱斗/sun_ex_1.png" id="4_xh8xk"]
 [ext_resource type="Script" uid="uid://dwba8nn3uyv11" path="res://scene/ui/mp_bar.gd" id="5_f7jfn"]
-[ext_resource type="Texture2D" uid="uid://ciygchho7fi5n" path="res://assets/icons/windows.png" id="5_ytdjg"]
+[ext_resource type="PackedScene" uid="uid://dg05heyilknlf" path="res://scene/ui/skill_slot.tscn" id="6_p21fl"]
 
 [node name="Ui" type="CanvasLayer" unique_id=917833657]
 script = ExtResource("1_kee8w")
@@ -86,61 +84,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0.7977378, 0.48452926, 0.95468724, 1)
 
-[node name="PrimaryAttackSlot" type="Control" parent="UiRoot" unique_id=809225076]
-propagate_maximum_size = true
+[node name="PrimaryAttackSlot" parent="UiRoot" unique_id=1439700499 instance=ExtResource("6_p21fl")]
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -56.0
-offset_right = 56.0
-grow_vertical = 0
-script = ExtResource("4_ajaei")
-
-[node name="SlotBg" type="TextureRect" parent="UiRoot/PrimaryAttackSlot" unique_id=137726887]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("5_ytdjg")
-expand_mode = 1
-stretch_mode = 6
-
-[node name="SkillIcon" type="TextureRect" parent="UiRoot/PrimaryAttackSlot" unique_id=1439613401]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-texture = ExtResource("4_xh8xk")
-expand_mode = 1
-stretch_mode = 5
-
-[node name="CooldownMask" type="ProgressBar" parent="UiRoot/PrimaryAttackSlot" unique_id=650518811]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-mouse_filter = 2
-theme_type_variation = &"CooldownMask"
-max_value = 1.0
-step = 0.0
-value = 1.0
-fill_mode = 3
-show_percentage = false
-
-[node name="CooldownLabel" type="Label" parent="UiRoot/PrimaryAttackSlot" unique_id=1448494618]
-layout_mode = 1
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-grow_horizontal = 2
-grow_vertical = 2
-text = "test"
-horizontal_alignment = 1
-vertical_alignment = 1
+script = null
