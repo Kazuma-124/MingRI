@@ -17,9 +17,10 @@ config/icon="res://icon.svg"
 
 [autoload]
 
+EventBus="*uid://c23excalbqfa6"
+SkillLibrary="*uid://ctvrbxjst5sq3"
 GameManager="*uid://bhhgvggi3ehxg"
 EnemyManager="*uid://wds7nan2maj8"
-SkillLibrary="*uid://ctvrbxjst5sq3"
 
 [display]
 

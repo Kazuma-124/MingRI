@@ -25,15 +25,24 @@ var move_dir:Vector2
 
 func _ready() -> void:
     super._ready()
-    EnemyManager.register_player(self)
-    # 玩家状态
-    move_speed = data.base_speed
+    # 需要存档的玩家状态
     _init_state_data()
+    # 不需要存档的状态
+    move_speed = data.base_speed
     # 装载技能槽，普攻技能槽和普通技能槽
     _init_defult_skills()
     # 方向和动画
     _update_dir_status()
     _update_animation()
+    # 注册
+    GameManager.set_player(self,state)
+    EnemyManager.register_player(self)
+    # 信号,
+    # 信号转发到EventBus
+    state.hp_changed.connect(_on_state_hp_changed)
+    state.mp_changed.connect(_on_state_mp_changed)
+    state.mp_all_changed.connect(_on_state_mp_all_changed)
+    _skill_signal_connect()
 
 func _physics_process(delta: float) -> void:
     # 鼠标方向等
@@ -51,11 +60,6 @@ func _unhandled_input(event: InputEvent) -> void:
             get_parent().add_child(bullet)
 
 
-func switch_primary_attack_skill()->void:
-    current_primary_attack_index = (current_primary_attack_index+1)%primary_attack_skills.size()
-
-    var new_data = primary_attack_skills[current_primary_attack_index]
-    primary_attack_slot.set_skill(new_data)
 
 # 受伤
 func take_damage(amount: float) -> void:
@@ -169,3 +173,49 @@ func cost_mp(attr: AttributeTypes.Type, amount: float) -> bool:
 
 func get_mp(attr: AttributeTypes.Type) -> float:
     return state.get_mp(attr)
+
+# 信号
+func _on_state_hp_changed(cur:float,max:float)->void:
+    EventBus.player_hp_changed.emit(cur,max)
+
+func _on_state_mp_changed(attr:AttributeTypes.Type,cur:float)->void:
+    EventBus.player_mp_changed.emit(attr,cur)
+
+func _on_state_mp_all_changed(
+    chiyan:float,
+    shengxi:float,
+    shuangxuan:float,
+    youying:float,
+    max:float
+)->void:
+    EventBus.player_mp_all_changed.emit(chiyan,shengxi,shuangxuan,youying,max)
+
+
+func _on_slot_skill_changed(skill:SkillData,slot_id:int)->void:
+    EventBus.equiped_skill_changed.emit(slot_id,skill)
+func _on_slot_skill_cooldown_updated(ratio:float,remaining:float,slot_id:int)->void:
+    EventBus.equiped_skill_cooldown_updated.emit(slot_id,ratio,remaining)
+func _skill_signal_connect()->void:
+    primary_attack_slot.skill_changed.connect(_on_slot_skill_changed.bind(0))
+    primary_attack_slot.cooldown_updated.connect(_on_slot_skill_cooldown_updated.bind(0))
+    for i in range(skill_slots.size()):
+        var slot_id = i+1 # 下标从0开始，普通技能槽id从1开始
+        skill_slots[i].skill_changed.connect(_on_slot_skill_changed.bind(slot_id))
+        skill_slots[i].cooldown_updated.connect(_on_slot_skill_cooldown_updated.bind(slot_id))
+    # 监听 UI 输入事件
+    EventBus.equiped_skill_slot_clicked.connect(_on_skill_slot_clicked)
+
+func _switch_primary_attack_skill()->void:
+    current_primary_attack_index = (current_primary_attack_index+1)%primary_attack_skills.size()
+
+    var new_data = primary_attack_skills[current_primary_attack_index]
+    primary_attack_slot.set_skill(new_data)
+func _on_skill_slot_clicked(slot_id:int)->void:
+    if slot_id<0:
+        push_warning("负数的slot_id,in _on_skill_slot_clicked")
+        return
+    if slot_id==0:
+        _switch_primary_attack_skill()
+    else:
+        #??? 普通技能槽切换逻辑
+        pass
