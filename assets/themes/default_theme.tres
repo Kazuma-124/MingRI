@@ -820,6 +820,18 @@ border_color = Color(0, 0, 0, 1)
 bg_color = Color(0, 0, 1, 1)
 border_color = Color(0, 0, 0, 1)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5vcv8"]
+bg_color = Color(0.45424774, 0.45424774, 0.45424774, 1)
+border_width_left = 1
+border_width_top = 1
+border_width_right = 1
+border_width_bottom = 1
+border_color = Color(0.43036, 0.15255937, 0, 1)
+expand_margin_left = 4.0
+expand_margin_top = 4.0
+expand_margin_right = 4.0
+expand_margin_bottom = 4.0
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sx0q5"]
 border_width_left = 2
 border_width_top = 2
@@ -840,4 +852,5 @@ HPBar/fonts/font = SubResource("FontFile_sx0q5")
 HPBar/styles/fill = SubResource("StyleBoxFlat_f7jfn")
 MPBar/base_type = &"ProgressBar"
 MPBar/styles/fill = SubResource("StyleBoxFlat_5sm08")
+PanelContainer/styles/panel = SubResource("StyleBoxFlat_5vcv8")
 ProgressBar/styles/background = SubResource("StyleBoxFlat_sx0q5")

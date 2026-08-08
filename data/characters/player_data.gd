@@ -21,6 +21,8 @@ func get_exp_required_for_level(level:int)->int:
 @export_subgroup("赤焰技能")
 @export var default_skills:Array[SkillData] = []
 
+@export_group("技能槽")
+@export var skill_slot_count: int = 8  # 普通技能槽数量
 @export_group("其它未分类")
 @export var view_radius:float = 500.0
 # @export var view_radius:float = 500.0

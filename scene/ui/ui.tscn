@@ -5,7 +5,7 @@
 [ext_resource type="Theme" uid="uid://j5c5qocrx31m" path="res://assets/themes/default_theme.tres" id="2_4e0l7"]
 [ext_resource type="Script" uid="uid://t3gtb7f8kwfk" path="res://scene/ui/hp_and_mp_status.gd" id="2_xh8xk"]
 [ext_resource type="Script" uid="uid://dwba8nn3uyv11" path="res://scene/ui/mp_bar.gd" id="5_f7jfn"]
-[ext_resource type="PackedScene" uid="uid://dg05heyilknlf" path="res://scene/ui/skill_slot.tscn" id="6_p21fl"]
+[ext_resource type="PackedScene" uid="uid://c6t1jo75ishkt" path="res://scene/ui/SkillShortcutBar.tscn" id="6_p21fl"]
 
 [node name="Ui" type="CanvasLayer" unique_id=917833657]
 script = ExtResource("1_kee8w")
@@ -78,12 +78,21 @@ offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0.48452926, 0.735357, 0.95468724, 1)
 
-[node name="YouyingBar" type="ColorRect" parent="UiRoot/HpAndMpStatus/MpBar" unique_id=2001868041]
+[node name="YouyingMpBar" type="ColorRect" parent="UiRoot/HpAndMpStatus/MpBar" unique_id=2001868041]
 layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 color = Color(0.7977378, 0.48452926, 0.95468724, 1)
 
-[node name="PrimaryAttackSlot" parent="UiRoot" unique_id=1439700499 instance=ExtResource("6_p21fl")]
-layout_mode = 1
-script = null
+[node name="SkillShortcutBar" parent="." unique_id=578397316 instance=ExtResource("6_p21fl")]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -155.0
+offset_top = -50.0
+offset_right = 155.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 0

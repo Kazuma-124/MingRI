@@ -8,7 +8,7 @@ extends Node
 
 signal player_hp_changed(cur: float, max: float)
 signal player_mp_changed(attr: int, cur: float)
-signal player_mp_all_changed(chiyan: float, shengxi: float, shuangxuan: float, youying: float, max: float)
+signal player_mp_all_changed(mp:Array[float], max: float)
 
 # ==========================================
 # 技能槽状态变化事件（数据 → UI）

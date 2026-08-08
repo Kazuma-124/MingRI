@@ -1,10 +1,10 @@
 [gd_scene format=3 uid="uid://dg05heyilknlf"]
 
-[ext_resource type="Script" uid="uid://byqen706gdiwq" path="res://scene/ui/skill_slot.gd" id="1_0f3ss"]
-[ext_resource type="Texture2D" uid="uid://ciygchho7fi5n" path="res://assets/icons/windows.png" id="2_xi3nm"]
-[ext_resource type="Texture2D" uid="uid://c4gluhm8dgahw" path="res://resources/植物明星大乱斗/sun_ex_1.png" id="3_dh886"]
+[ext_resource type="Script" uid="uid://byqen706gdiwq" path="res://scene/ui/skill_slot_ui.gd" id="1_kt0g2"]
+[ext_resource type="Texture2D" uid="uid://ciygchho7fi5n" path="res://assets/icons/windows.png" id="2_k0n71"]
 
 [node name="SkillSlot" type="Control" unique_id=1439700499]
+custom_minimum_size = Vector2(48, 48)
 propagate_maximum_size = true
 layout_mode = 3
 anchors_preset = 2
@@ -13,7 +13,7 @@ anchor_bottom = 1.0
 offset_top = -56.0
 offset_right = 56.0
 grow_vertical = 0
-script = ExtResource("1_0f3ss")
+script = ExtResource("1_kt0g2")
 
 [node name="SlotBg" type="TextureRect" parent="." unique_id=1884376137]
 layout_mode = 1
@@ -22,7 +22,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("2_xi3nm")
+texture = ExtResource("2_k0n71")
 expand_mode = 1
 stretch_mode = 6
 
@@ -33,7 +33,6 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-texture = ExtResource("3_dh886")
 expand_mode = 1
 stretch_mode = 5
 

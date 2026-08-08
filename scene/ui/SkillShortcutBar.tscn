@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://c6t1jo75ishkt"]
+
+[ext_resource type="Theme" uid="uid://j5c5qocrx31m" path="res://assets/themes/default_theme.tres" id="1_d2ytj"]
+[ext_resource type="Script" uid="uid://culkata01ocdo" path="res://scene/ui/skill_shortcut_bar.gd" id="2_5vcv8"]
+[ext_resource type="PackedScene" uid="uid://dg05heyilknlf" path="res://scene/ui/skill_slot_ui.tscn" id="3_5vcv8"]
+
+[node name="SkillShortcutBar" type="PanelContainer" unique_id=578397316]
+offset_right = 232.0
+offset_bottom = 16.0
+mouse_filter = 2
+theme = ExtResource("1_d2ytj")
+script = ExtResource("2_5vcv8")
+slot_ui_scene = ExtResource("3_5vcv8")
+
+[node name="SlotsContainer" type="HBoxContainer" parent="." unique_id=262413655]
+layout_mode = 2
+size_flags_horizontal = 0
+theme = ExtResource("1_d2ytj")

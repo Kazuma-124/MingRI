@@ -30,24 +30,26 @@ func self_data_init()->void:
 
 # ===== 工厂方法，负责初始化外部数据
 # static关键字，函数属于类，不属于实例，不需要实例化就能调用
-static func from_data(data:SkillData,caster:CharacterBody2D)->SkillSlot:
+static func from_data(data_input:SkillData,caster_input:CharacterBody2D)->SkillSlot:
     var slot = SkillSlot.new()
-    slot.skill_data = data
-    slot.caster = caster
-    slot.slef_data_init()
+    slot.skill_data = data_input
+    slot.caster = caster_input
+    slot.self_data_init()
     return slot
 
-static func from_id(skill_id:StringName,caster:CharacterBody2D)->SkillSlot:
+static func from_id(skill_id:StringName,caster_input:CharacterBody2D)->SkillSlot:
     var data = SkillLibrary.get_skill(skill_id)
-    return SkillSlot.from_data(data,caster)
+    return SkillSlot.from_data(data,caster_input)
 
 static func empty()->SkillSlot:
     return SkillSlot.new()
 
+func emit_skill_changed()->void:
+    skill_changed.emit(skill_data)
+
 func set_skill(new_data:SkillData)->void:
     skill_data = new_data
-    cooldown = skill_data.cooldown
-    cooldown_remaining = 0.0
+    self_data_init()
     # 技能图标
     skill_changed.emit(skill_data)
     # 冷却ui状态
@@ -55,7 +57,7 @@ func set_skill(new_data:SkillData)->void:
 
 func update(delta:float)->void:
     # 不需要外部数据
-    if cooldown_remaining>0:
+    if cooldown_remaining>0 && skill_data && is_instance_valid(caster):
         cooldown_remaining-=delta
         if cooldown_remaining<0:
             cooldown_remaining=0.0

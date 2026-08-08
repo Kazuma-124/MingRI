@@ -6,10 +6,9 @@ extends CharacterBase
 # @export var hp_regen_per_second: float = 5
 # @export var mp_regen_per_second: float = 10
 
-var state:PlayerRuntimeState
+var state:PlayerSaveableState
 # 普攻技能槽
 var primary_attack_slot:SkillSlot
-var primary_attack_skills:Array = []
 var current_primary_attack_index:int = 0
 # 其它技能槽
 var skill_slots:Array[SkillSlot]
@@ -25,12 +24,12 @@ var move_dir:Vector2
 
 func _ready() -> void:
     super._ready()
-    # 需要存档的玩家状态
-    _init_state_data()
+    # 从存档或data资源文件里加载可存档的玩家信息
+    _init_state()
     # 不需要存档的状态
     move_speed = data.base_speed
     # 装载技能槽，普攻技能槽和普通技能槽
-    _init_defult_skills()
+    _init_default_skills()
     # 方向和动画
     _update_dir_status()
     _update_animation()
@@ -42,7 +41,6 @@ func _ready() -> void:
     state.hp_changed.connect(_on_state_hp_changed)
     state.mp_changed.connect(_on_state_mp_changed)
     state.mp_all_changed.connect(_on_state_mp_all_changed)
-    _skill_signal_connect()
 
 func _physics_process(delta: float) -> void:
     # 鼠标方向等
@@ -61,10 +59,19 @@ func _unhandled_input(event: InputEvent) -> void:
 
 
 
-# 受伤
+# ======= 可存档数据
 func take_damage(amount: float) -> void:
     state.take_damage(amount)
+func update_skill_slot_data_to_ui()->void:
+    primary_attack_slot.emit_skill_changed()
+    for slot in skill_slots:
+        if not slot:
+            print_debug("slot is null,==========")
+        if slot && slot.skill_data:
+            slot.emit_skill_changed() 
 
+# ======= 运行时数据
+# 通过输入获取鼠标方向和运动方向
 func _update_dir_status():
     # 玩家鼠标方向，决定动画朝向和武器指向
     mouse_dir = get_global_mouse_position()-global_position
@@ -77,30 +84,12 @@ func _update_dir_status():
     velocity = move_dir * move_speed
     move_and_slide()
     
-
+# 技能冷却
 func _update_skill_status(delta:float)->void:
     primary_attack_slot.update(delta)
     for slot in skill_slots:
-        slot.update(delta)
-
-# func _update_hp_and_mp_regen(delta: float) -> void:
-#     if cur_hp < data.max_hp:
-#         if cur_hp <=0:
-#             cur_hp = 0;
-#         cur_hp += hp_regen_per_second * delta
-#         # 不能超过最大血量
-#         if cur_hp > data.max_hp:
-#             cur_hp = data.max_hp
-#         hp_changed.emit(cur_hp,data.max_hp)
-#     if cur_mp < data.max_mp:
-#         if cur_hp <=0:
-#             cur_hp = 0;
-#         cur_mp += mp_regen_per_second * delta
-#         # 不能超过最大血量
-#         if cur_mp > data.max_mp:
-#             cur_mp = data.max_mp
-#         mp_changed.emit(cur_mp,data.max_mp)
-
+        if slot:
+            slot.update(delta)
 # ======= 动画
 func _update_animation():
     _update_body_animation()
@@ -121,40 +110,54 @@ func _update_weapon_animation():
     weapon_pivot.rotation = mouse_dir.angle()
     weapon_pivot.scale.y = 1.0 if mouse_dir.x>=0 else -1.0
 
-
+# 释放技能时技能可能需要的数据
 func _generate_cast_context()->CastContext:
     var context = CastContext.new()
     context.caster_position = global_position
     context.cast_direction = mouse_dir
     return context
 
-func _init_state_data()->void:
-    state = PlayerRuntimeState.new()
+# func _update_hp_and_mp_regen(delta: float) -> void:
+#     if cur_hp < data.max_hp:
+#         if cur_hp <=0:
+#             cur_hp = 0;
+#         cur_hp += hp_regen_per_second * delta
+#         # 不能超过最大血量
+#         if cur_hp > data.max_hp:
+#             cur_hp = data.max_hp
+#         hp_changed.emit(cur_hp,data.max_hp)
+#     if cur_mp < data.max_mp:
+#         if cur_hp <=0:
+#             cur_hp = 0;
+#         cur_mp += mp_regen_per_second * delta
+#         # 不能超过最大血量
+#         if cur_mp > data.max_mp:
+#             cur_mp = data.max_mp
+#         mp_changed.emit(cur_mp,data.max_mp)
 
-    # learned_skill
-    for skill in data.default_skills:
-        if skill.unlock_level <= state.base_level:
-            state.learned_skills.append(skill)
-    # primary_attack_skills
-    for skill in state.learned_skills:
-        if skill.skill_type == SkillData.SkillType.PRIMARY_ATTACK && skill.unlock_level==0:
-            state.primary_attack_skills.append(skill)
 
 
-func _init_defult_skills()->void:
+# 初始化
+func _init_state()->void:
+    # 从初始玩家data资源文件中加载新存档的玩家初始状态
+    state = PlayerSaveableState.new()
+    state.init_with_start_data(data)
+
+func _init_default_skills()->void:
     # 下面的state相关以后要改为从存档中获取数据???
-    # 技能
     # 普攻，默认自动装备0级，普攻技能
-    primary_attack_skills = state.primary_attack_skills
     current_primary_attack_index = 0
-    var init_skill_data = primary_attack_skills[current_primary_attack_index]
+    var init_skill_data = state.primary_attack_skills[current_primary_attack_index]
     primary_attack_slot = SkillSlot.from_data(init_skill_data,self)
     # 普通技能
-    for skill in state.skill_slots:
-        skill_slots.append(SkillSlot.from_data(skill,self))
-    if state.skill_slots.size()<4:
-        for i in (4-state.skill_slots.size()):
+    for skill in state.skills_in_slot:
+        if skill:
+            skill_slots.append(SkillSlot.from_data(skill,self))
+        else:
             skill_slots.append(SkillSlot.empty())
+    # for slot in skill_slots:
+    #     print_debug("slot:",slot)
+    _skill_slot_signal_connect()
 
 # ============ 工具 =============
 func _vector_to_suffix(vec:Vector2)->StringName:
@@ -162,7 +165,6 @@ func _vector_to_suffix(vec:Vector2)->StringName:
         return &"right" if vec.x>=0 else &"left"
     else:
         return &"down" if vec.y>=0 else &"up"
-
 
 # 提供给 SkillSlot 调用的能量接口
 func has_enough_mp(attr: AttributeTypes.Type, amount: float) -> bool:
@@ -174,42 +176,35 @@ func cost_mp(attr: AttributeTypes.Type, amount: float) -> bool:
 func get_mp(attr: AttributeTypes.Type) -> float:
     return state.get_mp(attr)
 
-# 信号
+# ======= 信号
+# 状态信号
 func _on_state_hp_changed(cur:float,max:float)->void:
     EventBus.player_hp_changed.emit(cur,max)
 
 func _on_state_mp_changed(attr:AttributeTypes.Type,cur:float)->void:
     EventBus.player_mp_changed.emit(attr,cur)
 
-func _on_state_mp_all_changed(
-    chiyan:float,
-    shengxi:float,
-    shuangxuan:float,
-    youying:float,
-    max:float
-)->void:
-    EventBus.player_mp_all_changed.emit(chiyan,shengxi,shuangxuan,youying,max)
+func _on_state_mp_all_changed(mps:Array[float],max:float)->void:
+    EventBus.player_mp_all_changed.emit(mps,max)
 
+# 技能信号
 
+func _skill_slot_signal_connect()->void:
+    primary_attack_slot.skill_changed.connect(_on_slot_skill_changed.bind(0))
+    primary_attack_slot.cooldown_updated.connect(_on_slot_skill_cooldown_updated.bind(0))
+    for i in range(skill_slots.size()):
+        if skill_slots[i]:
+            var slot_id = i+1 # 下标从0开始，普通技能槽id从1开始
+            skill_slots[i].skill_changed.connect(_on_slot_skill_changed.bind(slot_id))
+            skill_slots[i].cooldown_updated.connect(_on_slot_skill_cooldown_updated.bind(slot_id))
+    # 监听 UI 输入事件
+    EventBus.equiped_skill_slot_clicked.connect(_on_skill_slot_clicked)
+
+#   自己的信号触发，转发为EventBus的信号
 func _on_slot_skill_changed(skill:SkillData,slot_id:int)->void:
     EventBus.equiped_skill_changed.emit(slot_id,skill)
 func _on_slot_skill_cooldown_updated(ratio:float,remaining:float,slot_id:int)->void:
     EventBus.equiped_skill_cooldown_updated.emit(slot_id,ratio,remaining)
-func _skill_signal_connect()->void:
-    primary_attack_slot.skill_changed.connect(_on_slot_skill_changed.bind(0))
-    primary_attack_slot.cooldown_updated.connect(_on_slot_skill_cooldown_updated.bind(0))
-    for i in range(skill_slots.size()):
-        var slot_id = i+1 # 下标从0开始，普通技能槽id从1开始
-        skill_slots[i].skill_changed.connect(_on_slot_skill_changed.bind(slot_id))
-        skill_slots[i].cooldown_updated.connect(_on_slot_skill_cooldown_updated.bind(slot_id))
-    # 监听 UI 输入事件
-    EventBus.equiped_skill_slot_clicked.connect(_on_skill_slot_clicked)
-
-func _switch_primary_attack_skill()->void:
-    current_primary_attack_index = (current_primary_attack_index+1)%primary_attack_skills.size()
-
-    var new_data = primary_attack_skills[current_primary_attack_index]
-    primary_attack_slot.set_skill(new_data)
 func _on_skill_slot_clicked(slot_id:int)->void:
     if slot_id<0:
         push_warning("负数的slot_id,in _on_skill_slot_clicked")
@@ -219,3 +214,7 @@ func _on_skill_slot_clicked(slot_id:int)->void:
     else:
         #??? 普通技能槽切换逻辑
         pass
+func _switch_primary_attack_skill()->void:
+    current_primary_attack_index = (current_primary_attack_index+1)%state.primary_attack_skills.size()
+    var new_data = state.primary_attack_skills[current_primary_attack_index]
+    primary_attack_slot.set_skill(new_data)

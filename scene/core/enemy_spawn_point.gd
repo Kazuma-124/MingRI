@@ -45,7 +45,6 @@ func _process(delta:float)->void:
 
 
 func spawn_activate()->void:
-    print_debug("spawn_active")
     if is_spawn_active:
         return
     is_spawn_active = true
