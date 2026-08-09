@@ -1,6 +1,8 @@
 extends PanelContainer
 class_name SkillShortcutBar
 
+signal initialilzed()
+
 @export var slot_ui_scene:PackedScene
 
 # 技能槽引用数组
@@ -33,7 +35,7 @@ func _init_after_player(p:CharacterBody2D)->void:
         slot_ui.clicked.connect(_on_slot_clicked.bind(slot_id))
     EventBus.equiped_skill_changed.connect(_on_skill_changed)
     EventBus.equiped_skill_cooldown_updated.connect(_on_cooldown_updated)
-    p.update_skill_slot_data_to_ui()
+    GameManager.current_player.init_skill_slots_signal()
 
 func _on_skill_changed(slot_id: int, skill: SkillData) -> void:
     if slot_id >= 0 && slot_id < skill_slots.size():

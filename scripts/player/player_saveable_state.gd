@@ -13,7 +13,7 @@ func emit_hp_changed()->void:
 func emit_mp_changed(attr:AttributeTypes.Type,val:float)->void:
     mp_changed.emit(attr,val)
 func emit_mp_all_changed()->void:
-    mp_all_changed.emit(mp)
+    mp_all_changed.emit(mp,max_mp)
 
 # === 基础等级
 var base_level:int = 1
@@ -61,15 +61,14 @@ func init_with_start_data(data:PlayerData)->void:
 func init_hp(cur:float,max:float)->void:
     cur_hp = cur
     max_hp = max
-    emit_hp_changed()
 func init_mp_from_max_mp(max:float)->void:
     max_mp = max
     var per_mp:float = max_mp/AttributeTypes.Type.size()
     for i in range(AttributeTypes.Type.size()):
         mp[i] = per_mp
-func init_mp_from_all_mp(mp_arr:Array[float],max:float)->void:
+func init_mp_from_all_mp(mp_arr:Array[float],max_input:float)->void:
     mp = mp_arr
-    max_mp = max
+    max_mp = max_input
 
 
 # hp修改
