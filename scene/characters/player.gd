@@ -173,8 +173,8 @@ func get_mp(attr: AttributeTypes.Type) -> float:
 
 # ======= 信号
 # 状态信号
-func _on_state_hp_changed(cur:float,max:float)->void:
-    EventBus.player_hp_changed.emit(cur,max)
+func _on_state_hp_changed(cur:float,max_input:float)->void:
+    EventBus.player_hp_changed.emit(cur,max_input)
 
 func _on_state_mp_changed(attr:AttributeTypes.Type,cur:float)->void:
     EventBus.player_mp_changed.emit(attr,cur)

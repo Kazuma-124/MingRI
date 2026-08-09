@@ -58,11 +58,11 @@ func init_with_start_data(data:PlayerData)->void:
     # skills_in_slot
     skills_in_slot.resize(data.skill_slot_count)
 
-func init_hp(cur:float,max:float)->void:
+func init_hp(cur:float,max_input:float)->void:
     cur_hp = cur
-    max_hp = max
-func init_mp_from_max_mp(max:float)->void:
-    max_mp = max
+    max_hp = max_input
+func init_mp_from_max_mp(max_input:float)->void:
+    max_mp = max_input
     var per_mp:float = max_mp/AttributeTypes.Type.size()
     for i in range(AttributeTypes.Type.size()):
         mp[i] = per_mp
