@@ -17,18 +17,27 @@ layout_mode = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="VBoxContainer" type="VBoxContainer" parent="Panel" unique_id=1540133140]
+[node name="MarginContainer" type="MarginContainer" parent="Panel" unique_id=1002599640]
 layout_mode = 2
 
-[node name="TitleBar" type="HBoxContainer" parent="Panel/VBoxContainer" unique_id=1824840454]
+[node name="VBoxContainer" type="VBoxContainer" parent="Panel/MarginContainer" unique_id=1540133140]
 layout_mode = 2
 
-[node name="TitleLabel" type="Label" parent="Panel/VBoxContainer/TitleBar" unique_id=1511447638]
+[node name="TitleBar" type="HBoxContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=1824840454]
 layout_mode = 2
 
-[node name="CloseButton" type="Button" parent="Panel/VBoxContainer/TitleBar" unique_id=542958139]
+[node name="TitleLabel" type="Label" parent="Panel/MarginContainer/VBoxContainer/TitleBar" unique_id=1511447638]
+layout_mode = 2
+
+[node name="CloseButton" type="Button" parent="Panel/MarginContainer/VBoxContainer/TitleBar" unique_id=542958139]
 layout_mode = 2
 theme = ExtResource("1_lfqev")
 
-[node name="SkillList" type="ScrollContainer" parent="Panel" unique_id=275177835]
+[node name="HSeparator" type="HSeparator" parent="Panel/MarginContainer/VBoxContainer" unique_id=1717256601]
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Panel/MarginContainer/VBoxContainer" unique_id=275177835]
+layout_mode = 2
+
+[node name="SkillList" type="VBoxContainer" parent="Panel/MarginContainer/VBoxContainer/ScrollContainer" unique_id=120903560]
 layout_mode = 2
