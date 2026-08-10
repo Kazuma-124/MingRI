@@ -8,12 +8,24 @@ signal mp_all_changed(
     mp:Array[float],
     max:float
 )
+signal skill_cooldown_updated(skill_id:StringName,ratio:float,remaining:float)
+signal primary_attack_skills_updated(ids:Array[StringName])
+signal slot_skill_changed(slot_id:int,skill:SkillData)
 func emit_hp_changed()->void:
     hp_changed.emit(cur_hp,max_hp)
 func emit_mp_changed(attr:AttributeTypes.Type,val:float)->void:
     mp_changed.emit(attr,val)
 func emit_mp_all_changed()->void:
     mp_all_changed.emit(mp,max_mp)
+func emit_skill_cooldown_updated(skill_id:StringName)->void:
+    var instance = get_skill_instance(skill_id)
+    var ratio = instance.get_cooldown_ratio()
+    var remaining = instance.get_remaining_cooldown()
+    skill_cooldown_updated.emit(skill_id,ratio,remaining)
+func emit_primary_attack_skills_updated()->void:
+    primary_attack_skills_updated.emit(primary_attack_skill_ids)
+func emit_slot_skill_changed(slot_id:int):
+    slot_skill_changed.emit(slot_id,get_skill_data(skill_slot_ids[slot_id]))
 
 # === 基础等级
 var base_level:int = 1
@@ -38,9 +50,11 @@ var max_mp:float = 1000.0
 var mp:Array[float] = [250.0,250.0,250.0,250.0]
 
 # 技能
-var learned_skills:Array[SkillData] = []
-var primary_attack_skills:Array[SkillData] = []
-var skills_in_slot:Array[SkillData] = [] # 索引是槽位号
+# key:StringName(skill_id),value:SkillInstance
+var skill_instances:Dictionary = {}
+var learned_skill_ids:Array[StringName] = []
+var primary_attack_skill_ids:Array[StringName] = []
+var skill_slot_ids:Array[StringName] = [] # 索引是槽位号
 
 # 初始化
 func init_with_start_data(data:PlayerData)->void:
@@ -50,13 +64,14 @@ func init_with_start_data(data:PlayerData)->void:
     # 加载 learned_skill
     for skill in data.default_skills:
         if skill.unlock_level <= base_level:
-            learned_skills.append(skill)
-    # 加载 primary_attack_skills
-    for skill in learned_skills:
+            learn_skill(skill)
+    # 加载 primary_attack_skill_ids
+    for skill_id in learned_skill_ids:
+        var skill = get_skill_data(skill_id)
         if skill.skill_type == SkillData.SkillType.PRIMARY_ATTACK && skill.unlock_level==0:
-            primary_attack_skills.append(skill)
-    # skills_in_slot
-    skills_in_slot.resize(data.skill_slot_count)
+            primary_attack_skill_ids.append(skill)
+    # skill_slot_ids
+    skill_slot_ids.resize(data.skill_slot_count)
 
 func init_hp(cur:float,max_input:float)->void:
     cur_hp = cur
@@ -175,7 +190,88 @@ func transfer_mp(from_attr: AttributeTypes.Type, to_attr: AttributeTypes.Type, a
     emit_mp_changed(to_attr,mp[to_attr])
     return true
         
+    
+# 技能
+# 通用
+func learn_skill(skill:SkillData)->void:
+    if skill.id in skill_instances:
+        return
+    var instance = SkillInstance.new(skill)
+    skill_instances[skill.id] = instance
+    learned_skill_ids.append(skill.id)
+
+func get_skill_instance(skill_id:StringName)->SkillInstance:
+    return skill_instances.get(skill_id,null)
+func get_skill_data(skill_id:StringName)->SkillData:
+    var instance = get_skill_instance(skill_id)
+    if instance:
+        return instance.data
+    return null
+
+# 技能快捷槽相关
+func set_slot_skill(skill_id:StringName,slot_id:int)->void:
+    if not (skill_id in skill_instances.keys()) or (slot_id<0 or slot_id>=skill_slot_ids.size()):
+        return
+    skill_slot_ids[slot_id] = skill_id 
+    emit_slot_skill_changed(slot_id)
+# func get_slot_skill(slot_id:int)->SkillData:
+#     if slot_id < 0 or slot_id >= skill_slot_ids.size():
+#         return null
+#     return get_skill_data(skill_slot_ids[slot_id])
+
+# 普攻
+func load_skill_in_primary_attack(skill_id:StringName)->void:
+    var data = get_skill_data(skill_id)
+    if not data or data.skill_type!=SkillData.SkillType.PRIMARY_ATTACK:
+        return
+    primary_attack_skill_ids.append(skill_id)
+    emit_primary_attack_skills_updated()
 
 
+# 释放技能相关
+func update_skill_cooldowns(delta: float) -> void:
+    for skill_id in skill_instances.keys():
+        var instance = skill_instances[skill_id]
+        var old_remaining = instance.current_cooldown
+        
+        instance.update_cooldown(delta)
+        
+        # 冷却变化时发信号（可选，也可以每帧都发）
+        if instance.current_cooldown != old_remaining:
+            emit_skill_cooldown_updated(skill_id)
 
-# var save_position:Vector2 = Vector2.ZERO
+func is_skill_ready(skill_id:StringName)->bool:
+    var instance = get_skill_instance(skill_id)
+    if not instance:
+        return false
+    return instance.current_cooldown<=0.0
+# 开始技能冷却
+func start_skill_cooldown(skill_id: StringName) -> void:
+    var instance = get_skill_instance(skill_id)
+    if not instance:
+        return
+    
+    instance.start_cooldown()
+    emit_skill_cooldown_updated(skill_id)    
+
+# 尝试释放技能（检查冷却和能量）
+func try_cast_skill(skill_id: StringName) -> bool:
+    var instance = get_skill_instance(skill_id)
+    if not instance:
+        return false
+    
+    # 检查冷却
+    if not is_skill_ready(skill_id):
+        return false
+    
+    # 检查能量
+    if not has_enough_mp(instance.data.attribute_type, instance.data.mp_cost):
+        return false
+    
+    # 消耗能量
+    cost_mp(instance.data.attribute_type, instance.data.mp_cost)
+    
+    # 开始冷却
+    start_skill_cooldown(skill_id)
+    
+    return true

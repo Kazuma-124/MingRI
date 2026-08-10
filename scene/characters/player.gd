@@ -142,10 +142,10 @@ func _init_default_skills()->void:
     # 下面的state相关以后要改为从存档中获取数据???
     # 普攻，默认自动装备0级，普攻技能
     current_primary_attack_index = 0
-    var init_skill_data = state.primary_attack_skills[current_primary_attack_index]
+    var init_skill_data = state.primary_attack_skill_ids[current_primary_attack_index]
     primary_attack_slot = SkillSlot.from_data(init_skill_data,self)
     # 普通技能槽
-    for skill in state.skills_in_slot:
+    for skill in state.skill_slot_ids:
         if skill:
             skill_slots.append(SkillSlot.from_data(skill,self))
         else:
@@ -210,8 +210,8 @@ func _on_skill_slot_clicked(slot_id:int)->void:
         #??? 普通技能槽切换逻辑
         pass
 func _switch_primary_attack_skill()->void:
-    current_primary_attack_index = (current_primary_attack_index+1)%state.primary_attack_skills.size()
-    var new_data = state.primary_attack_skills[current_primary_attack_index]
+    current_primary_attack_index = (current_primary_attack_index+1)%state.primary_attack_skill_ids.size()
+    var new_data = state.primary_attack_skill_ids[current_primary_attack_index]
     primary_attack_slot.set_skill(new_data)
 
 func init_hp_and_mp_signal()->void:
