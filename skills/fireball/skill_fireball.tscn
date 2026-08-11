@@ -1,7 +1,8 @@
 [gd_scene format=3 uid="uid://d3jcja4881vpl"]
 
-[ext_resource type="Script" uid="uid://ccaiamqd65yhi" path="res://scene/skills/skill_bullet_flame.gd" id="1_c6meu"]
+[ext_resource type="Script" uid="uid://ccaiamqd65yhi" path="res://skills/fireball/skill_fireball.gd" id="1_c6meu"]
 [ext_resource type="Texture2D" uid="uid://du81o81hnwmse" path="res://resources/texture/爆炸特效.png" id="2_c6meu"]
+[ext_resource type="Script" uid="uid://dk3o0csbvs7oo" path="res://skills/fireball/fireball_skill_logic.gd" id="3_q7ygs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4slac"]
 atlas = ExtResource("2_c6meu")
@@ -14,7 +15,7 @@ region = Rect2(150, 7, 34, 32)
 [sub_resource type="CircleShape2D" id="CircleShape2D_c6meu"]
 radius = 2.0
 
-[node name="BulletFlame" type="Area2D" unique_id=1686347967]
+[node name="Fireball" type="Area2D" unique_id=1686347967]
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("1_c6meu")
@@ -32,3 +33,7 @@ texture = SubResource("AtlasTexture_c6meu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1377735035]
 shape = SubResource("CircleShape2D_c6meu")
+
+[node name="SkillLogic" type="Node2D" parent="." unique_id=1314894646]
+script = ExtResource("3_q7ygs")
+metadata/_custom_type_script = "uid://6h52e01gditb"

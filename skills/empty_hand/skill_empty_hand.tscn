@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dgvkw7t37ax6k"]
+
+[ext_resource type="Script" uid="uid://bfsomhbs3wvva" path="res://skills/empty_hand/skill_empty_hand.gd" id="1_teotp"]
+
+[node name="SkillEmptyHand" type="Area2D" unique_id=1157381613]
+script = ExtResource("1_teotp")

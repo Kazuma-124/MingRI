@@ -2,6 +2,7 @@
 extends RefCounted
 class_name PlayerSaveableState
 
+#region 信号与触发函数
 signal hp_changed(cur:float,max:float)
 signal mp_changed(attr:AttributeTypes.Type,cur:float)
 signal mp_all_changed(
@@ -9,6 +10,7 @@ signal mp_all_changed(
     max:float
 )
 signal skill_cooldown_updated(skill_id:StringName,ratio:float,remaining:float)
+signal primary_attack_switched(skill_id)
 signal primary_attack_skills_updated(ids:Array[StringName])
 signal slot_skill_changed(slot_id:int,skill:SkillData)
 func emit_hp_changed()->void:
@@ -22,11 +24,16 @@ func emit_skill_cooldown_updated(skill_id:StringName)->void:
     var ratio = instance.get_cooldown_ratio()
     var remaining = instance.get_remaining_cooldown()
     skill_cooldown_updated.emit(skill_id,ratio,remaining)
+func emit_primary_attack_switched()->void:
+    primary_attack_switched.emit(curr_primary_attack_skill_id)
 func emit_primary_attack_skills_updated()->void:
     primary_attack_skills_updated.emit(primary_attack_skill_ids)
 func emit_slot_skill_changed(slot_id:int):
     slot_skill_changed.emit(slot_id,get_skill_data(skill_slot_ids[slot_id]))
+#endregion
 
+
+#region 数据
 # === 基础等级
 var base_level:int = 1
 var base_exp:int = 0
@@ -54,8 +61,14 @@ var mp:Array[float] = [250.0,250.0,250.0,250.0]
 var skill_instances:Dictionary = {}
 var learned_skill_ids:Array[StringName] = []
 var primary_attack_skill_ids:Array[StringName] = []
+var curr_primary_attack_index:int = 0
+var curr_primary_attack_skill_id:StringName=&"empty_hand"
 var skill_slot_ids:Array[StringName] = [] # 索引是槽位号
+#endregion
 
+
+
+#region 初始化init
 # 初始化
 func init_with_start_data(data:PlayerData)->void:
     init_hp(data.max_hp,data.max_hp)
@@ -69,9 +82,10 @@ func init_with_start_data(data:PlayerData)->void:
     for skill_id in learned_skill_ids:
         var skill = get_skill_data(skill_id)
         if skill.skill_type == SkillData.SkillType.PRIMARY_ATTACK && skill.unlock_level==0:
-            primary_attack_skill_ids.append(skill)
+            primary_attack_skill_ids.append(skill_id)
     # skill_slot_ids
     skill_slot_ids.resize(data.skill_slot_count)
+    skill_slot_ids.fill(&"")
 
 func init_hp(cur:float,max_input:float)->void:
     cur_hp = cur
@@ -84,8 +98,9 @@ func init_mp_from_max_mp(max_input:float)->void:
 func init_mp_from_all_mp(mp_arr:Array[float],max_input:float)->void:
     mp = mp_arr
     max_mp = max_input
+#endregion
 
-
+#region hp_and_mp
 # hp修改
 func take_damage(amount:float)->void:
     cur_hp -= amount
@@ -189,9 +204,14 @@ func transfer_mp(from_attr: AttributeTypes.Type, to_attr: AttributeTypes.Type, a
     emit_mp_changed(from_attr,mp[from_attr])
     emit_mp_changed(to_attr,mp[to_attr])
     return true
-        
-    
+
+#endregion
+
+
+#region 技能
 # 技能
+#region 技能通用设定
+# ---skill_common
 # 通用
 func learn_skill(skill:SkillData)->void:
     if skill.id in skill_instances:
@@ -207,7 +227,11 @@ func get_skill_data(skill_id:StringName)->SkillData:
     if instance:
         return instance.data
     return null
+#endregion
 
+
+#region skill_slots
+# ---skill_slots ---slot_skills
 # 技能快捷槽相关
 func set_slot_skill(skill_id:StringName,slot_id:int)->void:
     if not (skill_id in skill_instances.keys()) or (slot_id<0 or slot_id>=skill_slot_ids.size()):
@@ -218,16 +242,39 @@ func set_slot_skill(skill_id:StringName,slot_id:int)->void:
 #     if slot_id < 0 or slot_id >= skill_slot_ids.size():
 #         return null
 #     return get_skill_data(skill_slot_ids[slot_id])
+#endregion
 
+
+#region 普攻
 # 普攻
-func load_skill_in_primary_attack(skill_id:StringName)->void:
+func add_skill_in_primary_attack(skill_id:StringName)->void:
     var data = get_skill_data(skill_id)
     if not data or data.skill_type!=SkillData.SkillType.PRIMARY_ATTACK:
         return
     primary_attack_skill_ids.append(skill_id)
     emit_primary_attack_skills_updated()
+func change_skill_in_primary_attack(skill_id:StringName,arr_id:int)->void:
+    if arr_id<0 or arr_id>=primary_attack_skill_ids.size():
+        return
+    var data = get_skill_data(skill_id)
+    if not data or data.skill_type!=SkillData.SkillType.PRIMARY_ATTACK:
+        return
+    primary_attack_skill_ids[arr_id] = skill_id
+    emit_primary_attack_skills_updated()
+# 点击普攻槽 → 切换到下一个预设
+func switch_primary_attack() -> void:
+    if primary_attack_skill_ids.size() <= 1:
+        return  # 只有一个，不用切
+    
+    # 找到当前技能在列表里的位置
+    curr_primary_attack_index = (curr_primary_attack_index+1) % primary_attack_skill_ids.size()
+    curr_primary_attack_skill_id = primary_attack_skill_ids[curr_primary_attack_index] 
+    emit_primary_attack_switched()
+
+#endregion
 
 
+#region 释放技能相关
 # 释放技能相关
 func update_skill_cooldowns(delta: float) -> void:
     for skill_id in skill_instances.keys():
@@ -275,3 +322,10 @@ func try_cast_skill(skill_id: StringName) -> bool:
     start_skill_cooldown(skill_id)
     
     return true
+
+#endregion
+
+
+#endregion
+
+
