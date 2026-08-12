@@ -19,7 +19,7 @@ func cast_skill(skill_id:StringName)->bool:
         return true
     var skill_instances = skill_data.scene.instantiate()
     if skill_instances.has_method("setup"):
-        skill_instances.setup(_build_cast_context())
+        skill_instances.setup(_build_cast_context(),SkillLibrary.get_skill(skill_id))
     player.get_parent().add_child(skill_instances)
     return true
 
@@ -34,6 +34,6 @@ func _build_cast_context()->CastContext:
     context.caster = player
     context.caster_state = state
     context.caster_position = player.global_position
-    context.cast_direction = (player.get_global_mouse_position()-player.global_position)
+    context.cast_direction = (player.get_global_mouse_position()-player.global_position).normalized()
     context.mouse_position = player.get_global_mouse_position()
     return context

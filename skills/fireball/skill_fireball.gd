@@ -1,7 +1,6 @@
 extends Area2D
 
-@export var data:SkillData
-
+var data:SkillData
 var dir:Vector2 = Vector2(0,0)
 var start_pos:Vector2
 var _exploded:bool = false
@@ -26,7 +25,8 @@ func _physics_process(delta: float) -> void:
     if global_position.distance_to(start_pos) >= data.cast_range:
         _explode()
 
-func setup(context:CastContext)->void:
+func setup(context:CastContext,skill_data:SkillData)->void:
+    data = skill_data
     global_position = context.caster_position+context.cast_direction*10
     start_pos = global_position
     dir = context.cast_direction

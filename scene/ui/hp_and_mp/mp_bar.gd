@@ -62,8 +62,13 @@ func _update_bars_animated() -> void:
     
     for i in range(AttributeTypes.Type.size()):
         var bar_width = (mps[i] / max_mp) * total_width
-        tween.tween_property(_mp_bars[i], "position:x", x, 0.3)
-        tween.tween_property(_mp_bars[i], "size:x", bar_width, 0.3)
+        if i == 0:
+            # 第一个作为基准 step
+            tween.tween_property(_mp_bars[i], "position:x", x, 0.3)
+        else:
+            # 后续都与基准并行
+            tween.parallel().tween_property(_mp_bars[i], "position:x", x, 0.3)
+        tween.parallel().tween_property(_mp_bars[i], "size:x", bar_width, 0.3)
         x += bar_width
 
 # 立即更新（无动画，初始化用）
