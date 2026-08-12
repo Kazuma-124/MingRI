@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://d3jcja4881vpl"]
 
 [ext_resource type="Script" uid="uid://ccaiamqd65yhi" path="res://skills/fireball/skill_fireball.gd" id="1_c6meu"]
+[ext_resource type="Resource" uid="uid://c5q6u8c0uieb8" path="res://data/skills/skill_fireball.tres" id="2_0hu8h"]
 [ext_resource type="Texture2D" uid="uid://du81o81hnwmse" path="res://resources/texture/爆炸特效.png" id="2_c6meu"]
-[ext_resource type="Script" uid="uid://dk3o0csbvs7oo" path="res://skills/fireball/fireball_skill_logic.gd" id="3_q7ygs"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_4slac"]
 atlas = ExtResource("2_c6meu")
@@ -19,6 +19,7 @@ radius = 2.0
 collision_layer = 0
 collision_mask = 3
 script = ExtResource("1_c6meu")
+data = ExtResource("2_0hu8h")
 
 [node name="BulletSprite" type="Sprite2D" parent="." unique_id=854789447]
 position = Vector2(0, -9.536743e-07)
@@ -33,7 +34,3 @@ texture = SubResource("AtlasTexture_c6meu")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=1377735035]
 shape = SubResource("CircleShape2D_c6meu")
-
-[node name="SkillLogic" type="Node2D" parent="." unique_id=1314894646]
-script = ExtResource("3_q7ygs")
-metadata/_custom_type_script = "uid://6h52e01gditb"

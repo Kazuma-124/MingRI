@@ -12,7 +12,7 @@ signal mp_all_changed(
 signal skill_cooldown_updated(skill_id:StringName,ratio:float,remaining:float)
 signal primary_attack_switched(skill_id)
 signal primary_attack_skills_updated(ids:Array[StringName])
-signal slot_skill_changed(slot_id:int,skill:SkillData)
+signal slot_skill_changed(slot_id:int,skill_id:StringName)
 func emit_hp_changed()->void:
     hp_changed.emit(cur_hp,max_hp)
 func emit_mp_changed(attr:AttributeTypes.Type,val:float)->void:
@@ -29,7 +29,7 @@ func emit_primary_attack_switched()->void:
 func emit_primary_attack_skills_updated()->void:
     primary_attack_skills_updated.emit(primary_attack_skill_ids)
 func emit_slot_skill_changed(slot_id:int):
-    slot_skill_changed.emit(slot_id,get_skill_data(skill_slot_ids[slot_id]))
+    slot_skill_changed.emit(slot_id,skill_slot_ids[slot_id])
 #endregion
 
 
@@ -83,6 +83,8 @@ func init_with_start_data(data:PlayerData)->void:
         var skill = get_skill_data(skill_id)
         if skill.skill_type == SkillData.SkillType.PRIMARY_ATTACK && skill.unlock_level==0:
             primary_attack_skill_ids.append(skill_id)
+    curr_primary_attack_index = 0
+    curr_primary_attack_skill_id = primary_attack_skill_ids[0] if primary_attack_skill_ids.size()>0 else &""
     # skill_slot_ids
     skill_slot_ids.resize(data.skill_slot_count)
     skill_slot_ids.fill(&"")
@@ -238,10 +240,14 @@ func set_slot_skill(skill_id:StringName,slot_id:int)->void:
         return
     skill_slot_ids[slot_id] = skill_id 
     emit_slot_skill_changed(slot_id)
-# func get_slot_skill(slot_id:int)->SkillData:
-#     if slot_id < 0 or slot_id >= skill_slot_ids.size():
-#         return null
-#     return get_skill_data(skill_slot_ids[slot_id])
+func get_slot_skill(slot_id:int)->SkillData:
+    if slot_id < 0 or slot_id >= skill_slot_ids.size():
+        return null
+    return get_skill_data(skill_slot_ids[slot_id])
+func get_slot_skill_id(slot_id:int)->StringName:
+    if slot_id>=0 and slot_id<skill_slot_ids.size():
+        return skill_slot_ids[slot_id]
+    return &""
 #endregion
 
 

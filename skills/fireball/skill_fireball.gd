@@ -1,17 +1,18 @@
 extends Area2D
 
+@export var data:SkillData
+
 var dir:Vector2 = Vector2(0,0)
 var start_pos:Vector2
 var _exploded:bool = false
 
 @onready var bullet_sprite: Sprite2D = $BulletSprite
 @onready var explosion_sprite: Sprite2D = $ExplosionSprite
-@onready var skill_logic: Node2D = $SkillLogic
 
 func _ready() -> void:
     # 调整子弹尺寸，爆炸特效尺寸
-    _judge_sprite2D_scale(explosion_sprite,skill_logic.data.explosion_diameter)
-    _judge_sprite2D_scale(bullet_sprite,skill_logic.data.bullet_diameter)
+    _judge_sprite2D_scale(explosion_sprite,data.explosion_diameter)
+    _judge_sprite2D_scale(bullet_sprite,data.bullet_diameter)
     # 显示子弹，隐藏爆炸特效
     bullet_sprite.show()
     explosion_sprite.hide()
@@ -34,8 +35,6 @@ func setup(context:CastContext)->void:
 func set_direction(d:Vector2)->void:
     dir = d.normalized()
 
-
-    
 func _on_hit_body(body:Node2D)->void:
     if _exploded:
         return
