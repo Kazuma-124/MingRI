@@ -9,7 +9,7 @@ signal mp_all_changed(
     mp:Array[float],
     max:float
 )
-signal skill_cooldown_updated(skill_id:StringName,ratio:float,remaining:float)
+signal shortcut_skill_cooldown_updated(skill_id:StringName,ratio:float,remaining:float)
 signal primary_attack_switched(skill_id)
 signal primary_attack_skills_updated(ids:Array[StringName])
 signal slot_skill_changed(slot_id:int,skill_id:StringName)
@@ -19,16 +19,16 @@ func emit_mp_changed(attr:AttributeTypes.Type,val:float)->void:
     mp_changed.emit(attr,val)
 func emit_mp_all_changed()->void:
     mp_all_changed.emit(mp,max_mp)
-func emit_skill_cooldown_updated(skill_id:StringName)->void:
+func emit_shortcut_skill_cooldown_updated(skill_id:StringName)->void:
     var instance = get_skill_instance(skill_id)
     var ratio = instance.get_cooldown_ratio()
     var remaining = instance.get_remaining_cooldown()
-    skill_cooldown_updated.emit(skill_id,ratio,remaining)
+    shortcut_skill_cooldown_updated.emit(skill_id,ratio,remaining)
 func emit_primary_attack_switched()->void:
     primary_attack_switched.emit(curr_primary_attack_skill_id)
 func emit_primary_attack_skills_updated()->void:
     primary_attack_skills_updated.emit(primary_attack_skill_ids)
-func emit_slot_skill_changed(slot_id:int):
+func emit_shortcut_skill_changed(slot_id:int):
     slot_skill_changed.emit(slot_id,skill_slot_ids[slot_id])
 #endregion
 
@@ -239,7 +239,7 @@ func set_slot_skill(skill_id:StringName,slot_id:int)->void:
     if not (skill_id in skill_instances.keys()) or (slot_id<0 or slot_id>=skill_slot_ids.size()):
         return
     skill_slot_ids[slot_id] = skill_id 
-    emit_slot_skill_changed(slot_id)
+    emit_shortcut_skill_changed(slot_id)
 func get_slot_skill(slot_id:int)->SkillData:
     if slot_id < 0 or slot_id >= skill_slot_ids.size():
         return null
@@ -291,7 +291,7 @@ func update_skill_cooldowns(delta: float) -> void:
         
         # 冷却变化时发信号（可选，也可以每帧都发）
         if instance.current_cooldown != old_remaining:
-            emit_skill_cooldown_updated(skill_id)
+            emit_shortcut_skill_cooldown_updated(skill_id)
 
 func is_skill_ready(skill_id:StringName)->bool:
     var instance = get_skill_instance(skill_id)
@@ -305,7 +305,7 @@ func start_skill_cooldown(skill_id: StringName) -> void:
         return
     
     instance.start_cooldown()
-    emit_skill_cooldown_updated(skill_id)    
+    emit_shortcut_skill_cooldown_updated(skill_id)    
 
 # 尝试释放技能（检查冷却和能量）
 func try_cast_skill(skill_id: StringName) -> bool:

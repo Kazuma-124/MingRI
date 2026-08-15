@@ -158,9 +158,9 @@ func _init_saveable_state_signal_connect()->void:
         func(mps:Array[float],max_input:float)->void:
             EventBus.player_mp_all_changed.emit(mps,max_input)
     )
-    state.skill_cooldown_updated.connect(
+    state.shortcut_skill_cooldown_updated.connect(
         func(skill_id:StringName,ratio:float,remaining:float)->void:
-            EventBus.skill_cooldown_updated.emit(skill_id,ratio,remaining)
+            EventBus.shortcut_skill_cooldown_updated.emit(skill_id,ratio,remaining)
     )
     state.primary_attack_switched.connect(
         func(skill_id:StringName)->void:
@@ -169,7 +169,7 @@ func _init_saveable_state_signal_connect()->void:
     # state.primary_attack_skills_updated.connect(EventBus.player_primary_attack_skills_updated)
     state.slot_skill_changed.connect(
         func(slot_id:int,skill_id:StringName)->void:
-            EventBus.shortcut_slot_skill_changed.emit(slot_id,skill_id)
+            EventBus.shortcut_skill_changed.emit(slot_id,skill_id)
     )
 
     # UI输入->逻辑

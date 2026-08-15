@@ -13,10 +13,10 @@ signal player_mp_all_changed(mp:Array[float], max: float)
 # ==========================================
 # 技能槽状态变化事件（数据 → UI）
 # ==========================================
-signal skill_cooldown_updated(skill_id:StringName,ratio:float,remaining:float)
+signal shortcut_skill_cooldown_updated(skill_id:StringName,ratio:float,remaining:float)
 signal player_primary_attack_switched(skill_id:StringName)
 # signal player_primary_attack_skills_updated(ids:Array[StringName])
-signal shortcut_slot_skill_changed(slot_id:int,skill_id:StringName)
+signal shortcut_skill_changed(slot_id:int,skill_id:StringName)
 
 # ==========================================
 # UI 输入事件（UI → 逻辑）

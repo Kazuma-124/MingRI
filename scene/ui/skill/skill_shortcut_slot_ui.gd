@@ -11,7 +11,7 @@ var my_skill_id:StringName = &""
 
 
 func _ready() -> void:
-    EventBus.skill_cooldown_updated.connect(_on_cooldown_updated)
+    EventBus.shortcut_skill_cooldown_updated.connect(_on_cooldown_updated)
     _set_cooldown_display(0,0)
 
 func _gui_input(event: InputEvent) -> void:
