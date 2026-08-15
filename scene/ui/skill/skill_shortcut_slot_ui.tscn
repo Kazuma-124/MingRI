@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dg05heyilknlf"]
 
-[ext_resource type="Script" uid="uid://byqen706gdiwq" path="res://scene/ui/skill/skill_slot_ui.gd" id="1_kt0g2"]
+[ext_resource type="Script" uid="uid://byqen706gdiwq" path="res://scene/ui/skill/skill_shortcut_slot_ui.gd" id="1_kt0g2"]
 [ext_resource type="Texture2D" uid="uid://ciygchho7fi5n" path="res://assets/icons/windows.png" id="2_k0n71"]
 
 [node name="SkillSlot" type="Control" unique_id=1439700499]
