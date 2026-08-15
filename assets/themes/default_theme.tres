@@ -840,6 +840,8 @@ border_width_bottom = 2
 border_color = Color(0, 0, 0, 1)
 
 [resource]
+CooldownLabel/base_type = &"Label"
+CooldownLabel/colors/font_color = Color(0.9086235, 0.33613652, 0, 1)
 CooldownMask/base_type = &"ProgressBar"
 CooldownMask/styles/background = SubResource("StyleBoxFlat_4e0l7")
 CooldownMask/styles/fill = SubResource("StyleBoxFlat_tpbsb")

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://550ldwqrmdfq" path="res://scene/ui/skill/skill_item.gd" id="1_icaoy"]
 
+[sub_resource type="Theme" id="Theme_icaoy"]
+
 [node name="SkillItem" type="PanelContainer" unique_id=500631991]
 script = ExtResource("1_icaoy")
 
@@ -19,4 +21,10 @@ size_flags_vertical = 1
 [node name="InfoLabel" type="Label" parent="HBoxContainer" unique_id=1984972798]
 layout_mode = 2
 size_flags_vertical = 1
+
+[node name="CooldownLabel" type="Label" parent="HBoxContainer" unique_id=1145502956]
+layout_mode = 2
+size_flags_vertical = 1
+theme = SubResource("Theme_icaoy")
+theme_type_variation = &"CooldownLabel"
 horizontal_alignment = 2
