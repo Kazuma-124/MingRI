@@ -1,0 +1,27 @@
+[gd_scene format=3 uid="uid://ctb4uxuqmkdxu"]
+
+[ext_resource type="Script" uid="uid://fhfd3qnv6das" path="res://scene/characters/player/player.gd" id="1_5utgv"]
+[ext_resource type="Resource" uid="uid://wcg6f35os2ku" path="res://data/characters/player_data.tres" id="2_qbs7g"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_wq7vr"]
+radius = 6.0
+
+[node name="Player" type="CharacterBody2D" unique_id=1002450125 groups=["player"]]
+collision_layer = 6
+collision_mask = 3
+script = ExtResource("1_5utgv")
+data = ExtResource("2_qbs7g")
+
+[node name="BodySprite" type="AnimatedSprite2D" parent="." unique_id=583726038]
+animation = &""
+
+[node name="WeaponPivot" type="Node2D" parent="." unique_id=1547626547]
+
+[node name="WeaponSprite" type="Sprite2D" parent="WeaponPivot" unique_id=243604181]
+position = Vector2(17, 0)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=915760582]
+shape = SubResource("CircleShape2D_wq7vr")
+
+[node name="Camera2D" type="Camera2D" parent="." unique_id=567032642 groups=["player"]]
+zoom = Vector2(1.5, 1.5)

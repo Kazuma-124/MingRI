@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://dcgfmrud6lbrg" path="res://scene/ui/ui.gd" id="1_kee8w"]
 [ext_resource type="Theme" uid="uid://j5c5qocrx31m" path="res://assets/themes/default_theme.tres" id="2_4e0l7"]
-[ext_resource type="PackedScene" uid="uid://cl0kl4vnhxkge" path="res://scene/ui/hp_and_mp/hp_and_mp_status.tscn" id="3_auj7a"]
-[ext_resource type="PackedScene" uid="uid://cl8l5n2rjrep7" path="res://scene/ui/skill/skill_book.tscn" id="5_wiplj"]
-[ext_resource type="PackedScene" uid="uid://bi5df6nobj0kk" path="res://scene/ui/skill/skill_item.tscn" id="6_4e0l7"]
-[ext_resource type="PackedScene" uid="uid://c6t1jo75ishkt" path="res://scene/ui/skill/skill_shortcut_bar.tscn" id="6_p21fl"]
+[ext_resource type="PackedScene" uid="uid://cl0kl4vnhxkge" path="res://scene/ui/hug/hp_and_mp/hp_and_mp_status.tscn" id="3_auj7a"]
+[ext_resource type="PackedScene" uid="uid://cl8l5n2rjrep7" path="res://scene/ui/panels/skill_book/skill_book.tscn" id="5_wiplj"]
+[ext_resource type="PackedScene" uid="uid://bi5df6nobj0kk" path="res://scene/ui/panels/skill_book/skill_item.tscn" id="6_4e0l7"]
+[ext_resource type="PackedScene" uid="uid://c6t1jo75ishkt" path="res://scene/ui/hug/skill_shortcut_bar/skill_shortcut_bar.tscn" id="6_p21fl"]
 
 [node name="Ui" type="CanvasLayer" unique_id=917833657]
 script = ExtResource("1_kee8w")

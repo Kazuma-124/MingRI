@@ -1,0 +1,40 @@
+[gd_scene format=3 uid="uid://bi5df6nobj0kk"]
+
+[ext_resource type="Script" uid="uid://550ldwqrmdfq" path="res://scene/ui/panels/skill_book/skill_item.gd" id="1_icaoy"]
+[ext_resource type="Theme" uid="uid://j5c5qocrx31m" path="res://assets/themes/default_theme.tres" id="2_giae8"]
+
+[sub_resource type="Theme" id="Theme_icaoy"]
+
+[node name="SkillItem" type="PanelContainer" unique_id=500631991]
+offset_right = 104.0
+offset_bottom = 25.0
+script = ExtResource("1_icaoy")
+
+[node name="CooldownMask" type="ProgressBar" parent="." unique_id=805022878]
+layout_mode = 2
+theme = ExtResource("2_giae8")
+theme_type_variation = &"CooldownMask"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=838734133]
+layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer" unique_id=1401852049]
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="HBoxContainer" unique_id=971599463]
+layout_mode = 2
+size_flags_vertical = 1
+
+[node name="InfoLabel" type="Label" parent="HBoxContainer" unique_id=1984972798]
+layout_mode = 2
+size_flags_vertical = 1
+
+[node name="CooldownLabel" type="Label" parent="HBoxContainer" unique_id=1145502956]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 1
+theme = SubResource("Theme_icaoy")
+theme_type_variation = &"CooldownLabel"
+text = "test"
+horizontal_alignment = 2
