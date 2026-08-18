@@ -3,6 +3,8 @@
 [ext_resource type="Script" uid="uid://dcgfmrud6lbrg" path="res://scene/ui/ui.gd" id="1_kee8w"]
 [ext_resource type="Theme" uid="uid://j5c5qocrx31m" path="res://assets/themes/default_theme.tres" id="2_4e0l7"]
 [ext_resource type="PackedScene" uid="uid://cl0kl4vnhxkge" path="res://scene/ui/hp_and_mp/hp_and_mp_status.tscn" id="3_auj7a"]
+[ext_resource type="PackedScene" uid="uid://cl8l5n2rjrep7" path="res://scene/ui/skill/skill_book.tscn" id="5_wiplj"]
+[ext_resource type="PackedScene" uid="uid://bi5df6nobj0kk" path="res://scene/ui/skill/skill_item.tscn" id="6_4e0l7"]
 [ext_resource type="PackedScene" uid="uid://c6t1jo75ishkt" path="res://scene/ui/skill/skill_shortcut_bar.tscn" id="6_p21fl"]
 
 [node name="Ui" type="CanvasLayer" unique_id=917833657]
@@ -34,3 +36,11 @@ offset_right = 155.0
 offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 0
+
+[node name="SkillBoox" parent="UiRoot" unique_id=876062403 instance=ExtResource("5_wiplj")]
+layout_mode = 0
+offset_left = 184.0
+offset_top = 352.0
+offset_right = 184.0
+offset_bottom = 352.0
+_skill_item_scene = ExtResource("6_4e0l7")

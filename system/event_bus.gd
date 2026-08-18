@@ -13,9 +13,7 @@ signal player_mp_all_changed(mp:Array[float], max: float)
 # ==========================================
 # 技能槽状态变化事件（数据 → UI）
 # ==========================================
-signal shortcut_skill_cooldown_updated(skill_id:StringName,ratio:float,remaining:float)
 signal player_primary_attack_switched(skill_id:StringName)
-# signal player_primary_attack_skills_updated(ids:Array[StringName])
 signal shortcut_skill_changed(slot_id:int,skill_id:StringName)
 
 # ==========================================
@@ -24,3 +22,14 @@ signal shortcut_skill_changed(slot_id:int,skill_id:StringName)
 signal primary_attack_slot_clicked()
 signal shortcut_slot_clicked(slot_id:int)
 signal skill_book_skill_clicked(skill_id:StringName)
+
+#region 消除未使用警告
+func aaa()->void:
+    player_hp_changed.get_name()
+    player_mp_changed.get_name()
+    player_mp_all_changed.get_name()
+    player_primary_attack_switched.get_name()
+    shortcut_skill_changed.get_name()
+    primary_attack_slot_clicked.get_name()
+    shortcut_slot_clicked.get_name()
+    skill_book_skill_clicked.get_name()

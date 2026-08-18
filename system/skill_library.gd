@@ -22,5 +22,8 @@ func _load_all_skills()->void:
             file_name = dir.get_next()
         dir.list_dir_end()
 
+func get_all_skill_ids()->Array[StringName]:
+    return _all_skills.keys()
+
 func get_skill(id:StringName)->SkillData:
     return _all_skills.get(id,null)
