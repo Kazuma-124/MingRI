@@ -160,7 +160,6 @@ func _update_charge(delta:float)->void:
         # 返回射线相交的第一个物体
         var collider = collision.get_collider()
         if not hit_targets.has(collider):
-            hit_occurred = true
             if collider.has_method("take_damage"):
                 collider.take_damage(data.contact_damage)
             hit_targets.append(collider)

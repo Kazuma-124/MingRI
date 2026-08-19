@@ -16,7 +16,7 @@ var move_speed
 var mouse_dir:Vector2
 var move_dir:Vector2
 
-@onready var body_sprite: AnimatedSprite2D = $BodySprite
+@onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var weapon_pivot: Node2D = $WeaponPivot
 #endregion
 
@@ -93,14 +93,13 @@ func _update_body_animation():
         return
 
     var animation_suffix:StringName = _vector_to_suffix(mouse_dir)
-    var animation_prefix:StringName = &"idle" if move_dir==Vector2.ZERO else &"walk"
+    # var animation_prefix:StringName = &"idle" if move_dir==Vector2.ZERO else &"walk"
+    var animation_prefix:StringName = "facing"
     var animation_name:StringName = StringName("%s_%s"%[animation_prefix,animation_suffix])
-
-    if not body_sprite.sprite_frames.has_animation(animation_name):
+    if not animation_player.has_animation(animation_name):
         push_warning("Player BodySprite missing animation:%s"%animation_name)
-
-    if body_sprite.animation!=animation_name:
-        body_sprite.play(animation_name)
+    if animation_player.current_animation!=animation_name:
+        animation_player.play(animation_name)
 
 
 func _update_weapon_animation():
@@ -114,10 +113,11 @@ func _update_weapon_animation():
 
 # ============ 工具 =============
 func _vector_to_suffix(vec:Vector2)->StringName:
-    if abs(vec.x) >= abs(vec.y):
-        return &"right" if vec.x>=0 else &"left"
-    else:
-        return &"down" if vec.y>=0 else &"up"
+    return &"right" if vec.x>=0 else &"left"
+    # if abs(vec.x) >= abs(vec.y):
+    #     return &"right" if vec.x>=0 else &"left"
+    # else:
+    #     return &"down" if vec.y>=0 else &"up"
 
 # 提供给 SkillSlot 调用的能量接口
 func has_enough_mp(attr: AttributeTypes.Type, amount: float) -> bool:

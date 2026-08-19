@@ -4,7 +4,7 @@ class_name EnemySpawnPoint
 
 # 生成的敌人的场景
 @export var enemy_scene:PackedScene
-@export var max_count:int = 12 # 最多生成几只
+@export var max_count:int = 15 # 最多生成几只
 @export var spawn_radius:float = 500
 @export var respawn_delay: float = 8.0 # 刷新冷却
 
@@ -14,10 +14,14 @@ var spawned_enemies:Array = []
 var respawn_timer: float = 0.0
 
 func _ready() -> void:
+    if Engine.is_editor_hint():
+        return
     EnemyManager.register_spawn_point(self)
 
 # 结点离开SceneTree时调用
 func _exit_tree() -> void:
+    if Engine.is_editor_hint():
+        return
     if EnemyManager:
         EnemyManager.unregister_spawn_point(self)
 

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" uid="uid://cfhvx4yhxkdbl" path="res://scene/characters/enemy/test_enemy.gd" id="1_ab55u"]
 [ext_resource type="Resource" uid="uid://b1v7b6072khju" path="res://data/characters/enemies/test_enemy_data.tres" id="2_765w6"]
+[ext_resource type="Texture2D" uid="uid://bn68xapvy1lv6" path="res://resources/test_enemy.tres" id="3_j1ps3"]
+[ext_resource type="AnimationLibrary" uid="uid://1v1ft1r6qkhb" path="res://data/characters/character_anime.res" id="4_j1ps3"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tdhsh"]
 radius = 5.0
@@ -16,8 +18,13 @@ collision_mask = 3
 script = ExtResource("1_ab55u")
 data = ExtResource("2_765w6")
 
-[node name="BodySprite" type="AnimatedSprite2D" parent="." unique_id=315557597]
-animation = &""
+[node name="BodySprite" type="Sprite2D" parent="." unique_id=2053791575]
+texture = ExtResource("3_j1ps3")
+offset = Vector2(0, -10)
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=766448157]
+libraries/character_anime = ExtResource("4_j1ps3")
+autoplay = &"character_anime/facing_right"
 
 [node name="BodyCollisonShape" type="CollisionShape2D" parent="." unique_id=1878476414]
 position = Vector2(0, 1)

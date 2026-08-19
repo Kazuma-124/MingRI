@@ -19,3 +19,6 @@ Thumbs.db
 
 /resources
 /addons
+
+# 官方文档
+/0docs/godot-docs-html-stable
