@@ -4,7 +4,6 @@
 [ext_resource type="Theme" uid="uid://j5c5qocrx31m" path="res://assets/themes/default_theme.tres" id="2_4e0l7"]
 [ext_resource type="PackedScene" uid="uid://cl0kl4vnhxkge" path="res://scene/ui/hug/hp_and_mp/hp_and_mp_status.tscn" id="3_auj7a"]
 [ext_resource type="PackedScene" uid="uid://cl8l5n2rjrep7" path="res://scene/ui/panels/skill_book/skill_book.tscn" id="5_wiplj"]
-[ext_resource type="PackedScene" uid="uid://bi5df6nobj0kk" path="res://scene/ui/panels/skill_book/skill_item.tscn" id="6_4e0l7"]
 [ext_resource type="PackedScene" uid="uid://c6t1jo75ishkt" path="res://scene/ui/hug/skill_shortcut_bar/skill_shortcut_bar.tscn" id="6_p21fl"]
 
 [node name="Ui" type="CanvasLayer" unique_id=917833657]
@@ -38,9 +37,13 @@ grow_horizontal = 2
 grow_vertical = 0
 
 [node name="SkillBoox" parent="UiRoot" unique_id=876062403 instance=ExtResource("5_wiplj")]
+custom_minimum_size = Vector2(400, 300)
 layout_mode = 0
-offset_left = 184.0
-offset_top = 352.0
-offset_right = 184.0
-offset_bottom = 352.0
-_skill_item_scene = ExtResource("6_4e0l7")
+anchors_preset = 0
+anchor_top = 0.0
+anchor_bottom = 0.0
+offset_left = 248.0
+offset_top = 328.0
+offset_right = 248.0
+offset_bottom = 328.0
+grow_vertical = 1

@@ -6,14 +6,17 @@
 [sub_resource type="Theme" id="Theme_icaoy"]
 
 [node name="SkillItem" type="PanelContainer" unique_id=500631991]
-offset_right = 104.0
+offset_right = 62.0
 offset_bottom = 25.0
+size_flags_horizontal = 3
 script = ExtResource("1_icaoy")
 
 [node name="CooldownMask" type="ProgressBar" parent="." unique_id=805022878]
 layout_mode = 2
+size_flags_vertical = 1
 theme = ExtResource("2_giae8")
 theme_type_variation = &"CooldownMask"
+show_percentage = false
 
 [node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=838734133]
 layout_mode = 2

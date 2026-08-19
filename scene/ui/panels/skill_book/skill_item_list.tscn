@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://ctvoi4u04c2t4"]
+
+[ext_resource type="Script" uid="uid://boqkkj3hhvjq" path="res://scene/ui/panels/skill_book/skill_item_list.gd" id="1_jttrf"]
+[ext_resource type="PackedScene" uid="uid://bi5df6nobj0kk" path="res://scene/ui/panels/skill_book/skill_item.tscn" id="2_vxggw"]
+
+[node name="SkillItemList" type="ScrollContainer" unique_id=225434831]
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 3
+script = ExtResource("1_jttrf")
+skill_item_scene = ExtResource("2_vxggw")
+
+[node name="ItemsList" type="VBoxContainer" parent="." unique_id=1897722053]
+layout_mode = 2
+size_flags_horizontal = 3

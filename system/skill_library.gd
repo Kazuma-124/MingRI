@@ -15,7 +15,7 @@ func _load_all_skills()->void:
         dir.list_dir_begin()
         var file_name = dir.get_next()
         while file_name!="":
-            if file_name.ends_with("tres"):
+            if file_name.ends_with(".tres"):
                 var skill = load("res://data/skills/"+file_name) as SkillData
                 if skill:
                     _all_skills[skill.id] = skill
