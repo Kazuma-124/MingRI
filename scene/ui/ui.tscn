@@ -36,14 +36,9 @@ offset_bottom = 0.0
 grow_horizontal = 2
 grow_vertical = 0
 
-[node name="SkillBoox" parent="UiRoot" unique_id=876062403 instance=ExtResource("5_wiplj")]
-custom_minimum_size = Vector2(400, 300)
+[node name="SkillBook" parent="UiRoot" unique_id=876062403 instance=ExtResource("5_wiplj")]
 layout_mode = 0
-anchors_preset = 0
-anchor_top = 0.0
-anchor_bottom = 0.0
-offset_left = 248.0
-offset_top = 328.0
-offset_right = 248.0
-offset_bottom = 328.0
-grow_vertical = 1
+offset_left = 152.0
+offset_top = 344.0
+offset_right = 344.0
+offset_bottom = 624.0

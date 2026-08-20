@@ -11,7 +11,7 @@ var _learnable_visible:bool = false
 #endregion
 
 #region @onready
-@onready var _background: ColorRect = $Background
+@onready var _draggable: Draggable = $Panel/Body/TitleBar
 @onready var _close_button: Button = %CloseButton
 @onready var _learned_items: SkillItemList = %LearnedItems
 @onready var _learnable_toggle_button: Button = %LearnableToggleButton
@@ -21,11 +21,10 @@ var _learnable_visible:bool = false
 
 #region 内置函数
 func _ready() -> void:
-    _background.set_anchors_preset(Control.PRESET_FULL_RECT)
-    _background.mouse_filter = Control.MOUSE_FILTER_STOP
     # 技能书默认隐藏
     visible = false
     _learnable_items.visible = false
+    _update_content_min()
 
     _close_button.pressed.connect(_on_close_pressed)
     _learnable_toggle_button.pressed.connect(_on_learnable_toggle_pressed)
@@ -72,6 +71,12 @@ func _populate_list()->void:
     _learnable_toggle_button.text = "可\n学\n技\n能\n %s" % [">>>" if _learnable_visible else "<<<"]
     _learnable_toggle_button.visible = learnable_count>0
 
+    # 更新拖动的size最小值
+    _update_content_min()
+
+func _update_content_min()->void:
+    await get_tree().process_frame
+    _draggable.set_content_min($Panel.get_combined_minimum_size())
 #endregion
 
 
@@ -90,4 +95,7 @@ func _on_learnable_toggle_pressed()->void:
     if not _learnable_visible:
         pass
     _learnable_toggle_button.text = "可\n学\n技\n能\n %s" % [">>>" if _learnable_visible else "<<<"]
+    # 点击拓展后，容器最小大小更新
+    _update_content_min()
 #endregion
+
