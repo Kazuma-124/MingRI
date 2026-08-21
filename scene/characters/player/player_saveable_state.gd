@@ -104,7 +104,7 @@ func take_damage(amount:float)->void:
         cur_hp = 0
     hp_changed.emit(cur_hp,max_hp)
 
-func heap(amount:float)->void:
+func heal(amount:float)->void:
     cur_hp += amount
     if cur_hp > max_hp:
         cur_hp = max_hp

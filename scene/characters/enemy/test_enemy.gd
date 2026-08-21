@@ -121,7 +121,6 @@ func _update_combat_sub(delta)->void:
         _:
             push_warning("super state combat has wrong sub state when update: ",current_sub_state)
 func _update_returning_sub(delta)->void:
-    print()
     match current_sub_state:
         SUB_STATE.RETURN_HOME:
             _update_return_home(delta)

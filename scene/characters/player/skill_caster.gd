@@ -17,10 +17,10 @@ func cast_skill(skill_id:StringName)->bool:
     if not skill_data or not skill_data.scene:
         # 没有场景也算释放成功
         return true
-    var skill_instances = skill_data.scene.instantiate()
-    if skill_instances.has_method("setup"):
-        skill_instances.setup(_build_cast_context(),SkillLibrary.get_skill(skill_id))
-    player.get_parent().add_child(skill_instances)
+    var skill_instance = skill_data.scene.instantiate()
+    if skill_instance.has_method("setup"):
+        skill_instance.setup(SkillLibrary.get_skill(skill_id),_build_cast_context())
+    player.get_parent().add_child(skill_instance)
     return true
 
 func cast_primary_skill()->bool:

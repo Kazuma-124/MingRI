@@ -153,7 +153,6 @@ func _on_drag_input(event: InputEvent) -> void:
         get_viewport().set_input_as_handled()
 func _on_resize_input(event:InputEvent,corner:Draggable.Corner)->void:
     if event is InputEventMouseButton:
-        print_debug()
         if event.pressed and event.button_index==MOUSE_BUTTON_LEFT:
             _resizing = true
             _resize_corner = corner

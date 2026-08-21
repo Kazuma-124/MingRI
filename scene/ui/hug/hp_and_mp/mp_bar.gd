@@ -36,6 +36,8 @@ func _ready() -> void:
     _mp_bars[AttributeTypes.Type.SHUANGXUAN].color = AttributeTypes.SHUANGXUAN_COLOR
     _mp_bars[AttributeTypes.Type.YOUYING].color = AttributeTypes.YOUYING_COLOR
 
+    # 信号
+    resized.connect(_size_changed)
 
 func set_mp(attr: AttributeTypes.Type, value: float) -> void:
     mps[attr] = value

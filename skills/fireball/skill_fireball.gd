@@ -25,7 +25,7 @@ func _physics_process(delta: float) -> void:
     if global_position.distance_to(start_pos) >= data.cast_range:
         _explode()
 
-func setup(context:CastContext,skill_data:SkillData)->void:
+func setup(skill_data:SkillData,context:CastContext)->void:
     data = skill_data
     global_position = context.caster_position+context.cast_direction*10
     start_pos = global_position

@@ -70,7 +70,6 @@ func _populate_list()->void:
             _learnable_items.add_skill(skill_id)
             learnable_count+=1
     
-    print_debug("learnable_count: ",learnable_count)
     _learnable_toggle_button.text = _generate_learnable_toggle_button_text()
     _learnable_toggle_button.visible = learnable_count>0
 
