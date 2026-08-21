@@ -2,10 +2,10 @@
 
 [ext_resource type="Script" uid="uid://fhfd3qnv6das" path="res://scene/characters/player/player.gd" id="1_5utgv"]
 [ext_resource type="Resource" uid="uid://wcg6f35os2ku" path="res://data/characters/player_data.tres" id="2_qbs7g"]
-[ext_resource type="Texture2D" uid="uid://bhtqr0lwlvqpb" path="res://resources/player_shadow.tres" id="3_vj7nq"]
+[ext_resource type="Texture2D" uid="uid://bhtqr0lwlvqpb" path="res://assets/player_shadow.tres" id="3_vj7nq"]
 [ext_resource type="AnimationLibrary" uid="uid://1v1ft1r6qkhb" path="res://data/characters/character_anime.res" id="4_glldc"]
-[ext_resource type="Texture2D" uid="uid://bpn7vnx4diwt4" path="res://resources/player.tres" id="4_v7krq"]
-[ext_resource type="Texture2D" uid="uid://nkunsqbj7r6f" path="res://resources/weapon_pivot.tres" id="6_8nhx4"]
+[ext_resource type="Texture2D" uid="uid://bpn7vnx4diwt4" path="res://assets/player.tres" id="4_v7krq"]
+[ext_resource type="Texture2D" uid="uid://nkunsqbj7r6f" path="res://assets/weapon_pivot.tres" id="6_8nhx4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ekqmh"]
 atlas = ExtResource("3_vj7nq")

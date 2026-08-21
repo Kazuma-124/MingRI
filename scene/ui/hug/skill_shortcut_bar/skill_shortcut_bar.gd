@@ -35,8 +35,7 @@ func _init_after_player(p:CharacterBody2D)->void:
         _short_slots.append(slot_ui)
         _slots_container.add_child(slot_ui)
         slot_ui.clicked.connect(
-            func()->void:
-                EventBus.shortcut_slot_clicked.emit(i)
+            EventBus.shortcut_slot_clicked.emit.bind(i)
         )
 
     # Event技能槽数据信号->技能槽ui
@@ -54,5 +53,3 @@ func _on_shortcut_skill_changed(slot_id: int, skill_id: StringName) -> void:
     if slot_id >= 0 && slot_id < _short_slots.size():
         _short_slots[slot_id].set_skill(skill_id)
 
-func _on_slot_clicked(slot_id:int)->void:
-    EventBus.shortcut_slot_skill_changed.emit(slot_id)

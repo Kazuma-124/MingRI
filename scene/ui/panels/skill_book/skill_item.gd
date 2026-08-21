@@ -9,13 +9,15 @@ signal clicked(skill_id:StringName)
 
 #region 成员变量
 var _skill_id:StringName = &""
+#endregion
+
+
 #region @onready
 @onready var _cooldown_mask: ProgressBar = $CooldownMask
 @onready var _icon: TextureRect = $HBoxContainer/Icon
 @onready var _name_label: Label = $HBoxContainer/NameLabel
 @onready var _info_label: Label = $HBoxContainer/InfoLabel
 @onready var _cooldown_label: Label = $HBoxContainer/CooldownLabel
-#endregion
 #endregion
 
 

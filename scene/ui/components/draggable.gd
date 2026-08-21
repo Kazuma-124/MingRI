@@ -78,6 +78,7 @@ func _ready() -> void:
 #endregion
 
 
+
 #region 外部接口
 ## 把拖拽缩放的下限同步成“内容所需尺寸”。
 ## 背景:窗口是普通 Control,不会随内容自动变大。内容(如展开 LearnableItems)变高变宽后,

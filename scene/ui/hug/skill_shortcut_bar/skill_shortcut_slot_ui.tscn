@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://byqen706gdiwq" path="res://scene/ui/hug/skill_shortcut_bar/skill_shortcut_slot_ui.gd" id="1_kt0g2"]
 [ext_resource type="Texture2D" uid="uid://ciygchho7fi5n" path="res://assets/icons/windows.png" id="2_k0n71"]
+[ext_resource type="Texture2D" uid="uid://bma61y1ws1upl" path="res://assets/skill_fireball.tres" id="3_8t4uy"]
 
 [node name="SkillSlot" type="Control" unique_id=1439700499]
 custom_minimum_size = Vector2(48, 48)
@@ -22,6 +23,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
 texture = ExtResource("2_k0n71")
 expand_mode = 1
 stretch_mode = 6
@@ -33,6 +35,8 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+mouse_filter = 2
+texture = ExtResource("3_8t4uy")
 expand_mode = 1
 stretch_mode = 5
 

@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://d3jcja4881vpl"]
 
 [ext_resource type="Script" uid="uid://ccaiamqd65yhi" path="res://skills/fireball/skill_fireball.gd" id="1_c6meu"]
-[ext_resource type="Texture2D" uid="uid://bma61y1ws1upl" path="res://resources/skill_fireball.tres" id="2_q7ygs"]
-[ext_resource type="Texture2D" uid="uid://cvaif83l3wuuo" path="res://resources/skill_fireball_explosion.tres" id="3_0hu8h"]
+[ext_resource type="Texture2D" uid="uid://bma61y1ws1upl" path="res://assets/skill_fireball.tres" id="2_q7ygs"]
+[ext_resource type="Texture2D" uid="uid://cvaif83l3wuuo" path="res://assets/skill_fireball_explosion.tres" id="3_0hu8h"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_c6meu"]
 radius = 2.0
