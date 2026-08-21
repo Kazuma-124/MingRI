@@ -11,33 +11,55 @@ offset_bottom = 25.0
 size_flags_horizontal = 3
 script = ExtResource("1_icaoy")
 
-[node name="CooldownMask" type="ProgressBar" parent="." unique_id=805022878]
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=838734133]
 layout_mode = 2
+
+[node name="Icon" type="TextureRect" parent="HBoxContainer" unique_id=1401852049]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(16, 16)
+layout_mode = 2
+
+[node name="NameLabel" type="Label" parent="HBoxContainer" unique_id=971599463]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_vertical = 1
+text = "aaa"
+
+[node name="InfoCooldownContainer" type="Control" parent="HBoxContainer" unique_id=488246534]
+layout_mode = 2
+
+[node name="InfoLabel" type="Label" parent="HBoxContainer/InfoCooldownContainer" unique_id=1984972798]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 1.0
+offset_bottom = 23.0
+size_flags_horizontal = 3
+size_flags_vertical = 1
+text = "bbb"
+
+[node name="CooldownMask" type="ProgressBar" parent="HBoxContainer/InfoCooldownContainer" unique_id=805022878]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+rotation = 0.0031736558
 size_flags_vertical = 1
 theme = ExtResource("2_giae8")
 theme_type_variation = &"CooldownMask"
 show_percentage = false
 
-[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=838734133]
-layout_mode = 2
-
-[node name="Icon" type="TextureRect" parent="HBoxContainer" unique_id=1401852049]
-custom_minimum_size = Vector2(16, 16)
-layout_mode = 2
-
-[node name="NameLabel" type="Label" parent="HBoxContainer" unique_id=971599463]
-layout_mode = 2
-size_flags_vertical = 1
-
-[node name="InfoLabel" type="Label" parent="HBoxContainer" unique_id=1984972798]
-layout_mode = 2
-size_flags_vertical = 1
-
-[node name="CooldownLabel" type="Label" parent="HBoxContainer" unique_id=1145502956]
-layout_mode = 2
+[node name="CooldownLabel" type="Label" parent="HBoxContainer/InfoCooldownContainer" unique_id=1145502956]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 30.0
+offset_bottom = 23.0
 size_flags_horizontal = 3
 size_flags_vertical = 1
 theme = SubResource("Theme_icaoy")
 theme_type_variation = &"CooldownLabel"
 text = "test"
-horizontal_alignment = 2
+horizontal_alignment = 1
+vertical_alignment = 1

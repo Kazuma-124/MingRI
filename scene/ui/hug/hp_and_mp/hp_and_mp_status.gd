@@ -16,6 +16,7 @@ func _ready() -> void:
 
 func _on_player_initialized()->void:
     GameManager.current_player.init_hp_and_mp_signal()
+    GameManager.player_initialized.disconnect(_on_player_hp_changed)
 
 func _on_player_hp_changed(cur_hp:float,max_hp:float)->void:
     hp_bar.value = cur_hp

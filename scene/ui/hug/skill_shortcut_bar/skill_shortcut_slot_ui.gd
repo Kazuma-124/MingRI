@@ -41,10 +41,10 @@ func set_skill(skill_id:StringName)->void:
         _current_instance = null
     
     # 获取新的技能实例
-    var skill_instance:SkillInstance = GameManager.get_player_skill_instance(skill_id)
-    if skill_instance:
-        skill_instance.cooldown_updated.connect(_on_cooldown_updated)
-        var skill_data = skill_instance.data
+    _current_instance = GameManager.get_player_skill_instance(skill_id)
+    if _current_instance:
+        _current_instance.cooldown_updated.connect(_on_cooldown_updated)
+        var skill_data = _current_instance.data
         # 设置图标
         if skill_data:
             icon_rect.texture = skill_data.icon
@@ -53,8 +53,8 @@ func set_skill(skill_id:StringName)->void:
             icon_rect.texture = null
             icon_rect.visible = false
         _on_cooldown_updated(
-            skill_instance.get_cooldown_ratio(),
-            skill_instance.get_remaining_cooldown()
+            _current_instance.get_cooldown_ratio(),
+            _current_instance.get_remaining_cooldown()
         )
     else:
         set_empty()

@@ -2,7 +2,6 @@ extends Control
 class_name MpBar
 
 # ===== 子节点引用 =====
-@onready var background: ColorRect = $Background
 @onready var chiyan_mp_bar: ColorRect = $ChiyanMpBar
 @onready var shengxi_mp_bar: ColorRect = $ShengxiMpBar
 @onready var shuangxuan_mp_bar: ColorRect = $ShuangxuanMpBar
@@ -19,8 +18,8 @@ var _mp_bars: Array[ColorRect] = []
 var tween: Tween
 
 func _ready() -> void:
-    background.size = size
-    background.position = Vector2.ZERO
+    # background.size = size
+    # background.position = Vector2.ZERO
     
     # 把四个能量条放到数组里，顺序和 AttributeTypes.Type 一致
     _mp_bars = [

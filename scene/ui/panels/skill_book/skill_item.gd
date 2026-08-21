@@ -14,13 +14,13 @@ var _skill_instance:SkillInstance = null
 
 
 #region @onready
-@onready var _cooldown_mask: ProgressBar = $CooldownMask
-@onready var _icon: TextureRect = $HBoxContainer/Icon
-@onready var _name_label: Label = $HBoxContainer/NameLabel
-@onready var _info_label: Label = $HBoxContainer/InfoLabel
-@onready var _cooldown_label: Label = $HBoxContainer/CooldownLabel
+@onready var _cooldown_mask: ProgressBar = %CooldownMask
+@onready var _icon: TextureRect = %Icon
+@onready var _name_label: Label = %NameLabel
+@onready var _info_label: Label = %InfoLabel
+@onready var _cooldown_label: Label = %CooldownLabel
+@onready var _info_cooldown_container: Control = $HBoxContainer/InfoCooldownContainer
 #endregion
-
 
 #region 初始化
 func _ready() -> void:
@@ -45,14 +45,19 @@ func _gui_input(event: InputEvent) -> void:
 func _on_cooldown_updated(ratio:float,remaining:float)->void:
     _cooldown_mask.value = ratio
     if remaining>0.05:
+        _info_label.visible = false
+        _cooldown_label.visible = true
         _cooldown_label.text = "%.1fs" % remaining
     else:
+        _info_label.visible = true
+        _cooldown_label.visible = false
         _cooldown_label.text = ""
 #endregion
 
 
 #region 公共接口
 func setup(skill_id:StringName)->void:
+    # 断开旧连接
     if _skill_instance:
         if _skill_instance.cooldown_updated.is_connected(_on_cooldown_updated):
             _skill_instance.cooldown_updated.disconnect(_on_cooldown_updated)
@@ -74,14 +79,25 @@ func setup(skill_id:StringName)->void:
             parts.append("消耗:%.0f(%s)" % [skill_data.mp_cost,attr_name])
         _info_label.text = " | ".join(parts)
         # 动态信息：冷却
+        # 连接信号
         _skill_instance.cooldown_updated.connect(_on_cooldown_updated)
+        # 预留最大宽度给冷却时间
+        _cooldown_label.text = "%.1fs"%_skill_instance.get_max_cooldown()
+        # 设定容器宽度下限
+        _reserve_label_width()
+        # 恢复为真实冷却时间
         _on_cooldown_updated(
             _skill_instance.get_cooldown_ratio(),
             _skill_instance.get_remaining_cooldown()
         )
     else:
         # 未学习的技能不展示冷却信息
-        _cooldown_label.text = "未学习"
-        _cooldown_mask.value = 1
-    
+        _info_label.text = "未学习"
+        _cooldown_label.text = ""
+        _reserve_label_width()
+
+func _reserve_label_width()->void:
+    await get_tree().process_frame
+    var w = max(_info_label.get_minimum_size().x,_cooldown_label.get_minimum_size().x)
+    _info_cooldown_container.custom_minimum_size.x=w
 #endregion

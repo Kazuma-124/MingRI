@@ -30,6 +30,7 @@ func _ready() -> void:
     _learned_items.item_clicked.connect(_on_skill_item_clicked)
     # 可学习的技能无法释放
     # _learnable_items.item_clicked.connect(_on_skill_item_clicked)
+    EventBus.hud_action_pressed.connect(_on_hud_action)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -107,5 +108,9 @@ func _on_learnable_toggle_pressed()->void:
     _learnable_items.visible = _learnable_visible   # 展开/收起改变内容尺寸
     _learnable_toggle_button.text = _generate_learnable_toggle_button_text()
     _update_content_min(true) # 内容尺寸变化 → 同步拖拽下限与窗口大小
+
+func _on_hud_action(action:StringName)->void:
+    if action==&"skill_book":
+        toggle()
 #endregion
 

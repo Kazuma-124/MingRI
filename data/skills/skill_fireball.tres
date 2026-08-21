@@ -13,5 +13,6 @@ icon = ExtResource("1_gxqoo")
 scene = ExtResource("2_gxqoo")
 mp_cost = 10.0
 damage = 10.0
-cooldown = 0.2
+cooldown = 0.3
+fly_speed = 700.0
 metadata/_custom_type_script = "uid://b4ng7uinnlfag"

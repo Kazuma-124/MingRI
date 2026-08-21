@@ -64,8 +64,8 @@ language = "zh"
 
 [node name="LearnableItems" parent="Panel/Body/ListColumns" unique_id=1353659583 instance=ExtResource("3_bjps1")]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
-size_flags_horizontal = 3
 
 [node name="ResizeTL" type="ColorRect" parent="." unique_id=1671491538]
 custom_minimum_size = Vector2(10, 10)

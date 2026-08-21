@@ -1,0 +1,8 @@
+[gd_scene format=3 uid="uid://bpg8bg5lcshdl"]
+
+[ext_resource type="Script" uid="uid://bs47phyqdttm" path="res://scene/ui/hug/top_hud/hud_button.gd" id="1_63g35"]
+
+[node name="HudButton" type="Button" unique_id=30354921]
+offset_right = 8.0
+offset_bottom = 8.0
+script = ExtResource("1_63g35")

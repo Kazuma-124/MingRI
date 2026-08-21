@@ -35,6 +35,9 @@ func update_cooldown(delta:float)->void:
 func start_cooldown()->void:
     current_cooldown = data.cooldown
     emit_cooldown_updated(get_cooldown_ratio(),current_cooldown)
+
+func get_max_cooldown()->float:
+    return data.cooldown
 #endregion
 
 
