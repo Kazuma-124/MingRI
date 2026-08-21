@@ -24,14 +24,15 @@ layout_mode = 2
 [node name="TitleBar" type="HBoxContainer" parent="Panel/Body" unique_id=1824840454 node_paths=PackedStringArray("target", "drag_handle", "resize_tl", "resize_tr", "resize_bl", "resize_br")]
 layout_mode = 2
 script = ExtResource("2_72rvs")
+save_key = &"skill_book_window"
+auto_center_on_start = null
+min_size = Vector2(0, 0)
 target = NodePath("../../..")
 drag_handle = NodePath(".")
-save_key = &"skill_book_window"
 resize_tl = NodePath("../../../ResizeTL")
 resize_tr = NodePath("../../../ResizeTR")
 resize_bl = NodePath("../../../ResizeBL")
 resize_br = NodePath("../../../ResizeBR")
-min_size = Vector2(0, 0)
 
 [node name="TitleLabel" type="Label" parent="Panel/Body/TitleBar" unique_id=1511447638]
 layout_mode = 2
@@ -60,6 +61,7 @@ size_flags_horizontal = 3
 [node name="LearnableToggleButton" type="Button" parent="Panel/Body/ListColumns" unique_id=778453821]
 unique_name_in_owner = true
 layout_mode = 2
+autowrap_mode = 1
 language = "zh"
 
 [node name="LearnableItems" parent="Panel/Body/ListColumns" unique_id=1353659583 instance=ExtResource("3_bjps1")]

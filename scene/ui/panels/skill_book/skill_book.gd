@@ -5,13 +5,13 @@ class_name SkillBook
 #endregion
 
 
-#region _skill_items:Array[SkillItem] = []
+#region 成员变量
 # var _skill_items:Array[SkillItem]
 var _learnable_visible:bool = false
 #endregion
 
 #region @onready
-@onready var _draggable: Draggable = $Panel/Body/TitleBar
+@onready var _draggable: Draggable = $Panel/Body/TitleBar       # 标题栏上的拖拽/缩放组件(负责窗口移动与四角缩放)
 @onready var _close_button: Button = %CloseButton
 @onready var _learned_items: SkillItemList = %LearnedItems
 @onready var _learnable_toggle_button: Button = %LearnableToggleButton
@@ -21,10 +21,9 @@ var _learnable_visible:bool = false
 
 #region 内置函数
 func _ready() -> void:
-    # 技能书默认隐藏
-    visible = false
+    visible = false                     # 技能书默认隐藏
     _learnable_items.visible = false
-    _update_content_min()
+    _update_content_min(false)               # 初始化时把内容最小尺寸同步给拖拽下限
 
     _close_button.pressed.connect(_on_close_pressed)
     _learnable_toggle_button.pressed.connect(_on_learnable_toggle_pressed)
@@ -32,8 +31,7 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("toggle_skill"):
         toggle()
-        # 标记当前事件已处理，阻止其继续传播
-        get_viewport().set_input_as_handled()
+        get_viewport().set_input_as_handled()   # 标记当前事件已处理，阻止其继续传播
 #endregion
 
 #region 公共接口
@@ -48,6 +46,7 @@ func toggle()->void:
 
 
 #region 内部方法
+# 生成技能书列表
 func _populate_list()->void:
     _learned_items.clear_skills()
     _learnable_items.clear_skills()
@@ -68,15 +67,26 @@ func _populate_list()->void:
             learnable_count+=1
     
     print_debug("learnable_count: ",learnable_count)
-    _learnable_toggle_button.text = "可\n学\n技\n能\n %s" % [">>>" if _learnable_visible else "<<<"]
+    _learnable_toggle_button.text = _generate_learnable_toggle_button_text()
     _learnable_toggle_button.visible = learnable_count>0
 
-    # 更新拖动的size最小值
-    _update_content_min()
+    # 列表项数量变化 → 内容最小尺寸变化,同步拖拽下限
+    _update_content_min(false)
 
-func _update_content_min()->void:
+# 把“内容当前所需的最小尺寸”同步给拖拽组件。
+# 关键:Godot 的布局/最小尺寸计算不是同步的——修改子节点可见性或内容后只是排队重排,
+# 要等下一帧 process_frame 布局刷新完,祖先的 get_combined_minimum_size() 才是新值。
+# 所以先 await 一帧,再读最新值传给 draggable,避免传入“上一帧的旧数据”导致窗口尺寸对不上内容。
+func _update_content_min(is_keep_margin:bool)->void:
     await get_tree().process_frame
-    _draggable.set_content_min($Panel.get_combined_minimum_size())
+    if is_keep_margin:
+        _draggable.set_content_min_keep_margin($Panel.get_combined_minimum_size())
+    else:
+        _draggable.set_content_min($Panel.get_combined_minimum_size())
+
+func _generate_learnable_toggle_button_text()->String:
+    return "可\n学\n技\n能\n%s" % [">>" if _learnable_visible else "<<"]
+    # return "可学技能%s" % [">>" if _learnable_visible else "<<"]
 #endregion
 
 
@@ -91,11 +101,8 @@ func _on_close_pressed()->void:
 
 func _on_learnable_toggle_pressed()->void:
     _learnable_visible = !_learnable_visible
-    _learnable_items.visible = _learnable_visible
-    if not _learnable_visible:
-        pass
-    _learnable_toggle_button.text = "可\n学\n技\n能\n %s" % [">>>" if _learnable_visible else "<<<"]
-    # 点击拓展后，容器最小大小更新
-    _update_content_min()
+    _learnable_items.visible = _learnable_visible   # 展开/收起改变内容尺寸
+    _learnable_toggle_button.text = _generate_learnable_toggle_button_text()
+    _update_content_min(true) # 内容尺寸变化 → 同步拖拽下限与窗口大小
 #endregion
 
