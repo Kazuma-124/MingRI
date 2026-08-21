@@ -27,6 +27,10 @@ func _ready() -> void:
 
     _close_button.pressed.connect(_on_close_pressed)
     _learnable_toggle_button.pressed.connect(_on_learnable_toggle_pressed)
+    _learned_items.item_clicked.connect(_on_skill_item_clicked)
+    # 可学习的技能无法释放
+    # _learnable_items.item_clicked.connect(_on_skill_item_clicked)
+
 
 func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("toggle_skill"):

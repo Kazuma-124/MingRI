@@ -9,6 +9,7 @@ signal clicked(skill_id:StringName)
 
 #region 成员变量
 var _skill_id:StringName = &""
+var _skill_instance:SkillInstance = null
 #endregion
 
 
@@ -52,14 +53,19 @@ func _on_cooldown_updated(ratio:float,remaining:float)->void:
 
 #region 公共接口
 func setup(skill_id:StringName)->void:
+    if _skill_instance:
+        if _skill_instance.cooldown_updated.is_connected(_on_cooldown_updated):
+            _skill_instance.cooldown_updated.disconnect(_on_cooldown_updated)
+        _skill_instance = null
+    _skill_id = skill_id
     var skill_data:SkillData = SkillLibrary.get_skill(skill_id)
     if skill_data:
         _icon.texture = skill_data.icon
         _name_label.text = skill_data.name
 
     # 动态信息：冷却信号
-    var skill_instance = GameManager.get_player_skill_instance(skill_id)
-    if skill_instance:
+    _skill_instance = GameManager.get_player_skill_instance(_skill_id)
+    if _skill_instance:
         # 已学习的技能展示信息
         # 静态信息
         var parts:Array[String] = []
@@ -68,10 +74,10 @@ func setup(skill_id:StringName)->void:
             parts.append("消耗:%.0f(%s)" % [skill_data.mp_cost,attr_name])
         _info_label.text = " | ".join(parts)
         # 动态信息：冷却
-        skill_instance.cooldown_updated.connect(_on_cooldown_updated)
+        _skill_instance.cooldown_updated.connect(_on_cooldown_updated)
         _on_cooldown_updated(
-            skill_instance.get_cooldown_ratio(),
-            skill_instance.get_remaining_cooldown()
+            _skill_instance.get_cooldown_ratio(),
+            _skill_instance.get_remaining_cooldown()
         )
     else:
         # 未学习的技能不展示冷却信息

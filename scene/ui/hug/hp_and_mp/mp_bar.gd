@@ -36,6 +36,7 @@ func _ready() -> void:
     _mp_bars[AttributeTypes.Type.SHUANGXUAN].color = AttributeTypes.SHUANGXUAN_COLOR
     _mp_bars[AttributeTypes.Type.YOUYING].color = AttributeTypes.YOUYING_COLOR
 
+
 func set_mp(attr: AttributeTypes.Type, value: float) -> void:
     mps[attr] = value
     _update_bars_animated()
