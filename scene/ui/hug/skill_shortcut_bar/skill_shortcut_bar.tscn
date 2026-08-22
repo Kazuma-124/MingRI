@@ -14,5 +14,4 @@ _slot_ui_scene = ExtResource("3_5vcv8")
 
 [node name="SlotsContainer" type="HBoxContainer" parent="." unique_id=262413655]
 layout_mode = 2
-size_flags_horizontal = 0
 theme = ExtResource("1_d2ytj")

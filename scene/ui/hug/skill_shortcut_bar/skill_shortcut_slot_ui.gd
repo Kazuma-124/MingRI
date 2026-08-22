@@ -2,7 +2,7 @@ extends Control
 class_name SkillSlotUI
 
 #region 信号
-signal clicked()
+signal skill_slot_clicked()
 #endregion
 
 #region 成员变量
@@ -10,11 +10,10 @@ var _current_instance:SkillInstance = null
 #endregion
 
 #region @onready
-@onready var icon_rect: TextureRect = $SkillIcon
+@onready var icon_rect: TextureRect = $IconRect
 @onready var cooldown_mask: ProgressBar = $CooldownMask
 @onready var cooldown_label: Label = $CooldownLabel
 #endregion
-
 #region 内置函数
 func _gui_input(event: InputEvent) -> void:
     if(
@@ -22,7 +21,7 @@ func _gui_input(event: InputEvent) -> void:
         event.pressed and 
         event.button_index==MOUSE_BUTTON_LEFT
     ):
-        clicked.emit()
+        skill_slot_clicked.emit()
         accept_event()
 #endregion
 

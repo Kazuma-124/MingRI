@@ -23,7 +23,7 @@ func _init_after_player(p:CharacterBody2D)->void:
     # 普攻,点击->EventBus.primary_attack_slot_clicked->state.switch_primary
     _primary_slot = _slot_ui_scene.instantiate()
     _slots_container.add_child(_primary_slot)
-    _primary_slot.clicked.connect(
+    _primary_slot.skill_slot_clicked.connect(
         func() ->void:
             EventBus.primary_attack_slot_clicked.emit()
     )
@@ -34,7 +34,7 @@ func _init_after_player(p:CharacterBody2D)->void:
         var slot_ui = _slot_ui_scene.instantiate()
         _short_slots.append(slot_ui)
         _slots_container.add_child(slot_ui)
-        slot_ui.clicked.connect(
+        slot_ui.skill_slot_clicked.connect(
             EventBus.shortcut_slot_clicked.emit.bind(i)
         )
 
