@@ -1,8 +1,8 @@
 extends HBoxContainer
 
 
-@onready var hp_bar: ProgressBar = $HpBar
-@onready var mp_bar: MpBar = $MpBar
+@onready var hp_bar: ProgressBar = %HpBar
+@onready var mp_bar: MpBar = %MpBar
 var player:CharacterBody2D
 
 func _ready() -> void:

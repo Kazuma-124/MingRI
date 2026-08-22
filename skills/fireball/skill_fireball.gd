@@ -22,7 +22,7 @@ func _physics_process(delta: float) -> void:
     if _exploded:
         return
     global_position += dir * data.fly_speed * delta
-    if global_position.distance_to(start_pos) >= data.cast_range:
+    if global_position.distance_to(start_pos) >= data.fly_distance:
         _explode()
 
 func setup(skill_data:SkillData,context:CastContext)->void:

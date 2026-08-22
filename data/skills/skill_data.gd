@@ -6,10 +6,18 @@ enum SkillType{
     PRIMARY_ATTACK,     # 普攻
     PASSIVE,            # 被动
 }
+enum TargetingType{
+    INSTANT,            # 立即生效
+    DIRECTION,          # 方向性技能
+    POSITION,           # 位置性技能
+    TARGET,             # 目标性技能
+}
 @export_group("基础信息")
 @export var id:StringName
 @export var name:String
 @export var skill_type:SkillType = SkillType.NORMAL
+@export var targeting_type:TargetingType
+
 @export_group("资源")
 @export var icon:Texture2D
 @export var scene:PackedScene
@@ -20,16 +28,4 @@ enum SkillType{
 @export var mp_cost:float
 @export var damage:float
 @export var cooldown:float
-@export var cast_range:float = 250
 
-# ==================== 投射物专属 ====================
-@export_group("投射物专属")
-@export var fly_speed: float = 480.0
-
-
-@export_group("bullet_flame")
-@export var damage_range:float = 32 # 伤害范围，直径
-@export_subgroup("子弹动画配置")
-@export var anime_duration_time:float = 0.3
-@export var bullet_diameter:float = 8 # 子弹直径（像素）
-@export var explosion_diameter:float = 32 # 爆炸特效直径（像素）

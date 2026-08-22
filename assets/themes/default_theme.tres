@@ -6,21 +6,22 @@ bg_color = Color(0.6, 0.6, 0.6, 0)
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tpbsb"]
 bg_color = Color(0, 0, 0, 0.6862745)
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_p04ny"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_64efx"]
+bg_color = Color(1, 0, 0, 1)
+
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5sm08"]
 bg_color = Color(0, 0, 1, 1)
 border_color = Color(0, 0, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_5vcv8"]
 bg_color = Color(0.45424774, 0.45424774, 0.45424774, 1)
-border_width_left = 1
-border_width_top = 1
-border_width_right = 1
-border_width_bottom = 1
-border_color = Color(0.43036, 0.15255937, 0, 1)
-expand_margin_left = 4.0
-expand_margin_top = 4.0
-expand_margin_right = 4.0
-expand_margin_bottom = 4.0
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.45935756, 0.11276866, 0, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_qqye0"]
 border_width_left = 2
@@ -35,6 +36,9 @@ CooldownLabel/colors/font_color = Color(1, 1, 0, 1)
 CooldownMask/base_type = &"ProgressBar"
 CooldownMask/styles/background = SubResource("StyleBoxFlat_4e0l7")
 CooldownMask/styles/fill = SubResource("StyleBoxFlat_tpbsb")
+HpBar/base_type = &"ProgressBar"
+HpBar/styles/background = SubResource("StyleBoxFlat_p04ny")
+HpBar/styles/fill = SubResource("StyleBoxFlat_64efx")
 MPBar/base_type = &"ProgressBar"
 MPBar/styles/fill = SubResource("StyleBoxFlat_5sm08")
 PanelContainer/styles/panel = SubResource("StyleBoxFlat_5vcv8")

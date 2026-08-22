@@ -1,4 +1,4 @@
-extends PanelContainer
+extends HBoxContainer
 class_name SkillItem
 
 
