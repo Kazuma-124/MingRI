@@ -109,13 +109,6 @@ func _create_indicator(skill_data:SkillData)->SkillIndicator:
             return SkillIndicatorTarget.new()
     return null
 
-func _process(delta:float)->void:
-    if _cast_state != CastState.AIMING or not _indicator:
-        return
-    # 每帧更新指示器位置/旋转（返回值在此处忽略，仅用于驱动视觉更新）
-    var mouse_position:Vector2 = _caster.get_global_mouse_position()
-    _indicator.update_aim(mouse_position)
-
 func _unhandled_input(event:InputEvent)->void:
     if _cast_state != CastState.AIMING:
         return
@@ -141,7 +134,7 @@ func _confirm_cast()->void:
         return
 
     # 从指示器取最终瞄准数据，补全施法者信息
-    var ctx:CastContext = _indicator.update_aim(_caster.get_global_mouse_position())
+    var ctx:CastContext = _indicator.generate_castcontext()
     ctx.caster = _caster
 
     # 生成技能实例

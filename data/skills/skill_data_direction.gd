@@ -1,16 +1,12 @@
 extends SkillData
 class_name SkillDataDirection
 
-enum IndicatorShape{
-	NONE, # 无范围图形, 纯方向选择
-	RECTANGLE, # 长方形，以玩家为起点，朝方向眼神
-	SECTOR,	# 扇形，以玩家为圆心，超方向展开
-}
 
-@export var indicator_shape:SkillDataDirection.IndicatorShape = IndicatorShape.NONE
-@export var indicator_length:float	# 矩形长度/扇形半径
-@export var indicator_width:float 	# 矩形宽度（扇形不用）
-@export var indicator_angle:float	# 扇形角度（矩形不用）
+#region 指示器
+@export_group("指示器")
+@export var indicator_shape:IndicatorShape
+@export var indicator_color:Color = Color(0,0.2,1.0,0.5)
+#endregion
 
 @export_group("投射物")
 @export var fly_distance: float
