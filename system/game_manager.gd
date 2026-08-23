@@ -11,5 +11,5 @@ func set_player(p: CharacterBody2D) -> void:
 
 func get_player_skill_instance(skill_id:StringName)->SkillInstance:
     if current_player:
-        return current_player.state.get_skill_instance(skill_id)
+        return current_player.get_state().get_skill_instance(skill_id)
     return null

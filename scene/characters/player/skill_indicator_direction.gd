@@ -4,7 +4,7 @@ class_name SkillIndicatorDirection
 #region 运行时状态
 var _skill_data:SkillDataDirection = null
 var _direction:Vector2 = Vector2.RIGHT
-var _color:Color = Color(0.75, 0.85, 1.0, 0.35)
+var _color:Color = Color(0, 0.2, 1.0, 0.5)
 #endregion
 
 
@@ -12,6 +12,8 @@ var _color:Color = Color(0.75, 0.85, 1.0, 0.35)
 func setup(skill_data:SkillData, caster:Node2D)->void:
     _skill_data = skill_data as SkillDataDirection
     global_position = caster.global_position
+    print_debug("caster position:",caster.global_position)
+    print_debug("indicator position:",global_position)
     # z_index会影响结点的绘制顺序，越大越优先
     z_index = 10
     # 加入重绘队列

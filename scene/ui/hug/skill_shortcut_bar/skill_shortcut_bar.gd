@@ -42,9 +42,9 @@ func _init_after_player(p:CharacterBody2D)->void:
     EventBus.player_primary_attack_switched.connect(_on_primary_skill_switched)
     EventBus.shortcut_skill_changed.connect(_on_shortcut_skill_changed)
     # 手动初始化ui信息
-    _primary_slot.set_skill(p.state.curr_primary_attack_skill_id) 
+    _primary_slot.set_skill(p.get_state().curr_primary_attack_skill_id) 
     for i in range(count):
-        var skill_id:StringName = p.state.get_slot_skill_id(i) 
+        var skill_id:StringName = p.get_state().get_slot_skill_id(i) 
         _short_slots[i].set_skill(skill_id)
 
 func _on_primary_skill_switched(skill_id):

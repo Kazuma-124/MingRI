@@ -94,8 +94,8 @@ func _enter_aiming(skill_id:StringName, skill_data:SkillData)->void:
     # 创建并挂载指示器
     _indicator = _create_indicator(_aiming_skill)
     if _indicator:
-        _indicator.setup(_aiming_skill, _caster)
         _caster.add_child(_indicator)
+        _indicator.setup(_aiming_skill, _caster)
 
     cast_started.emit(skill_id)
 

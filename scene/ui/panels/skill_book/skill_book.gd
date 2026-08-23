@@ -55,7 +55,7 @@ func toggle()->void:
 func _populate_list()->void:
     _learned_items.clear_skills()
     _learnable_items.clear_skills()
-    var player_state:PlayerSaveableState = GameManager.current_player.state
+    var player_state:PlayerSaveableState = GameManager.current_player.get_state()
     
     # var learned_count = 0
     var learnable_count = 0

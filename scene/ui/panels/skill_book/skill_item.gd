@@ -99,5 +99,5 @@ func setup(skill_id:StringName)->void:
 func _reserve_label_width()->void:
     await get_tree().process_frame
     var w = max(_info_label.get_minimum_size().x,_cooldown_label.get_minimum_size().x)
-    _info_cooldown_container.custom_minimum_size.x=w
+    _info_cooldown_container.custom_minimum_size.x=max(w,50)
 #endregion

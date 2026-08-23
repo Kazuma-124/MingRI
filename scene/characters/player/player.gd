@@ -174,7 +174,6 @@ func _init_saveable_state_signal_connect()->void:
         func(skill_id:StringName)->void:
             EventBus.player_primary_attack_switched.emit(skill_id)
     )
-    # _state.primary_attack_skills_updated.connect(EventBus.player_primary_attack_skills_updated)
     _state.slot_skill_changed.connect(
         func(slot_id:int,skill_id:StringName)->void:
             EventBus.shortcut_skill_changed.emit(slot_id,skill_id)

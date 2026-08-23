@@ -27,6 +27,7 @@ text = "aaa"
 
 [node name="InfoCooldownContainer" type="Control" parent="HBoxContainer" unique_id=488246534]
 layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="InfoLabel" type="Label" parent="HBoxContainer/InfoCooldownContainer" unique_id=1984972798]
 unique_name_in_owner = true
