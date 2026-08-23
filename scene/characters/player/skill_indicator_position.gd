@@ -1,0 +1,2 @@
+extends SkillIndicator
+class_name SkillIndicatorPosition

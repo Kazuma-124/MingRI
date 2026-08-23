@@ -9,13 +9,15 @@ extends CharacterBase
 #endregion
 
 #region 成员变量
-var state:PlayerSaveableState
-var skill_caster:SkillCaster
+var _state:PlayerSaveableState
+var _skill_caster:SkillCaster
 # ====== 玩家状态
-var move_speed
-var mouse_dir:Vector2
-var move_dir:Vector2
+var _move_speed
+var _mouse_dir:Vector2
+var _move_dir:Vector2
+#endregion
 
+#region onready
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var weapon_pivot: Node2D = $WeaponPivot
 #endregion
@@ -26,11 +28,11 @@ func _ready() -> void:
     super._ready()
     # ==== 玩家状态
     _init_saveable_state()
-    skill_caster = SkillCaster.new()
-    skill_caster.setup(self,state)
+    _skill_caster = SkillCaster.new()
+    _skill_caster.setup(self)
     _init_saveable_state_signal_connect()
-    # == runtime state
-    move_speed = data.base_speed
+    # == runtime _state
+    _move_speed = data.base_speed
     # 方向和动画
     _update_dir_status()
     _update_animation()
@@ -46,36 +48,39 @@ func _physics_process(delta: float) -> void:
     _update_animation()
 
 func _unhandled_input(event: InputEvent) -> void:
+    if _skill_caster.is_aiming():
+        return
     if event.is_action_pressed("primary_attack"):
-        skill_caster.cast_primary_skill()
+        _skill_caster.cast_primary_skill()
 
 #endregion
 
-#region 可存档数据接口
 # ======= 可存档数据
 func take_damage(amount: float) -> void:
-    state.take_damage(amount)
+    _state.take_damage(amount)
 
-#endregion
 
 
 #region 运行时更新
 # 技能冷却
 func _update_skill_status(delta:float)->void:
-    state.update_skill_cooldowns(delta)
+    _state.update_skill_cooldowns(delta)
 
 # ======= 运行时数据
 # 通过输入获取鼠标方向和运动方向
 func _update_dir_status():
     # 玩家鼠标方向，决定动画朝向和武器指向
-    mouse_dir = get_global_mouse_position()-global_position
-    if mouse_dir!=Vector2.ZERO:
-        mouse_dir = mouse_dir.normalized()
+    _mouse_dir = get_global_mouse_position()-global_position
+    if _mouse_dir!=Vector2.ZERO:
+        _mouse_dir = _mouse_dir.normalized()
     # 玩家移动方向
-    move_dir = Input.get_vector("move_left","move_right","move_up","move_down").normalized()
+    _move_dir = Input.get_vector("move_left","move_right","move_up","move_down").normalized()
 
-    # 更新玩家速度，移动
-    velocity = move_dir * move_speed
+    if _skill_caster.is_aiming():
+        velocity = Vector2.ZERO
+    else:
+        # 更新玩家速度，移动
+        velocity = _move_dir * _move_speed
     move_and_slide()
 
 #endregion
@@ -89,11 +94,11 @@ func _update_animation():
     _update_weapon_animation()
 
 func _update_body_animation():
-    if mouse_dir==Vector2.ZERO:
+    if _mouse_dir==Vector2.ZERO:
         return
 
-    var animation_suffix:StringName = _vector_to_suffix(mouse_dir)
-    # var animation_prefix:StringName = &"idle" if move_dir==Vector2.ZERO else &"walk"
+    var animation_suffix:StringName = _vector_to_suffix(_mouse_dir)
+    # var animation_prefix:StringName = &"idle" if _move_dir==Vector2.ZERO else &"walk"
     var animation_prefix:StringName = "facing"
     var animation_name:StringName = StringName("%s_%s"%[animation_prefix,animation_suffix])
     if not animation_player.has_animation(animation_name):
@@ -103,8 +108,12 @@ func _update_body_animation():
 
 
 func _update_weapon_animation():
-    weapon_pivot.rotation = mouse_dir.angle()
-    weapon_pivot.scale.y = 1.0 if mouse_dir.x>=0 else -1.0
+    if _skill_caster.is_aiming():
+        weapon_pivot.visible = false
+    else:
+        weapon_pivot.visible = true
+        weapon_pivot.rotation = _mouse_dir.angle()
+        weapon_pivot.scale.y = 1.0 if _mouse_dir.x>=0 else -1.0
 
 #endregion
 
@@ -112,6 +121,9 @@ func _update_weapon_animation():
 #region 工具函数
 
 # ============ 工具 =============
+func get_state()->PlayerSaveableState:
+    return _state
+
 func _vector_to_suffix(vec:Vector2)->StringName:
     return &"right" if vec.x>=0 else &"left"
     # if abs(vec.x) >= abs(vec.y):
@@ -121,13 +133,13 @@ func _vector_to_suffix(vec:Vector2)->StringName:
 
 # 提供给 SkillSlot 调用的能量接口
 func has_enough_mp(attr: AttributeTypes.Type, amount: float) -> bool:
-    return state.has_enough_mp(attr, amount)
+    return _state.has_enough_mp(attr, amount)
 
 func cost_mp(attr: AttributeTypes.Type, amount: float) -> bool:
-    return state.cost_mp(attr, amount)
+    return _state.cost_mp(attr, amount)
 
 func get_mp(attr: AttributeTypes.Type) -> float:
-    return state.get_mp(attr)
+    return _state.get_mp(attr)
 
 #endregion
 
@@ -138,44 +150,44 @@ func get_mp(attr: AttributeTypes.Type) -> float:
 # 初始化
 func _init_saveable_state()->void:
     # 从初始玩家data资源文件中加载新存档的玩家初始状态
-    state = PlayerSaveableState.new()
-    state.init_with_start_data(data)
+    _state = PlayerSaveableState.new()
+    _state.init_with_start_data(data)
 #endregion
 
 
 #region 信号处理
 
 func _init_saveable_state_signal_connect()->void:
-    state.hp_changed.connect(
+    _state.hp_changed.connect(
         func(cur:float,max_input:float)->void:
             EventBus.player_hp_changed.emit(cur,max_input)
     )
-    state.mp_changed.connect(
+    _state.mp_changed.connect(
         func(attr:AttributeTypes.Type,cur:float)->void:
             EventBus.player_mp_changed.emit(attr,cur)
     )
-    state.mp_all_changed.connect(
+    _state.mp_all_changed.connect(
         func(mps:Array[float],max_input:float)->void:
             EventBus.player_mp_all_changed.emit(mps,max_input)
     )
-    state.primary_attack_switched.connect(
+    _state.primary_attack_switched.connect(
         func(skill_id:StringName)->void:
             EventBus.player_primary_attack_switched.emit(skill_id)
     )
-    # state.primary_attack_skills_updated.connect(EventBus.player_primary_attack_skills_updated)
-    state.slot_skill_changed.connect(
+    # _state.primary_attack_skills_updated.connect(EventBus.player_primary_attack_skills_updated)
+    _state.slot_skill_changed.connect(
         func(slot_id:int,skill_id:StringName)->void:
             EventBus.shortcut_skill_changed.emit(slot_id,skill_id)
     )
 
     # UI输入->逻辑
-    EventBus.primary_attack_slot_clicked.connect(state.switch_primary_attack)
+    EventBus.primary_attack_slot_clicked.connect(_state.switch_primary_attack)
     EventBus.shortcut_slot_clicked.connect(_on_shortcut_slot_clicked)
-    EventBus.skill_book_skill_clicked.connect(skill_caster.cast_skill)
+    EventBus.skill_book_skill_clicked.connect(_skill_caster.cast_skill)
 func _on_shortcut_slot_clicked(slot_id:int)->void:
-    skill_caster.cast_skill(state.get_slot_skill_id(slot_id))
+    _skill_caster.cast_skill(_state.get_slot_skill_id(slot_id))
 
 func init_hp_and_mp_signal()->void:
-    state.emit_hp_changed()
-    state.emit_mp_all_changed()
+    _state.emit_hp_changed()
+    _state.emit_mp_all_changed()
 #endregion

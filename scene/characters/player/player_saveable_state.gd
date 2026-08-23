@@ -204,7 +204,6 @@ func transfer_mp(from_attr: AttributeTypes.Type, to_attr: AttributeTypes.Type, a
 #endregion
 
 
-#region 技能
 # 技能
 #region 技能通用设定
 # ---skill_common
@@ -281,11 +280,22 @@ func update_skill_cooldowns(delta: float) -> void:
         var instance = skill_instances[skill_id]
         instance.update_cooldown(delta)
 
-func is_skill_ready(skill_id:StringName)->bool:
+func is_skill_cooldown_ready(skill_id:StringName)->bool:
     var instance = get_skill_instance(skill_id)
     if not instance:
         return false
     return instance.current_cooldown<=0.0
+
+func can_cast(skill_id:StringName)->bool:
+    # 检查冷却
+    if not is_skill_cooldown_ready(skill_id):
+        return false
+    # 检查能量
+    var instance = get_skill_instance(skill_id)
+    if not has_enough_mp(instance.data.attribute_type, instance.data.mp_cost):
+        return false
+    return true
+
 # 开始技能冷却
 func start_skill_cooldown(skill_id: StringName) -> void:
     var instance = get_skill_instance(skill_id)
@@ -293,31 +303,24 @@ func start_skill_cooldown(skill_id: StringName) -> void:
         return
     instance.start_cooldown()
 
+func confirm_cast(skill_id:StringName)->bool:
+    var instance = get_skill_instance(skill_id)
+    if instance:
+        # 消耗能量
+        cost_mp(instance.data.attribute_type, instance.data.mp_cost)
+        # 开始冷却
+        start_skill_cooldown(skill_id)
+        return true
+    else:
+        return false
+
+
 # 尝试释放技能（检查冷却和能量）
 func try_cast_skill(skill_id: StringName) -> bool:
-    var instance = get_skill_instance(skill_id)
-    if not instance:
-        return false
-    
-    # 检查冷却
-    if not is_skill_ready(skill_id):
-        return false
-    
-    # 检查能量
-    if not has_enough_mp(instance.data.attribute_type, instance.data.mp_cost):
-        return false
-    
-    # 消耗能量
-    cost_mp(instance.data.attribute_type, instance.data.mp_cost)
-    
-    # 开始冷却
-    start_skill_cooldown(skill_id)
-    
-    return true
-
-#endregion
-
-
+    if can_cast(skill_id):
+        return confirm_cast(skill_id)
+    else:
+        return false 
 #endregion
 
 

@@ -1,8 +1,8 @@
 extends Area2D
 
-var data:SkillData
-var dir:Vector2 = Vector2(0,0)
-var start_pos:Vector2
+var _data:SkillData
+var _dir:Vector2 = Vector2(0,0)
+var _start_pos:Vector2
 var _exploded:bool = false
 
 @onready var bullet_sprite: Sprite2D = $BulletSprite
@@ -10,8 +10,8 @@ var _exploded:bool = false
 
 func _ready() -> void:
     # 调整子弹尺寸，爆炸特效尺寸
-    _judge_sprite2D_scale(explosion_sprite,data.explosion_diameter)
-    _judge_sprite2D_scale(bullet_sprite,data.bullet_diameter)
+    _judge_sprite2D_scale(explosion_sprite,_data.explosion_diameter)
+    _judge_sprite2D_scale(bullet_sprite,_data.bullet_diameter)
     # 显示子弹，隐藏爆炸特效
     bullet_sprite.show()
     explosion_sprite.hide()
@@ -21,19 +21,19 @@ func _ready() -> void:
 func _physics_process(delta: float) -> void:
     if _exploded:
         return
-    global_position += dir * data.fly_speed * delta
-    if global_position.distance_to(start_pos) >= data.fly_distance:
+    global_position += _dir * _data.fly_speed * delta
+    if global_position.distance_to(_start_pos) >= _data.fly_distance:
         _explode()
 
 func setup(skill_data:SkillData,context:CastContext)->void:
-    data = skill_data
-    global_position = context.caster_position+context.cast_direction*10
-    start_pos = global_position
-    dir = context.cast_direction
+    _data = skill_data
+    global_position = context.caster.global_position + context.direction * 10
+    _start_pos = global_position
+    _dir = context.direction
 
 
 func set_direction(d:Vector2)->void:
-    dir = d.normalized()
+    _dir = d.normalized()
 
 func _on_hit_body(body:Node2D)->void:
     if _exploded:
@@ -51,7 +51,7 @@ func _explode()->void:
     # 2. 指定查询用的形状为圆形
     query.shape = CircleShape2D.new()
     # 3. 设置圆形的半径 = 爆炸范围大小，从技能配置里读
-    query.shape.radius = data.damage_range/2
+    query.shape.radius = _data.damage_range/2
     # 4. 设置查询的位置和朝向
     #    Transform2D(旋转角度, 中心点坐标)
     #    爆炸不用旋转，角度填0；中心点就是子弹当前的世界坐标
@@ -69,9 +69,9 @@ func _explode()->void:
         # 取出命中的实体节点
         var body = result.collider
         if body.has_method("take_damage"):
-            body.take_damage(data.damage)
+            body.take_damage(_data.damage)
 
-    await get_tree().create_timer(data.anime_duration_time).timeout
+    await get_tree().create_timer(_data.anime_duration_time).timeout
     queue_free()
 
 
