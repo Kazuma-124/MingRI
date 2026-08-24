@@ -5,8 +5,8 @@
 
 [sub_resource type="Theme" id="Theme_icaoy"]
 
-[node name="SkillItem" type="HBoxContainer" unique_id=1309269217]
-offset_right = 62.0
+[node name="SkillItem" type="MarginContainer" unique_id=1452808066]
+offset_right = 64.0
 offset_bottom = 27.0
 size_flags_horizontal = 3
 script = ExtResource("1_icaoy")

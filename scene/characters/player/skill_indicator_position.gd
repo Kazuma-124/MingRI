@@ -24,7 +24,7 @@ func generate_castcontext()->CastContext:
     var ctx:=CastContext.new()
     ctx.position = global_position
     # 形状朝向，滚轮旋转后的朝向
-    ctx.direction = Vector2.RIGHT.rotated(rotation)
+    ctx.direction = Vector2.RIGHT.rotated(rotation).normalized()
     return ctx
 func get_is_valid()->bool:
     return _is_valid and _skill_data!=null

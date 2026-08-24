@@ -19,7 +19,7 @@ func setup(skill_data:SkillData, caster:Node2D)->void:
 
 func generate_castcontext()->CastContext:
     var ctx := CastContext.new()
-    ctx.direction = get_global_mouse_position()
+    ctx.direction = (get_global_mouse_position()-_caster.global_position).normalized()
     ctx.position = _caster.global_position
     return ctx
 

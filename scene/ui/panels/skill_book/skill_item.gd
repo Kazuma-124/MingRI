@@ -1,4 +1,5 @@
-extends HBoxContainer
+extends Container
+# extends HBoxContainer
 class_name SkillItem
 
 
