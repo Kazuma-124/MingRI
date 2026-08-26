@@ -43,6 +43,7 @@ var curr_bounce_speed:float
 
 func _ready() -> void:
     super._ready()
+    add_to_group("enemy")
     cur_hp = data.max_hp
 
     # 视野半径和信号设置

@@ -16,6 +16,7 @@ Thumbs.db
 # 编辑器本地配置
 .vscode/
 .idea/
+.memory/
 
 /resources
 /addons

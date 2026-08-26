@@ -14,3 +14,6 @@ func generate_castcontext()->CastContext:
 func get_is_valid()->bool:
     pass
     return true
+
+func get_aim_direction()->Vector2:
+    return Vector2.ZERO

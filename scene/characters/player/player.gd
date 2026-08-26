@@ -2,7 +2,13 @@
 
 extends CharacterBase
 
-#region 导出变量
+#region 信号
+signal facing_changed(new_facing:Vector2)
+signal target_locked(target:Node2D)
+signal target_unlocked()
+#endregion
+
+#region export
 @export var data:PlayerData
 # @export var hp_regen_per_second: float = 5
 # @export var mp_regen_per_second: float = 10
@@ -15,12 +21,58 @@ var _skill_caster:SkillCaster
 var _move_speed
 var _mouse_dir:Vector2
 var _move_dir:Vector2
+var _target_dir:Vector2
+# 朝向系统
+var _facing:Vector2 = Vector2.RIGHT
+var _other_facing:Vector2 = Vector2.ZERO
+var _locked_target:Node2D = null
 #endregion
 
 #region onready
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var weapon_pivot: Node2D = $WeaponPivot
 #endregion
+
+#region 外部接口
+func init_hp_and_mp_signal()->void:
+    _state.emit_hp_changed()
+    _state.emit_mp_all_changed()
+func get_state()->PlayerSaveableState:
+    return _state
+# 提供给 SkillSlot 调用的能量接口
+func has_enough_mp(attr: AttributeTypes.Type, amount: float) -> bool:
+    return _state.has_enough_mp(attr, amount)
+
+func cost_mp(attr: AttributeTypes.Type, amount: float) -> bool:
+    return _state.cost_mp(attr, amount)
+
+func get_mp(attr: AttributeTypes.Type) -> float:
+    return _state.get_mp(attr)
+func take_damage(amount: float) -> void:
+    _state.take_damage(amount)
+
+func set_other_facing(dir:Vector2)->void:
+    _other_facing = dir.normalized()
+
+func get_facing()->Vector2:
+    return _facing
+
+func set_lock_target(target:Node2D)->void:
+    if is_instance_valid(target):
+        if _locked_target == target:
+            return
+        clear_lock()
+        _locked_target = target
+        target_locked.emit(target)
+        return
+func clear_lock()->void:
+    if _locked_target:
+        _locked_target = null
+        target_unlocked.emit()
+func get_locked_target()->Node2D:
+    return _locked_target
+#endregion
+
 
 #region 内置函数
 
@@ -30,6 +82,7 @@ func _ready() -> void:
     _init_saveable_state()
     _skill_caster = SkillCaster.new()
     _skill_caster.setup(self)
+    _skill_caster.cast_executed.connect(_on_cast_executed)
     _init_saveable_state_signal_connect()
     # == runtime _state
     _move_speed = data.base_speed
@@ -52,30 +105,61 @@ func _unhandled_input(event: InputEvent) -> void:
         return
     if event.is_action_pressed("primary_attack"):
         _skill_caster.cast_primary_skill()
+        get_viewport().set_input_as_handled()
+    
+    if event.is_action_pressed("lock_target"):
+        _try_toggle_lock()
+        get_viewport().set_input_as_handled()
 
-#endregion
+func _try_toggle_lock()->void:
+    var mouse_pos := get_global_mouse_position()
+    var space_state := get_world_2d().direct_space_state
 
-# ======= 可存档数据
-func take_damage(amount: float) -> void:
-    _state.take_damage(amount)
-
-
-
-#region 运行时更新
+    # 在鼠标位置做小圆范围查询
+    var query := PhysicsShapeQueryParameters2D.new()
+    query.shape = CircleShape2D.new()
+    query.shape.radius = 20.0
+    # 把查询形状放到世界空间,Transform2D(旋转角度,摆放位置)
+    query.transform = Transform2D(0,mouse_pos)
+    query.collide_with_bodies = true
+    query.collide_with_areas = false
+    query.collision_mask = 2 # 只查Entity层
+    
+    var results:=space_state.intersect_shape(query)
+    var nearest_target:Node2D = null
+    var nearest_dist:float = INF
+    for result in results:
+        var body:CharacterBody2D = result.collider
+        if body.is_in_group("enemy") and is_instance_valid(body):
+            var dist = body.global_position.distance_to(mouse_pos)
+            if dist < nearest_dist:
+                nearest_dist = dist
+                nearest_target = body
+    if nearest_target:
+        # 有可锁定对象，锁定新目标
+        set_lock_target(nearest_target)
+    else:
+        # 鼠标下无敌人，取消锁定
+        clear_lock()
 # 技能冷却
 func _update_skill_status(delta:float)->void:
     _state.update_skill_cooldowns(delta)
 
-# ======= 运行时数据
-# 通过输入获取鼠标方向和运动方向
-func _update_dir_status():
-    # 玩家鼠标方向，决定动画朝向和武器指向
-    _mouse_dir = get_global_mouse_position()-global_position
-    if _mouse_dir!=Vector2.ZERO:
-        _mouse_dir = _mouse_dir.normalized()
-    # 玩家移动方向
-    _move_dir = Input.get_vector("move_left","move_right","move_up","move_down").normalized()
+func _update_dir_status()->void:
+    _update_mouse_dir()
 
+    _update_move_dir()
+
+    _update_target_dir()
+
+    _update_aim_facing()
+
+    _update_facing_dir()
+
+    _my_move_and_slide()
+
+func _my_move_and_slide()->void:
+    # 移动
     if _skill_caster.is_aiming():
         velocity = Vector2.ZERO
     else:
@@ -83,7 +167,41 @@ func _update_dir_status():
         velocity = _move_dir * _move_speed
     move_and_slide()
 
-#endregion
+func _update_facing_dir()->void:
+    # 优先级从高到低
+    if _other_facing!=Vector2.ZERO:
+        _facing = _other_facing
+        # 消费后清零
+        _other_facing = Vector2.ZERO
+    elif _target_dir!=Vector2.ZERO:
+        _facing = _target_dir
+    elif _move_dir!=Vector2.ZERO:
+        _facing = _move_dir
+    # 没有更改则保持不变
+
+func _update_aim_facing()->void:
+    if not _skill_caster.is_aiming():
+        return
+    var indicator:= _skill_caster.get_indicator()
+    if not indicator:
+        return
+    var dir := indicator.get_aim_direction()
+    if dir!=Vector2.ZERO:
+        set_other_facing(dir)
+
+func _update_target_dir()->void:
+    # 朝向跟随被锁定目标，可被其它朝向更改来源覆盖
+    if _locked_target and is_instance_valid(_locked_target):
+        _target_dir = (_locked_target.global_position-global_position).normalized()
+    else:
+        _target_dir = Vector2.ZERO
+
+
+func _update_mouse_dir()->void:
+    _mouse_dir = (get_global_mouse_position()-global_position).normalized()
+func _update_move_dir()->void:
+    _move_dir = Input.get_vector("move_left","move_right","move_up","move_down").normalized()
+
 
 
 
@@ -94,11 +212,10 @@ func _update_animation():
     _update_weapon_animation()
 
 func _update_body_animation():
-    if _mouse_dir==Vector2.ZERO:
+    if _facing==Vector2.ZERO:
         return
 
-    var animation_suffix:StringName = _vector_to_suffix(_mouse_dir)
-    # var animation_prefix:StringName = &"idle" if _move_dir==Vector2.ZERO else &"walk"
+    var animation_suffix:StringName = _vector_to_suffix(_facing)
     var animation_prefix:StringName = "facing"
     var animation_name:StringName = StringName("%s_%s"%[animation_prefix,animation_suffix])
     if not animation_player.has_animation(animation_name):
@@ -112,38 +229,21 @@ func _update_weapon_animation():
         weapon_pivot.visible = false
     else:
         weapon_pivot.visible = true
-        weapon_pivot.rotation = _mouse_dir.angle()
-        weapon_pivot.scale.y = 1.0 if _mouse_dir.x>=0 else -1.0
+        if _facing!=Vector2.ZERO:
+            weapon_pivot.rotation = _facing.angle()
+            weapon_pivot.scale.y = 1.0 if _facing.x>=0 else -1.0
 
 #endregion
 
-
 #region 工具函数
-
 # ============ 工具 =============
-func get_state()->PlayerSaveableState:
-    return _state
-
 func _vector_to_suffix(vec:Vector2)->StringName:
     return &"right" if vec.x>=0 else &"left"
     # if abs(vec.x) >= abs(vec.y):
     #     return &"right" if vec.x>=0 else &"left"
     # else:
     #     return &"down" if vec.y>=0 else &"up"
-
-# 提供给 SkillSlot 调用的能量接口
-func has_enough_mp(attr: AttributeTypes.Type, amount: float) -> bool:
-    return _state.has_enough_mp(attr, amount)
-
-func cost_mp(attr: AttributeTypes.Type, amount: float) -> bool:
-    return _state.cost_mp(attr, amount)
-
-func get_mp(attr: AttributeTypes.Type) -> float:
-    return _state.get_mp(attr)
-
 #endregion
-
-
 
 #region 初始化
 
@@ -152,6 +252,8 @@ func _init_saveable_state()->void:
     # 从初始玩家data资源文件中加载新存档的玩家初始状态
     _state = PlayerSaveableState.new()
     _state.init_with_start_data(data)
+#endregion
+
 #endregion
 
 
@@ -185,8 +287,29 @@ func _init_saveable_state_signal_connect()->void:
     EventBus.skill_book_skill_clicked.connect(_skill_caster.cast_skill)
 func _on_shortcut_slot_clicked(slot_id:int)->void:
     _skill_caster.cast_skill(_state.get_slot_skill_id(slot_id))
-
-func init_hp_and_mp_signal()->void:
-    _state.emit_hp_changed()
-    _state.emit_mp_all_changed()
+func _on_cast_executed(skill_id:StringName,ctx:CastContext)->void:
+    var dir := _dir_from_castcontext(skill_id,ctx)
+    if dir != Vector2.ZERO:
+        _other_facing = dir
+func _dir_from_castcontext(skill_id:StringName,ctx:CastContext)->Vector2:
+    var skill_data := _state.get_skill_data(skill_id)
+    if not skill_data:
+        return Vector2.ZERO
+    match skill_data.targeting_type:
+        SkillData.TargetingType.INSTANT:
+            var instant_data := skill_data as SkillDataInstant
+            if instant_data:
+                if instant_data.direction_mode==SkillDataInstant.DirectionMode.CASTER_SELF:
+                    return Vector2.ZERO
+                else:
+                    return ctx.direction
+        SkillData.TargetingType.DIRECTION:
+            if ctx.direction!=Vector2.ZERO:
+                return ctx.direction
+        SkillData.TargetingType.POSITION:
+            return (ctx.position-global_position).normalized()
+        SkillData.TargetingType.TARGET:
+            if is_instance_valid(ctx.target):
+                return (ctx.target.global_position-global_position).normalized()
+    return Vector2.ZERO
 #endregion

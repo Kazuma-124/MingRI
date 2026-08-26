@@ -20,6 +20,7 @@ var _caster:CharacterBody2D
 signal cast_started(skill_id:StringName)
 signal cast_cancelled(skill_id:StringName)
 signal cast_confirmed(skill_id:StringName)
+signal cast_executed(skill_id:StringName,ctx:CastContext)
 #endregion
 
 #region 公共接口
@@ -53,6 +54,9 @@ func cast_skill(skill_id:StringName)->void:
     # DIRECTION / POSITION / TARGET → 进入瞄准
     _enter_aiming(skill_id, skill_data)
 
+func get_indicator()->SkillIndicator:
+    return _indicator
+
 func cast_primary_skill()->bool:
     # 普攻不需要瞄准，点击鼠标自动释放
     # 获取state中普攻id
@@ -71,19 +75,30 @@ func _instant_cast(skill_id:StringName, skill_data:SkillData)->bool:
     var state = _caster.get_state()
     if not state.try_cast_skill(skill_id):
         return false
-    if not skill_data.scene:
-        return true
 
     # 构建即时释放上下文（方向取当前鼠标方向）
     var ctx := CastContext.new()
     ctx.caster = _caster
-    ctx.direction = (_caster.get_global_mouse_position() - _caster.global_position).normalized()
     ctx.position = _caster.global_position
+    var instant_data := skill_data as SkillDataInstant
+    if instant_data:
+        match instant_data.direction_mode:
+            SkillDataInstant.DirectionMode.MOUSE_DIRECTION:
+                ctx.position = (_caster.get_global_mouse_position()-_caster.global_position).normalized()
+            SkillDataInstant.DirectionMode.CASTER_FACING:
+                ctx.direction = _caster.get_facing()
+            SkillDataInstant.DirectionMode.NONE:
+                ctx.direction = Vector2.ZERO
+    else:
+        ctx.direction = (_caster.get_global_mouse_position()-_caster.global_position).normalized()
 
-    var instance = skill_data.scene.instantiate()
-    if instance.has_method("setup"):
-        instance.setup(skill_data, ctx)
-    _caster.get_parent().add_child(instance)
+    if skill_data.scene:
+        var instance = skill_data.scene.instantiate()
+        if instance.has_method("setup"):
+            instance.setup(skill_data, ctx)
+        _caster.get_parent().add_child(instance)
+    # 通知外部玩家，技能已释放，用于更新朝向等
+    cast_executed.emit(skill_id,ctx)
     return true
 
 func _enter_aiming(skill_id:StringName, skill_data:SkillData)->void:
@@ -144,6 +159,7 @@ func _confirm_cast()->void:
             instance.setup(_aiming_skill, ctx)
         _caster.get_parent().add_child(instance)
 
+    cast_executed.emit(_aiming_skill_id,ctx)
     cast_confirmed.emit(_aiming_skill_id)
     _exit_aiming()
 

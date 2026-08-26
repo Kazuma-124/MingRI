@@ -25,6 +25,9 @@ func generate_castcontext()->CastContext:
 
 func get_is_valid()->bool:
     return _skill_data!=null
+
+func get_aim_direction()->Vector2:
+    return (get_global_mouse_position()-_caster.global_position).normalized()
 #endregion
 
 
