@@ -160,11 +160,12 @@ func _update_dir_status()->void:
 
 func _my_move_and_slide()->void:
     # 移动
-    if _skill_caster.is_aiming():
-        velocity = Vector2.ZERO
-    else:
-        # 更新玩家速度，移动
-        velocity = _move_dir * _move_speed
+    # if _skill_caster.is_aiming():
+    #     velocity = Vector2.ZERO
+    # else:
+    #     # 更新玩家速度，移动
+    #     velocity = _move_dir * _move_speed
+    velocity = _move_dir * _move_speed
     move_and_slide()
 
 func _update_facing_dir()->void:
@@ -299,9 +300,10 @@ func _dir_from_castcontext(skill_id:StringName,ctx:CastContext)->Vector2:
         SkillData.TargetingType.INSTANT:
             var instant_data := skill_data as SkillDataInstant
             if instant_data:
-                if instant_data.direction_mode==SkillDataInstant.DirectionMode.CASTER_SELF:
+                if instant_data.direction_mode==SkillDataInstant.DirectionMode.NONE:
                     return Vector2.ZERO
                 else:
+                    # CASTER_FACING,MOUSE_DIRECTION
                     return ctx.direction
         SkillData.TargetingType.DIRECTION:
             if ctx.direction!=Vector2.ZERO:
