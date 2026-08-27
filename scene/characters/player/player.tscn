@@ -6,6 +6,7 @@
 [ext_resource type="AnimationLibrary" uid="uid://1v1ft1r6qkhb" path="res://data/characters/character_anime.res" id="4_glldc"]
 [ext_resource type="Texture2D" uid="uid://bpn7vnx4diwt4" path="res://assets/player.tres" id="4_v7krq"]
 [ext_resource type="Texture2D" uid="uid://nkunsqbj7r6f" path="res://assets/weapon_pivot.tres" id="6_8nhx4"]
+[ext_resource type="Script" uid="uid://cco7kqh3564sy" path="res://scene/characters/player/lock_indicator.gd" id="7_8nhx4"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_ekqmh"]
 atlas = ExtResource("3_vj7nq")
@@ -36,6 +37,9 @@ autoplay = &"facing_right"
 position = Vector2(30, 0)
 scale = Vector2(0.81, 0.81)
 texture = ExtResource("6_8nhx4")
+
+[node name="LockIndicator" type="Node2D" parent="." unique_id=498465849]
+script = ExtResource("7_8nhx4")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=915760582]
 shape = SubResource("CircleShape2D_wq7vr")

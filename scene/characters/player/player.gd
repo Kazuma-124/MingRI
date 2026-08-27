@@ -31,6 +31,7 @@ var _locked_target:Node2D = null
 #region onready
 @onready var animation_player: AnimationPlayer = $AnimationPlayer
 @onready var weapon_pivot: Node2D = $WeaponPivot
+@onready var _lock_indicator:CanvasItem = $LockIndicator
 #endregion
 
 #region 外部接口
@@ -86,6 +87,9 @@ func _ready() -> void:
     _init_saveable_state_signal_connect()
     # == runtime _state
     _move_speed = data.base_speed
+    # 锁定信号
+    target_locked.connect(_on_target_locked)
+    target_unlocked.connect(_on_target_unlocked)
     # 方向和动画
     _update_dir_status()
     _update_animation()
@@ -318,4 +322,10 @@ func _dir_from_castcontext(skill_id:StringName,ctx:CastContext)->Vector2:
             if is_instance_valid(ctx.target):
                 return (ctx.target.global_position-global_position).normalized()
     return Vector2.ZERO
+
+func _on_target_locked(target:Node2D)->void:
+    _lock_indicator.set_target(target)
+
+func _on_target_unlocked()->void:
+    _lock_indicator.set_target(null)
 #endregion
