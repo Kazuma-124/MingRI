@@ -1,7 +1,0 @@
-{
-    "godotTools.editorPath.godot4": "h:\\SteamLibrary\\steamapps\\common\\Godot Engine\\godot.windows.opt.tools.64.exe",
-    "files.exclude": {
-        "**/*.uid":true,//隐藏uid文件
-    },
-    "cmake.ignoreCMakeListsMissing": true
-}
