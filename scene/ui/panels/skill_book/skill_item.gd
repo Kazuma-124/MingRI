@@ -5,6 +5,7 @@ class_name SkillItem
 
 #region 信号
 signal clicked(skill_id:StringName)
+signal quick_cast(skill_id:StringName)
 #endregion
 
 
@@ -33,12 +34,19 @@ func _ready() -> void:
 func _gui_input(event: InputEvent) -> void:
     if(
         event is InputEventMouseButton and 
-        event.pressed and  #InputEventMouseButton的属性
-        event.button_index == MOUSE_BUTTON_LEFT
+        event.pressed #InputEventMouseButton的属性
     ):
-        clicked.emit(_skill_id)
-        # 事件标记为已处理，传播停止
-        accept_event()
+        # 未学习的技能不能响应点击
+        if _skill_instance==null:
+            # 事件标记为已处理，传播停止
+            accept_event()
+        match event.button_index:
+            MOUSE_BUTTON_LEFT:
+                clicked.emit(_skill_id)
+                accept_event()
+            MOUSE_BUTTON_RIGHT:
+                quick_cast.emit(_skill_id)
+                accept_event()
 #endregion
 
 #region 信号处理

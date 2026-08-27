@@ -4,6 +4,7 @@
 [ext_resource type="Resource" uid="uid://b1v7b6072khju" path="res://data/characters/enemies/test_enemy_data.tres" id="2_765w6"]
 [ext_resource type="Texture2D" uid="uid://bn68xapvy1lv6" path="res://assets/test_enemy.tres" id="3_j1ps3"]
 [ext_resource type="AnimationLibrary" uid="uid://1v1ft1r6qkhb" path="res://data/characters/character_anime.res" id="4_j1ps3"]
+[ext_resource type="Script" uid="uid://csyx6v5wtya60" path="res://scene/characters/enemy/hp_bar.gd" id="5_fvnbf"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_tdhsh"]
 radius = 5.0
@@ -20,7 +21,7 @@ data = ExtResource("2_765w6")
 
 [node name="BodySprite" type="Sprite2D" parent="." unique_id=2053791575]
 texture = ExtResource("3_j1ps3")
-offset = Vector2(0, -10)
+flip_h = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=766448157]
 libraries/character_anime = ExtResource("4_j1ps3")
@@ -37,3 +38,8 @@ collision_mask = 3
 
 [node name="VisionCollisionShape" type="CollisionShape2D" parent="VisionArea" unique_id=701377465]
 shape = SubResource("CircleShape2D_pitpm")
+
+[node name="HpBar" type="Node2D" parent="." unique_id=212084136]
+position = Vector2(0, -20)
+script = ExtResource("5_fvnbf")
+width = 20.0

@@ -15,6 +15,7 @@ signal skill_book_toggle_requested()
 signal primary_attack_slot_clicked()
 signal shortcut_slot_clicked(slot_id:int)
 signal skill_book_skill_clicked(skill_id:StringName)
+signal skill_bool_quick_cast(skill_id:StringName)
 
 # #region 消除未使用警告
 # func aaa()->void:

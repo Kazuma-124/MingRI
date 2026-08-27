@@ -46,6 +46,8 @@ func _ready() -> void:
     add_to_group("enemy")
     cur_hp = data.max_hp
 
+    $HpBar.set_ratio(cur_hp/data.max_hp)
+
     # 视野半径和信号设置
     vision_collision_shape.shape.radius = data.vision_radius
     vision_area.body_entered.connect(_on_body_enter_vision)
@@ -61,7 +63,8 @@ func _physics_process(delta: float) -> void:
     _update_super_state(delta)
 
 func take_damage(damage:float)->void:
-    cur_hp-=damage
+    cur_hp = max(cur_hp-damage,0.0)
+    $HpBar.set_ratio(cur_hp/data.max_hp)
 
 func _update_super_state(delta: float) -> void:
     match current_super_state:

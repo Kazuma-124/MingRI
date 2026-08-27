@@ -27,9 +27,7 @@ func _init(data_input:SkillData) -> void:
 #region 冷却控制
 func update_cooldown(delta:float)->void:
     if current_cooldown>0:
-        current_cooldown-=delta
-        if current_cooldown<0:
-            current_cooldown=0
+        current_cooldown = max(current_cooldown-delta,0.0)
         emit_cooldown_updated(get_cooldown_ratio(),current_cooldown)
 
 func start_cooldown()->void:

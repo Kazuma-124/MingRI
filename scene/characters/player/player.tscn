@@ -24,7 +24,6 @@ texture = SubResource("AtlasTexture_ekqmh")
 
 [node name="BodySprite" type="Sprite2D" parent="." unique_id=1872199458]
 texture = ExtResource("4_v7krq")
-offset = Vector2(0, -10)
 flip_v = true
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="." unique_id=559166373]

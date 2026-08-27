@@ -99,15 +99,11 @@ func init_mp_from_all_mp(mp_arr:Array[float],max_input:float)->void:
 #region hp_and_mp
 # hp修改
 func take_damage(amount:float)->void:
-    cur_hp -= amount
-    if cur_hp < 0:
-        cur_hp = 0
+    cur_hp = clamp(cur_hp-amount,0.0,max_hp)
     hp_changed.emit(cur_hp,max_hp)
 
 func heal(amount:float)->void:
-    cur_hp += amount
-    if cur_hp > max_hp:
-        cur_hp = max_hp
+    cur_hp = clamp(cur_hp+amount,0,max_hp)
     hp_changed.emit(cur_hp,max_hp)
 
 # mp获取

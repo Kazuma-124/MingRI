@@ -84,7 +84,7 @@ func _instant_cast(skill_id:StringName, skill_data:SkillData)->bool:
     if instant_data:
         match instant_data.direction_mode:
             SkillDataInstant.DirectionMode.MOUSE_DIRECTION:
-                ctx.position = (_caster.get_global_mouse_position()-_caster.global_position).normalized()
+                ctx.direction = (_caster.get_global_mouse_position()-_caster.global_position).normalized()
             SkillDataInstant.DirectionMode.CASTER_FACING:
                 ctx.direction = _caster.get_facing()
             SkillDataInstant.DirectionMode.NONE:

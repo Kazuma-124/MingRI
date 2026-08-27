@@ -41,7 +41,7 @@ func _process(delta:float)->void:
     var offset := mouse_pos-caster_pos
     var max_dist := _skill_data.cast_range
     if max_dist>0.0 and offset.length()>max_dist:
-        offset = offset.normalized()*max_dist
+        offset = offset.limit_length(max_dist)
         _is_valid = false
     else:
         _is_valid = true

@@ -1,5 +1,12 @@
 extends Area2D
 
+#region export
+@export var damage_range:float = 32 # 伤害范围，直径
+@export var anime_duration_time:float = 0.3
+@export var bullet_diameter:float = 8 # 子弹直径（像素）
+@export var explosion_diameter:float = 32 # 爆炸特效直径（像素）
+#endregion
+
 var _data:SkillData
 var _dir:Vector2 = Vector2(0,0)
 var _start_pos:Vector2
@@ -10,8 +17,8 @@ var _exploded:bool = false
 
 func _ready() -> void:
     # 调整子弹尺寸，爆炸特效尺寸
-    _judge_sprite2D_scale(explosion_sprite,_data.explosion_diameter)
-    _judge_sprite2D_scale(bullet_sprite,_data.bullet_diameter)
+    _judge_sprite2D_scale(explosion_sprite,explosion_diameter)
+    _judge_sprite2D_scale(bullet_sprite,bullet_diameter)
     # 显示子弹，隐藏爆炸特效
     bullet_sprite.show()
     explosion_sprite.hide()
@@ -51,7 +58,7 @@ func _explode()->void:
     # 2. 指定查询用的形状为圆形
     query.shape = CircleShape2D.new()
     # 3. 设置圆形的半径 = 爆炸范围大小，从技能配置里读
-    query.shape.radius = _data.damage_range/2
+    query.shape.radius = damage_range/2
     # 4. 设置查询的位置和朝向
     #    Transform2D(旋转角度, 中心点坐标)
     #    爆炸不用旋转，角度填0；中心点就是子弹当前的世界坐标
@@ -71,7 +78,7 @@ func _explode()->void:
         if body.has_method("take_damage"):
             body.take_damage(_data.damage)
 
-    await get_tree().create_timer(_data.anime_duration_time).timeout
+    await get_tree().create_timer(anime_duration_time).timeout
     queue_free()
 
 
