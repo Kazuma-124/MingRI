@@ -8,11 +8,13 @@ export/
 *.exe
 *.apk
 *.ipa
+*.pck
 
 # 系统临时文件
 .DS_Store
 Thumbs.db
 desktop.ini
+*.lnk
 
 # 临时/备份/日志文件
 *.log
@@ -33,6 +35,7 @@ crash.txt
 
 /resources
 /addons
+/tasktool
 
 # 官方文档
 /0docs/godot-docs-html-stable
