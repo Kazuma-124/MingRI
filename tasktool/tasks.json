@@ -15,11 +15,6 @@
       "created": "2026-08-27 19:25:45",
       "id": "t1787829945904",
       "text": "skill_item只有点击name_label或Icon的区域时才会触发，点击InfoCooldownContainer区域不会触发"
-    },
-    {
-      "created": "2026-08-27 20:33:04",
-      "id": "t1787833984655",
-      "text": "将新的命令实现文件覆盖到H:\\Files\\doubao\\skills\\persistent-memory作为备份"
     }
   ]
 }
