@@ -32,19 +32,27 @@ func setup(player_ref:CharacterBody2D)->void:
 func is_aiming()->bool:
     return _cast_state == CastState.AIMING
 
-func cast_skill(skill_id:StringName)->void:
+func cast_skill(skill_id:StringName,quick:bool=false)->void:
     # 正在瞄准时再按技能 → 取消当前瞄准, 释放新技能
     if _cast_state == CastState.AIMING:
         _cancel_cast()
-
     var skill_data:SkillData = _get_skill_data(skill_id)
     if not skill_data:
         return
 
-    # 检查能否释放
+    # state检查能否释放
     var state = _caster.get_state()
     if not state.can_cast(skill_id):
         return
+
+    # 快捷释放：有锁定且在范围内->直接释放
+    if quick:
+        var locked_target:Node2D = _caster.get_locked_target()
+        if locked_target and is_instance_valid(locked_target):
+            if _is_target_in_cast_range(skill_data,locked_target):
+                _quick_cast(skill_id,skill_data,locked_target)
+                return
+        # 没有锁定对象或锁定对象不在施法范围内，则进入正常施法流程
 
     # INSTANT 类型直接释放
     if skill_data.targeting_type == SkillData.TargetingType.INSTANT:
@@ -177,4 +185,35 @@ func _exit_aiming()->void:
 
 func _get_skill_data(skill_id:StringName)->SkillData:
     return _caster.get_state().get_skill_data(skill_id)
+
+func _is_target_in_cast_range(skill_data:SkillData,target:Node2D)->bool:
+    var dist := target.global_position.distance_to(_caster.global_position)
+    match skill_data.targeting_type:
+        SkillData.TargetingType.POSITION:
+            var pos_data := skill_data as SkillDataPosition
+            return dist <= pos_data.cast_range
+        SkillData.TargetingType.TARGET:
+            var tar_data := skill_data as SkillDataTarget
+            return dist <= tar_data.cast_range
+        _: # INSTANT / DIRECTION 无施法距离限制
+            return true
+
+func _quick_cast(skill_id:StringName,skill_data:SkillData,target:Node2D)->void:
+    var state = _caster.get_state()
+    # can_cast在一开始进行过判断了
+    if not state.confirm_cast(skill_id):
+        return
+    var ctx := CastContext.new()
+    ctx.caster = _caster
+    ctx.direction = (target.global_position-_caster.global_position).normalized()
+    ctx.position = target.global_position
+    ctx.target = target
+    if skill_data.scene:
+        var instance = skill_data.scene.instantiate()
+        if instance.has_method("setup"):
+            instance.setup(skill_data,ctx)
+        # 先setup，再加入场景树，因为_ready()可能用到一些setup设定的数据
+        _caster.get_parent().add_child(instance)
+    cast_executed.emit(skill_id,ctx) 
+
 #endregion

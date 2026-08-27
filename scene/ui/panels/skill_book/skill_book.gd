@@ -28,6 +28,7 @@ func _ready() -> void:
     _close_button.pressed.connect(_on_close_pressed)
     _learnable_toggle_button.pressed.connect(_on_learnable_toggle_pressed)
     _learned_items.item_clicked.connect(_on_skill_item_clicked)
+    _learned_items.item_quick_cast.connect(_on_skill_item_quick_cast)
     # 可学习的技能无法释放
     # _learnable_items.item_clicked.connect(_on_skill_item_clicked)
     EventBus.hud_action_pressed.connect(_on_hud_action)
@@ -97,6 +98,8 @@ func _generate_learnable_toggle_button_text()->String:
 #region 信号处理
 func _on_skill_item_clicked(skill_id:StringName)->void:
     EventBus.skill_book_skill_clicked.emit(skill_id)
+func _on_skill_item_quick_cast(skill_id:StringName)->void:
+    EventBus.skill_book_quick_cast.emit(skill_id)
 
 func _on_close_pressed()->void:
     visible = false

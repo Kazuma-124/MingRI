@@ -286,6 +286,10 @@ func _init_saveable_state_signal_connect()->void:
     EventBus.primary_attack_slot_clicked.connect(_state.switch_primary_attack)
     EventBus.shortcut_slot_clicked.connect(_on_shortcut_slot_clicked)
     EventBus.skill_book_skill_clicked.connect(_skill_caster.cast_skill)
+    EventBus.skill_book_quick_cast.connect(
+        func(skill_id:StringName)->void:
+            _skill_caster.cast_skill(skill_id,true)
+    )
 func _on_shortcut_slot_clicked(slot_id:int)->void:
     _skill_caster.cast_skill(_state.get_slot_skill_id(slot_id))
 func _on_cast_executed(skill_id:StringName,ctx:CastContext)->void:
