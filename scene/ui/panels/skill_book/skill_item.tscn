@@ -28,6 +28,7 @@ text = "aaa"
 [node name="InfoCooldownContainer" type="Control" parent="HBoxContainer" unique_id=488246534]
 layout_mode = 2
 size_flags_horizontal = 3
+mouse_filter = 2
 
 [node name="InfoLabel" type="Label" parent="HBoxContainer/InfoCooldownContainer" unique_id=1984972798]
 unique_name_in_owner = true
@@ -48,6 +49,7 @@ grow_horizontal = 2
 grow_vertical = 2
 rotation = 0.0031736558
 size_flags_vertical = 1
+mouse_filter = 2
 theme = ExtResource("2_giae8")
 theme_type_variation = &"CooldownMask"
 show_percentage = false

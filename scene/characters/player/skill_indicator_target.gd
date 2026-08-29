@@ -68,7 +68,7 @@ func _draw() -> void:
     # 施法范围圈，以施法者为中心，先画在底层
     if _skill_data:
         var caster_local := _caster.global_position-global_position
-        draw_circle(caster_local,_skill_data.cast_range,Color(1,1,1,0.25),false,1.5,true)
+        draw_circle(caster_local,_skill_data.cast_range,GameColors.INDICATOR_RANGE_CIRCLE,false,1.5,true)
 
     if not _skill_data:
         return

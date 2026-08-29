@@ -5,7 +5,7 @@ class_name SkillDataDirection
 #region 指示器
 @export_group("指示器")
 @export var indicator_shape:IndicatorShape
-@export var indicator_color:Color = Color(0,0.2,1.0,0.5)
+@export var indicator_color:Color = GameColors.INDICATOR_VALID
 @export var show_fly_range:bool = true	# 是否画表示投射物飞行距离的圈
 #endregion
 

@@ -1,7 +1,7 @@
 extends Node2D
 
 @export var _radius:float = 24.0
-@export var _color:Color = Color(1.0,0.8,0.0,0.8)
+@export var _color:Color = GameColors.LOCK_TARGET_RING
 
 var _target:Node2D = null
 

@@ -8,8 +8,8 @@ class_name SkillDataPosition
 #region 指示器配置
 @export_group("指示器")
 @export var indicator_shape:IndicatorShape
-@export var indicator_color := Color(0,0.2,1.0,0.5)  # 处于合法施法范围内时指示器颜色
-@export var invalid_color := Color(1,0.2,0.2,0.4)    # 处于非法范围时指示器的颜色
+@export var indicator_color := GameColors.INDICATOR_VALID  # 处于合法施法范围内时指示器颜色
+@export var invalid_color := GameColors.INDICATOR_INVALID    # 处于非法范围时指示器的颜色
 @export var cast_range:float                        # 最大施法距离（以玩家为中心的圆半径）
 @export var allow_rotation:bool = true              # 是否允许滚轮旋转形状
 @export var rotation_step:float = 15.0              # 每次滚轮旋转角度(角度值)

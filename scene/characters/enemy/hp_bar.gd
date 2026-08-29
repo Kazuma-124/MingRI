@@ -2,8 +2,8 @@ extends Node2D
 
 @export var width:float = 32
 @export var height:float = 4
-@export var bg_color:Color = Color(0,0,0,0.5)
-@export var fg_color:Color = Color(0.8,0.1,0.1,0.9)
+@export var bg_color:Color = GameColors.HP_BAR_BG
+@export var fg_color:Color = GameColors.HP_BAR_FG
 
 var _ratio:float = 1.0
 

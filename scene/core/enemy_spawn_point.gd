@@ -31,8 +31,8 @@ func _draw() -> void:
         return
     # 画一个居中的矩形生成范围
     var rect = Rect2(Vector2(-spawn_radius,-spawn_radius),Vector2(spawn_radius*2,spawn_radius*2))
-    draw_rect(rect, Color(0, 1, 0, 0.2))  # 填充
-    draw_rect(rect, Color(0, 1, 0, 0.8), false, 2.0)  # 边框
+    draw_rect(rect,GameColors.EDITOR_SPAWN_AREA_FILL)  # 填充
+    draw_rect(rect,GameColors.EDITOR_SPAWN_AREA_BORDER, false, 2.0)  # 边框
 
 func _process(delta:float)->void:
     if Engine.is_editor_hint():
