@@ -24,14 +24,14 @@ func generate_castcontext()->CastContext:
     var ctx:=CastContext.new()
     ctx.position = global_position
     # 形状朝向，滚轮旋转后的朝向
-    ctx.direction = Vector2.RIGHT.rotated(rotation).normalized()
+    ctx.shape_rotation = rotation   # 单位为弧度
     return ctx
 func get_is_valid()->bool:
     return _is_valid and _skill_data!=null
 #endregion
 
 #region 内部函数
-func _process(delta:float)->void:
+func _process(_delta:float)->void:
     if not _skill_data or not _caster:
         return
     

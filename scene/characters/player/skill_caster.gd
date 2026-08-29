@@ -87,7 +87,6 @@ func _instant_cast(skill_id:StringName, skill_data:SkillData)->bool:
     # 构建即时释放上下文（方向取当前鼠标方向）
     var ctx := CastContext.new()
     ctx.caster = _caster
-    ctx.position = _caster.global_position
     var instant_data := skill_data as SkillDataInstant
     if instant_data:
         match instant_data.direction_mode:
@@ -205,9 +204,20 @@ func _quick_cast(skill_id:StringName,skill_data:SkillData,target:Node2D)->void:
         return
     var ctx := CastContext.new()
     ctx.caster = _caster
-    ctx.direction = (target.global_position-_caster.global_position).normalized()
-    ctx.position = target.global_position
-    ctx.target = target
+    match skill_data.targeting_type:
+        SkillData.TargetingType.INSTANT:
+            var instant_data:=skill_data as SkillDataInstant
+            if instant_data and instant_data.direction_mode==SkillDataInstant.DirectionMode.NONE:
+                ctx.direction = Vector2.ZERO
+            else:
+                ctx.direction = (target.global_position-_caster.global_position).normalized()
+        SkillData.TargetingType.DIRECTION:
+            ctx.direction = (target.global_position-_caster.global_position).normalized()
+        SkillData.TargetingType.POSITION:
+            ctx.position = target.global_position
+            ctx.shape_rotation = 0.0
+        SkillData.TargetingType.TARGET:
+            ctx.target = target
     if skill_data.scene:
         var instance = skill_data.scene.instantiate()
         if instance.has_method("setup"):

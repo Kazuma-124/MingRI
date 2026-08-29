@@ -19,9 +19,6 @@ func setup(skill_data:SkillData,caster:Node2D)->void:
 func generate_castcontext()->CastContext:
     var ctx:=CastContext.new()
     ctx.target = _hovered_target
-    if _hovered_target:
-        ctx.position = _hovered_target.global_position
-        ctx.direction = (_hovered_target.global_position-_caster.global_position).normalized()
     return ctx
 
 func get_is_valid()->bool:
