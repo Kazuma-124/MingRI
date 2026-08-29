@@ -65,12 +65,17 @@ func _find_target_at(mouse_pos:Vector2)->Node2D:
     return nearest
 
 func _draw() -> void:
+    # 施法范围圈，以施法者为中心，先画在底层
+    if _skill_data:
+        var caster_local := _caster.global_position-global_position
+        draw_circle(caster_local,_skill_data.cast_range,Color(1,1,1,0.25),false,1.5,true)
+
     if not _skill_data:
         return
     var color := _skill_data.indicator_color if _is_valid else _skill_data.invalid_color
     # 鼠标位置小圆点(圆心在局部位置的坐标,半径,颜色,filed是否填充,线宽,是否抗锯齿)
     draw_circle(Vector2.ZERO,_skill_data.cursor_radius,color,true,-1.0,true)
-    # 放在对象上面时，画一个圈
+    # 鼠标放在对象上面时，在对象周围画一个圈，以表示可选择
     if _is_valid and _hovered_target and is_instance_valid(_hovered_target):
         var target_local := _hovered_target.global_position-global_position
         draw_circle(target_local,_skill_data.highlight_radius,color,false,2.0,true)

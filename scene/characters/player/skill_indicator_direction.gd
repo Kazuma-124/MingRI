@@ -43,6 +43,9 @@ func _process(_delta: float) -> void:
 
 #region 绘制
 func _draw()->void:
+    # 飞行距离圈
+    if _skill_data and _skill_data.show_fly_range and _skill_data.fly_distance>0:
+        draw_circle(Vector2.ZERO,_skill_data.fly_distance,Color(1,1,1,0.25),false,1.5,true)
     if not _skill_data:
         return
     if _skill_data.indicator_shape:
