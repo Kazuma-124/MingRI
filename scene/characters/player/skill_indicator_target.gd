@@ -42,13 +42,13 @@ func _process(_delta:float)->void:
     queue_redraw()
 
 func _find_target_at(mouse_pos:Vector2)->Node2D:
-    var space_state:=get_world_2d().direct_space_state
     var query := PhysicsShapeQueryParameters2D.new()
     query.shape = CircleShape2D.new()
     query.shape.radius = _skill_data.select_tolerance
     query.transform = Transform2D(0,mouse_pos)
     query.collide_with_bodies = true
     query.collision_mask = 2 # Entity层
+    var space_state:=get_world_2d().direct_space_state
     var results := space_state.intersect_shape(query)
     var nearest:Node2D = null
     var nearest_dist:float = INF

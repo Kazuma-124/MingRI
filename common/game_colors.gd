@@ -17,3 +17,7 @@ const HP_BAR_FG:Color = Color(0.8,0.1,0.1,0.9)
 # 编辑器辅助
 const EDITOR_SPAWN_AREA_FILL: Color = Color(0, 1, 0, 0.2)
 const EDITOR_SPAWN_AREA_BORDER: Color = Color(0, 1, 0, 0.8)
+
+
+# 技能特效
+const SHOCKWAVE_ANIME: Color = Color(1.0, 0.15, 0.1, 0.9)

@@ -56,11 +56,16 @@ func _ready() -> void:
     _switch_super_state(SUPER_STATE.IDLE)
 
 func _physics_process(delta: float) -> void:
+    # 上一帧的状态作为输入
     if cur_hp <= 0:
         queue_free()
         return
+    # 处理
     move_and_slide()
+    # 输出：计算得到下一帧的输入
+    _update_effects(delta)
     _update_super_state(delta)
+    velocity+=external_velocity
 
 func take_damage(damage:float)->void:
     cur_hp = max(cur_hp-damage,0.0)
@@ -144,7 +149,7 @@ func _update_wander_pause(delta:float)->void:
     if state_timer<=0:
         _switch_sub_state_idle(SUB_STATE.WANDER)
 
-func _update_charge(delta:float)->void:
+func _update_charge(_delta:float)->void:
     # 朝向实时追踪目标
     _update_charge_direction()
     velocity = move_dir*data.charge_speed

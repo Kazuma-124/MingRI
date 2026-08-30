@@ -1,0 +1,17 @@
+[gd_resource type="Resource" script_class="SkillDataInstant" format=3 uid="uid://c36qrvjwqryxw"]
+
+[ext_resource type="Texture2D" uid="uid://bu4fvxed8xdsy" path="res://assets/icons/shockwave.tres" id="1_m1f0o"]
+[ext_resource type="Script" uid="uid://bds8ty2wexvkc" path="res://data/skills/skill_data_instant.gd" id="1_pi8fk"]
+[ext_resource type="PackedScene" uid="uid://cedusn6s1c1xa" path="res://skills/shockwave/skill_shockwave.tscn" id="2_3oguo"]
+
+[resource]
+script = ExtResource("1_pi8fk")
+direction_mode = 2
+id = &"shockwave"
+name = "震地波"
+icon = ExtResource("1_m1f0o")
+scene = ExtResource("2_3oguo")
+mp_cost = 5.0
+damage = 20.0
+cooldown = 2.0
+metadata/_custom_type_script = "uid://bds8ty2wexvkc"

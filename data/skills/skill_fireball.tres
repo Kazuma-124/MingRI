@@ -6,8 +6,8 @@
 
 [resource]
 script = ExtResource("1_0luw2")
-fly_distance = 400.0
-fly_speed = 700.0
+fly_distance = 800.0
+fly_speed = 1000.0
 id = &"fireball"
 name = "火球"
 skill_type = 1

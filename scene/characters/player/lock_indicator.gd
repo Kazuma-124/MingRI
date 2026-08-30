@@ -21,14 +21,13 @@ func _ready() -> void:
     z_index = 10
 
 func _process(_delta:float)->void:
-    if _target:
-        if is_instance_valid(_target):
-            global_position = _target.global_position
-            queue_redraw()
-        else:
-            # 目标已死亡，自动清除
-            _target = null
-            visible = false
+    if _target && is_instance_valid(_target):
+        global_position = _target.global_position
+        queue_redraw()
+    else:
+        # 目标已死亡，自动清除
+        _target = null
+        visible = false
 
 func _draw() -> void:
     if not _target or not is_instance_valid(_target):

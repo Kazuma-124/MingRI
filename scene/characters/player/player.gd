@@ -71,7 +71,10 @@ func clear_lock()->void:
         _locked_target = null
         target_unlocked.emit()
 func get_locked_target()->Node2D:
-    return _locked_target
+    if is_instance_valid(_locked_target):
+        return _locked_target
+    else:
+        return null
 #endregion
 
 
@@ -117,7 +120,6 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _try_toggle_lock()->void:
     var mouse_pos := get_global_mouse_position()
-    var space_state := get_world_2d().direct_space_state
 
     # 在鼠标位置做小圆范围查询
     var query := PhysicsShapeQueryParameters2D.new()
@@ -129,6 +131,7 @@ func _try_toggle_lock()->void:
     query.collide_with_areas = false
     query.collision_mask = 2 # 只查Entity层
     
+    var space_state := get_world_2d().direct_space_state
     var results:=space_state.intersect_shape(query)
     var nearest_target:Node2D = null
     var nearest_dist:float = INF
@@ -163,13 +166,7 @@ func _update_dir_status()->void:
     _my_move_and_slide()
 
 func _my_move_and_slide()->void:
-    # 移动
-    # if _skill_caster.is_aiming():
-    #     velocity = Vector2.ZERO
-    # else:
-    #     # 更新玩家速度，移动
-    #     velocity = _move_dir * _move_speed
-    velocity = _move_dir * _move_speed
+    velocity = _move_dir * _move_speed + external_velocity
     move_and_slide()
 
 func _update_facing_dir()->void:
