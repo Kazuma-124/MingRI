@@ -13,7 +13,7 @@ var _speed:float = 0.0
 
 func update(delta:float)->bool:
     # 施加本效果的影响
-    target.external_velocity += _direction*_speed
+    target.stagger_velocity += _direction*_speed
     return super.update(delta)
 
 func _init(dir:Vector2,distance:float,speed:float = DEFAULT_SPEED)->void:

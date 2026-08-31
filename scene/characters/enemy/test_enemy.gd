@@ -60,12 +60,19 @@ func _physics_process(delta: float) -> void:
     if cur_hp <= 0:
         queue_free()
         return
-    # 处理
-    move_and_slide()
-    # 输出：计算得到下一帧的输入
+
+    # 1. 计算
     _update_effects(delta)
-    _update_super_state(delta)
-    velocity+=external_velocity
+    if is_staggered():
+        velocity = stagger_velocity # 硬直期间状态机冻结，不参与
+    else:
+        _update_super_state(delta)
+        velocity+=external_velocity
+    # 2. 动画
+    # 3. 运动
+    move_and_slide()
+    # 4. 运动后计算
+    _on_movement_result()
 
 func take_damage(damage:float)->void:
     cur_hp = max(cur_hp-damage,0.0)
@@ -154,34 +161,34 @@ func _update_charge(_delta:float)->void:
     _update_charge_direction()
     velocity = move_dir*data.charge_speed
 
-    # 检测冲锋是否撞击到敌人
-    # 记录本次移动是否发生有效撞击
-    var hit_occurred = false
-    var hit_normal:Vector2 #记录正面撞击的法线
-    # 造成伤害
-    # 记录已经攻击过的对象，避免重复扣血
-    var hit_targets = []
-    # get_bounce_collision_count()最近一次调用move_and_slide()时发生碰撞并改变方向的次数
-    for i in get_slide_collision_count():
-        # 获取碰撞信息,可能发生多次碰撞，用i指定获取哪次
-        var collision = get_slide_collision(i)
-        # 返回射线相交的第一个物体
-        var collider = collision.get_collider()
-        if not hit_targets.has(collider):
-            if collider.has_method("take_damage"):
-                collider.take_damage(data.contact_damage)
-            hit_targets.append(collider)
+    # # 检测冲锋是否撞击到敌人
+    # # 记录本次移动是否发生有效撞击
+    # var hit_occurred = false
+    # var hit_normal:Vector2 #记录正面撞击的法线
+    # # 造成伤害
+    # # 记录已经攻击过的对象，避免重复扣血
+    # var hit_targets = []
+    # # get_bounce_collision_count()最近一次调用move_and_slide()时发生碰撞并改变方向的次数
+    # for i in get_slide_collision_count():
+    #     # 获取碰撞信息,可能发生多次碰撞，用i指定获取哪次
+    #     var collision = get_slide_collision(i)
+    #     # 返回射线相交的第一个物体
+    #     var collider = collision.get_collider()
+    #     if not hit_targets.has(collider):
+    #         if collider.has_method("take_damage"):
+    #             collider.take_damage(data.contact_damage)
+    #         hit_targets.append(collider)
 
-            var normal = collision.get_normal()
-            if move_dir.dot(-normal)>0.5:
-                hit_occurred = true
-                hit_normal = normal
+    #         var normal = collision.get_normal()
+    #         if move_dir.dot(-normal)>0.5:
+    #             hit_occurred = true
+    #             hit_normal = normal
 
-    if hit_occurred:
-        # var collision = get_last_slide_collision()
-        # 入射方向.bounce(法线) == 反射方向
-        bounce_dir = move_dir.bounce(hit_normal)
-        _switch_sub_state_combat(SUB_STATE.BOUNCE)
+    # if hit_occurred:
+    #     # var collision = get_last_slide_collision()
+    #     # 入射方向.bounce(法线) == 反射方向
+    #     bounce_dir = move_dir.bounce(hit_normal)
+    #     _switch_sub_state_combat(SUB_STATE.BOUNCE)
 
 func _update_bounce(delta: float) -> void:
     # 弹开状态属于后摇，自己无法控制，必须走完整个流程
@@ -190,7 +197,7 @@ func _update_bounce(delta: float) -> void:
     curr_bounce_speed *= pow(data.bounce_friction,delta)
     velocity = move_dir * curr_bounce_speed
     # 本帧移动距离
-    var move_this_frame = get_real_velocity().length() * delta
+    var move_this_frame = velocity.length() * delta
     bounce_remaining -= move_this_frame
     
     if curr_bounce_speed <= data.bounce_min_speed or bounce_remaining <= 0:
@@ -314,4 +321,28 @@ func _update_charge_direction()->void:
     if not target:
         return
     move_dir = (target.global_position-global_position).normalized()
+
+func _on_movement_result()->void:
+    if current_super_state != SUPER_STATE.COMBAT:
+        return
+    if current_sub_state != SUB_STATE.CHARGE:
+        return
+    var hit_occurred = false
+    var hit_normal: Vector2
+    var hit_targets: Array = []
+    for i in get_slide_collision_count():
+        var collision = get_slide_collision(i)
+        var collider = collision.get_collider()
+        if not hit_targets.has(collider):
+            if collider.has_method("take_damage"):
+                collider.take_damage(data.contact_damage)
+            hit_targets.append(collider)
+            var normal = collision.get_normal()
+            if move_dir.dot(-normal) > 0.5:
+                hit_occurred = true
+                hit_normal = normal
+    if hit_occurred:
+        bounce_dir = move_dir.bounce(hit_normal)
+        _switch_sub_state_combat(SUB_STATE.BOUNCE)
+
 

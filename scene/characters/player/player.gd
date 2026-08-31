@@ -101,11 +101,19 @@ func _ready() -> void:
     GameManager.set_player(self)
 
 func _physics_process(delta: float) -> void:
-    # 鼠标方向等
-    _update_dir_status()
-    # 更新技能冷却之类的
-    _update_skill_status(delta)
+    # 1. 计算：效果+状态
+    _update_effects(delta)
+    if is_staggered():
+        velocity = stagger_velocity
+    else:
+        _update_dir_status()
+        _update_skill_status(delta)
+        velocity = _move_dir*_move_speed+external_velocity
+    # 2. 动画
     _update_animation()
+    # 3. 运动
+    move_and_slide()
+    # 4. 计算：运动后，得到的数据的计算
 
 func _unhandled_input(event: InputEvent) -> void:
     if _skill_caster.is_aiming():
@@ -163,11 +171,9 @@ func _update_dir_status()->void:
 
     _update_facing_dir()
 
-    _my_move_and_slide()
 
-func _my_move_and_slide()->void:
-    velocity = _move_dir * _move_speed + external_velocity
-    move_and_slide()
+# func _my_move_and_slide()->void:
+#     move_and_slide()
 
 func _update_facing_dir()->void:
     # 优先级从高到低
