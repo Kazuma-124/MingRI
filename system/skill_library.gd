@@ -1,29 +1,37 @@
 extends Node
 
+#region 成员变量
 var _all_skills:Dictionary = {
-    # key:StringName id,value:SkillData
-    
+	# key:StringName id,value:SkillData
+
 }
+#endregion
 
+#region 生命周期
 func _ready() -> void:
-    _load_all_skills()
+	_load_all_skills()
+#endregion
 
-func _load_all_skills()->void:
-    var dir = DirAccess.open("res://data/skills/")
-    if dir:
-        # 初始化流，该流可以通过get_next()逐个获取所有文件和目录
-        dir.list_dir_begin()
-        var file_name = dir.get_next()
-        while file_name!="":
-            if file_name.ends_with(".tres"):
-                var skill = load("res://data/skills/"+file_name) as SkillData
-                if skill:
-                    _all_skills[skill.id] = skill
-            file_name = dir.get_next()
-        dir.list_dir_end()
-
+#region 外部接口
 func get_all_skill_ids()->Array[StringName]:
-    return _all_skills.keys()
+	return _all_skills.keys()
 
 func get_skill(id:StringName)->SkillData:
-    return _all_skills.get(id,null)
+	return _all_skills.get(id,null)
+#endregion
+
+#region 内部函数
+func _load_all_skills()->void:
+	var dir = DirAccess.open("res://data/skills/")
+	if dir:
+		# 初始化流，该流可以通过get_next()逐个获取所有文件和目录
+		dir.list_dir_begin()
+		var file_name = dir.get_next()
+		while file_name!="":
+			if file_name.ends_with(".tres"):
+				var skill = load("res://data/skills/"+file_name) as SkillData
+				if skill:
+					_all_skills[skill.id] = skill
+			file_name = dir.get_next()
+		dir.list_dir_end()
+#endregion

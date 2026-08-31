@@ -2,6 +2,7 @@ extends Node
 # 全局事件总线（Autoload 单例）
 # 所有模块通过它收发消息，互不直接依赖
 
+#region 信号
 signal player_hp_changed(cur: float, max: float)
 signal player_mp_changed(attr: int, cur: float)
 signal player_mp_all_changed(mp:Array[float], max: float)
@@ -16,14 +17,4 @@ signal primary_attack_slot_clicked()
 signal shortcut_slot_clicked(slot_id:int)
 signal skill_book_skill_clicked(skill_id:StringName)
 signal skill_book_quick_cast(skill_id:StringName)
-
-# #region 消除未使用警告
-# func aaa()->void:
-#     player_hp_changed.get_name()
-#     player_mp_changed.get_name()
-#     player_mp_all_changed.get_name()
-#     player_primary_attack_switched.get_name()
-#     shortcut_skill_changed.get_name()
-#     primary_attack_slot_clicked.get_name()
-#     shortcut_slot_clicked.get_name()
-#     skill_book_skill_clicked.get_name()
+#endregion

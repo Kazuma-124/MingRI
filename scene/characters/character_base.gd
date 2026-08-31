@@ -26,7 +26,7 @@ func _update_effects(delta:float)->void:
     external_velocity = Vector2.ZERO
     stagger_velocity = Vector2.ZERO
     for i in range(_effects.size()-1,-1,-1):# 反向遍历，可以安全地在遍历途中移除元素
-        # updatae获取本轮时间内的状态效果，更新状态时间,若下一轮状态失效则移除
+        # update获取本轮时间内的状态效果，更新状态时间,若下一轮状态失效则移除
         if not _effects[i].update(delta):
             _effects[i].remove()
             _effects.remove_at(i) # 将后面的元素全部前移一位

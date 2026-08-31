@@ -23,7 +23,7 @@ func add_skill(skill_id:StringName)->void:
         item.clicked.connect(_on_item_clicked)
         item.quick_cast.connect(_on_item_quick_cast)
     else:
-        push_error("创建skill_item示例失败")
+        push_error("创建skill_item实例失败")
 func clear_skills()->void:
     for it in _items:
         it.queue_free()

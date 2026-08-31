@@ -15,7 +15,7 @@ var current_cooldown:float
 
 
 #region 内置函数
-# 声明周期
+# 生命周期
 func _init(data_input:SkillData) -> void:
     data = data_input
     current_cooldown = 0

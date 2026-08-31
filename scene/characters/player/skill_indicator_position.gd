@@ -4,7 +4,7 @@ class_name SkillIndicatorPosition
 # 位置类技能指示器
 # 跟随鼠标位置，clamp 在以玩家为中心的cast_range圆内
 # 滚轮可旋转形状朝向(skill_data里配置allot_rotation=true)
-# 超出释放范围时形状变红色且 get_is_valid() 返回false
+# 超出施法范围时形状变红色且 get_is_valid() 返回false
 
 #region 运行时状态
 var _skill_data:SkillDataPosition = null

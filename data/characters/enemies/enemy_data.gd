@@ -1,8 +1,7 @@
 extends Resource
 class_name EnemyData
 
-# @export_group("基本信息")
-
+#region export
 @export_group("基础属性")
 @export var max_hp:float = 50.0
 
@@ -21,12 +20,4 @@ class_name EnemyData
 @export var bounce_distance:float = 50.0 # 撞击后最大惯性滑行距离
 @export var bounce_min_speed:float = 60.0
 @export var recovery_time:float = 0.4
-
-# 140初速度，0.85衰减
-# 时间	速度	累计位移
-# 0 s	140 px/s	0 px
-# 0.5 s	129 px/s	67 px
-# 1 s	119 px/s	130 px
-# 2 s	101 px/s	241 px
-# 3 s	85.8 px/s	335 px
-# 5 s	61.7 px/s	483 px
+#endregion

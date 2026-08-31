@@ -2,7 +2,7 @@ extends Area2D
 
 #region export
 @export var damage_range:float = 32 # 伤害范围，直径
-@export var anime_duration_time:float = 0.3
+@export var animation_duration_time:float = 0.3
 @export var bullet_diameter:float = 8 # 子弹直径（像素）
 @export var explosion_diameter:float = 32 # 爆炸特效直径（像素）
 #endregion
@@ -78,7 +78,7 @@ func _explode()->void:
         if body.has_method("take_damage"):
             body.take_damage(_data.damage)
 
-    await get_tree().create_timer(anime_duration_time).timeout
+    await get_tree().create_timer(animation_duration_time).timeout
     queue_free()
 
 

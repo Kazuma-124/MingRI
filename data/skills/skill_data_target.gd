@@ -1,6 +1,7 @@
 extends SkillData
 class_name SkillDataTarget
 
+#region export
 @export_group("指示器")
 @export var cast_range:float = 200.0
 @export var highlight_radius:float = 24.0   # 目标高亮圈半径
@@ -11,6 +12,9 @@ class_name SkillDataTarget
 
 @export_group("目标规则")
 @export var can_target_self:bool = false    # 是否可以选择自己为施法对象
+#endregion
 
+#region 生命周期
 func _init():
-    targeting_type = TargetingType.TARGET
+	targeting_type = TargetingType.TARGET
+#endregion

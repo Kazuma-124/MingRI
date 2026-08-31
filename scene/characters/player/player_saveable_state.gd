@@ -270,7 +270,7 @@ func switch_primary_attack() -> void:
 
 
 #region 释放技能相关
-# 释放技能相关
+# 施法相关
 func update_skill_cooldowns(delta: float) -> void:
     for skill_id in skill_instances.keys():
         var instance = skill_instances[skill_id]
