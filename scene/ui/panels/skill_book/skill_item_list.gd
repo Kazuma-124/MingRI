@@ -9,7 +9,7 @@ signal item_quick_cast(skill_id:StringName)
 #region 变量
 @export var skill_item_scene:PackedScene
 var _items:Array[SkillItem] = []
-@onready var items_list: VBoxContainer = $ItemsList
+@onready var _items_list: VBoxContainer = $ItemsList
 #endregion
 
 
@@ -17,7 +17,7 @@ var _items:Array[SkillItem] = []
 func add_skill(skill_id:StringName)->void:
     var item = skill_item_scene.instantiate() as SkillItem
     if item:
-        items_list.add_child(item)
+        _items_list.add_child(item)
         _items.append(item)
         item.setup(skill_id)
         item.clicked.connect(_on_item_clicked)

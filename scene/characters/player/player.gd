@@ -29,8 +29,8 @@ var _locked_target:Node2D = null
 #endregion
 
 #region onready
-@onready var animation_player: AnimationPlayer = $AnimationPlayer
-@onready var weapon_pivot: Node2D = $WeaponPivot
+@onready var _animation_player: AnimationPlayer = $AnimationPlayer
+@onready var _weapon_pivot: Node2D = $WeaponPivot
 @onready var _lock_indicator:CanvasItem = $LockIndicator
 #endregion
 
@@ -226,20 +226,20 @@ func _update_body_animation():
     var animation_suffix:StringName = _vector_to_suffix(_facing)
     var animation_prefix:StringName = "facing"
     var animation_name:StringName = StringName("%s_%s"%[animation_prefix,animation_suffix])
-    if not animation_player.has_animation(animation_name):
+    if not _animation_player.has_animation(animation_name):
         push_warning("Player BodySprite missing animation:%s"%animation_name)
-    if animation_player.current_animation!=animation_name:
-        animation_player.play(animation_name)
+    if _animation_player.current_animation!=animation_name:
+        _animation_player.play(animation_name)
 
 
 func _update_weapon_animation():
     if _skill_caster.is_aiming():
-        weapon_pivot.visible = false
+        _weapon_pivot.visible = false
     else:
-        weapon_pivot.visible = true
+        _weapon_pivot.visible = true
         if _facing!=Vector2.ZERO:
-            weapon_pivot.rotation = _facing.angle()
-            weapon_pivot.scale.y = 1.0 if _facing.x>=0 else -1.0
+            _weapon_pivot.rotation = _facing.angle()
+            _weapon_pivot.scale.y = 1.0 if _facing.x>=0 else -1.0
 
 #endregion
 

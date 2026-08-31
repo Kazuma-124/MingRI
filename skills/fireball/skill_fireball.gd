@@ -12,16 +12,16 @@ var _dir:Vector2 = Vector2(0,0)
 var _start_pos:Vector2
 var _exploded:bool = false
 
-@onready var bullet_sprite: Sprite2D = $BulletSprite
-@onready var explosion_sprite: Sprite2D = $ExplosionSprite
+@onready var _bullet_sprite: Sprite2D = $BulletSprite
+@onready var _explosion_sprite: Sprite2D = $ExplosionSprite
 
 func _ready() -> void:
     # 调整子弹尺寸，爆炸特效尺寸
-    _judge_sprite2D_scale(explosion_sprite,explosion_diameter)
-    _judge_sprite2D_scale(bullet_sprite,bullet_diameter)
+    _judge_sprite2D_scale(_explosion_sprite,explosion_diameter)
+    _judge_sprite2D_scale(_bullet_sprite,bullet_diameter)
     # 显示子弹，隐藏爆炸特效
-    bullet_sprite.show()
-    explosion_sprite.hide()
+    _bullet_sprite.show()
+    _explosion_sprite.hide()
     # 连接信号
     body_entered.connect(_on_hit_body)
     
@@ -49,8 +49,8 @@ func _on_hit_body(body:Node2D)->void:
 
 func _explode()->void:
     _exploded = true
-    bullet_sprite.hide()
-    explosion_sprite.show()
+    _bullet_sprite.hide()
+    _explosion_sprite.show()
 
     # 在当前子弹位置，做一次指定半径的圆形范围检测
     # 1. 创建「物理形状查询参数」对象，所有查询条件都配置在这个对象里

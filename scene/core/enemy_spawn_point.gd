@@ -12,8 +12,8 @@ class_name EnemySpawnPoint
 
 #region 成员变量
 var is_spawn_active:bool = false
-var spawned_enemies:Array = []
-var respawn_timer: float = 0.0
+var _spawned_enemies:Array = []
+var _respawn_timer: float = 0.0
 #endregion
 
 #region 生命周期
@@ -44,12 +44,12 @@ func _process(delta:float)->void:
 	if not is_spawn_active:
 		return
 
-	if respawn_timer>0:
-		respawn_timer-=delta
-	if spawned_enemies.size() < max_count:
-		if respawn_timer<=0:
+	if _respawn_timer>0:
+		_respawn_timer-=delta
+	if _spawned_enemies.size() < max_count:
+		if _respawn_timer<=0:
 			_spawn_one()
-			respawn_timer = respawn_delay
+			_respawn_timer = respawn_delay
 #endregion
 
 #region 外部接口
@@ -65,15 +65,15 @@ func spawn_deactivate()->void:
 	is_spawn_active = false
 
 func destroy_all()->void:
-	for enemy in spawned_enemies:
+	for enemy in _spawned_enemies:
 		if is_instance_valid(enemy):
 			enemy.queue_free()
-	spawned_enemies.clear()
+	_spawned_enemies.clear()
 #endregion
 
 #region 内部函数
 func _spawn_all()->void:
-	for i in max_count-spawned_enemies.size():
+	for i in max_count-_spawned_enemies.size():
 		_spawn_one()
 
 func _spawn_one()->void:
@@ -91,12 +91,12 @@ func _spawn_one()->void:
 	enemy.home_radius = spawn_radius*2
 
 	# 添加到场景树
-	spawned_enemies.append(enemy)
+	_spawned_enemies.append(enemy)
 	get_parent().add_child(enemy)
 
 	enemy.tree_exited.connect(
 		func():
-			if spawned_enemies.has(enemy):
-				spawned_enemies.erase(enemy)
+			if _spawned_enemies.has(enemy):
+				_spawned_enemies.erase(enemy)
 	)
 #endregion

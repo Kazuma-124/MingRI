@@ -1,7 +1,7 @@
 extends Node2D
 
-@export var _radius:float = 24.0
-@export var _color:Color = GameColors.LOCK_TARGET_RING
+@export var radius:float = 24.0
+@export var color:Color = GameColors.LOCK_TARGET_RING
 
 var _target:Node2D = null
 
@@ -32,5 +32,5 @@ func _process(_delta:float)->void:
 func _draw() -> void:
     if not _target or not is_instance_valid(_target):
         return
-    draw_circle(Vector2.ZERO,_radius,_color,false,2.0,true)
+    draw_circle(Vector2.ZERO,radius,color,false,2.0,true)
 #endregion
