@@ -40,7 +40,7 @@ func _draw() -> void:
 func _check_hits()->void:
 	var query := PhysicsShapeQueryParameters2D.new()
 	query.shape = CircleShape2D.new()
-	query.shape.radius = damage_radius
+	query.shape.radius = damage_radius*_skill_progress
 	# 把查询形状放到世界空间，(旋转，位置)
 	query.transform = Transform2D(0,global_position)
 	query.collide_with_bodies = true

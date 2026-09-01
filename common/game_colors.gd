@@ -23,4 +23,6 @@ const EDITOR_SPAWN_AREA_BORDER: Color = Color(0, 1, 0, 0.8)
 
 #region 技能特效
 const SHOCKWAVE_ANIME: Color = Color(1.0, 0.15, 0.1, 0.9)
+const SWORD_QI:Color = Color(0.85, 0.5, 1.0)
+const SWORD_QI_SWORD_BLADE:Color = Color(0.92, 0.85, 1.0, 0.95)
 #endregion
