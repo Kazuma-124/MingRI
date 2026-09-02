@@ -7,8 +7,8 @@ class_name SkillShortcutBar
 
 #region 成员变量
 # 技能槽引用数组
-var _primary_slot:SkillSlotUI
-var _short_slots: Array[SkillSlotUI] = []
+var _primary_slot:SkillShortcutSlotUI
+var _short_slots: Array[SkillShortcutSlotUI] = []
 #endregion
 
 #region onready

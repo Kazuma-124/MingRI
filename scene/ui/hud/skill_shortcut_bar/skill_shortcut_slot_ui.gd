@@ -1,5 +1,5 @@
 extends Control
-class_name SkillSlotUI
+class_name SkillShortcutSlotUI
 
 #region 信号
 signal skill_slot_clicked()

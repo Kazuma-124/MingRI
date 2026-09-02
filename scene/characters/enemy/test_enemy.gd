@@ -91,21 +91,17 @@ func _physics_process(delta: float) -> void:
 	if _cur_hp <= 0:
 		queue_free()
 		return
-
-	# 1. 计算
-	_update_effects(delta)
-	if is_staggered():
-		velocity = stagger_velocity # 硬直期间状态机冻结，不参与
-	else:
-		_update_super_state(delta)
-		velocity+=external_velocity
-	# 2. 动画
-	# 3. 运动
-	move_and_slide()
-	# 4. 运动后计算
-	_on_movement_result()
+	super._physics_process(delta)
 #endregion
 
+
+#region 属性计算
+func _update_base_status(_delta:float)->void:
+	_update_super_state(_delta)
+	status_manager.set_self_velocity(velocity)
+func _post_movement(_delta:float)->void:
+	_on_movement_result()
+#endregion
 
 #region 状态机-大状态
 func _update_super_state(delta: float) -> void:

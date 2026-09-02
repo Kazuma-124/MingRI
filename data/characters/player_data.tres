@@ -4,12 +4,10 @@
 [ext_resource type="Script" uid="uid://5qwocjh76bce" path="res://data/characters/player_data.gd" id="1_lkx0q"]
 [ext_resource type="Resource" uid="uid://bpktdpbw1hqn3" path="res://data/skills/skill_empty_hand.tres" id="2_o1ct4"]
 [ext_resource type="Resource" uid="uid://c5q6u8c0uieb8" path="res://data/skills/skill_fireball.tres" id="3_px370"]
-[ext_resource type="Resource" uid="uid://4rnv5j8e8bdh" path="res://data/skills/test_direction.tres" id="4_o1ct4"]
-[ext_resource type="Resource" uid="uid://ou828hfgnyuw" path="res://data/skills/test_target.tres" id="5_px370"]
 [ext_resource type="Resource" uid="uid://c36qrvjwqryxw" path="res://data/skills/skill_shockwave.tres" id="6_bxli4"]
 [ext_resource type="Resource" uid="uid://bcdyy14v5qfik" path="res://data/skills/skill_sword_qi.tres" id="7_bh2cd"]
 
 [resource]
 script = ExtResource("1_lkx0q")
-default_skills = Array[ExtResource("1_2qvq0")]([ExtResource("2_o1ct4"), ExtResource("3_px370"), ExtResource("4_o1ct4"), ExtResource("5_px370"), ExtResource("6_bxli4"), ExtResource("7_bh2cd")])
+default_skills = Array[ExtResource("1_2qvq0")]([ExtResource("2_o1ct4"), ExtResource("3_px370"), ExtResource("6_bxli4"), ExtResource("7_bh2cd")])
 metadata/_custom_type_script = "uid://5qwocjh76bce"

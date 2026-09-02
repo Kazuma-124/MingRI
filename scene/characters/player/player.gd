@@ -100,20 +100,6 @@ func _ready() -> void:
     EnemyManager.register_player(self)
     GameManager.set_player(self)
 
-func _physics_process(delta: float) -> void:
-    # 1. 计算：效果+状态
-    _update_effects(delta)
-    if is_staggered():
-        velocity = stagger_velocity
-    else:
-        _update_dir_status()
-        _update_skill_status(delta)
-        velocity = _move_dir*_move_speed+external_velocity
-    # 2. 动画
-    _update_animation()
-    # 3. 运动
-    move_and_slide()
-    # 4. 计算：运动后，得到的数据的计算
 
 func _unhandled_input(event: InputEvent) -> void:
     if _skill_caster.is_aiming():
@@ -125,6 +111,11 @@ func _unhandled_input(event: InputEvent) -> void:
     if event.is_action_pressed("lock_target"):
         _try_toggle_lock()
         get_viewport().set_input_as_handled()
+
+func _update_base_status(delta:float)->void:
+    _update_dir_status()
+    _update_skill_status(delta)
+    status_manager.set_self_velocity(_move_dir*_move_speed)
 
 func _try_toggle_lock()->void:
     var mouse_pos := get_global_mouse_position()

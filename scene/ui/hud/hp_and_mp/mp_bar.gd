@@ -1,5 +1,5 @@
 extends Control
-class_name MpBar
+class_name MPBar
 
 
 #region 成员变量

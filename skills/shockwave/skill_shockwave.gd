@@ -53,6 +53,6 @@ func _check_hits()->void:
 		if body.has_method("take_damage"):
 			body.take_damage(_data.damage)
 		var dir:=(body.global_position-global_position).normalized()
-		body.add_effect(KnockbackEffect.new(dir,knockback_distance))
+		body.add_buff(KnockbackBuff.new(dir,knockback_distance))
 		_hit_bodies.append(body)
 #endregion
