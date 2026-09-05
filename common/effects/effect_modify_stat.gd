@@ -1,6 +1,8 @@
 extends BuffEffectDefinition
 class_name EffectModifyStat
 
+# effect用于管理自己对属性的修改, 最终变为buff的BuffModifier
+
 #region 配置
 var stat_name: StringName = &""
 var calc_layer: BuffEnums.CalcLayer = BuffEnums.CalcLayer.FLAT_ADD

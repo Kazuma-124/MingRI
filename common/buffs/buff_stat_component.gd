@@ -1,10 +1,13 @@
 extends RefCounted
 class_name BuffStatComponent
 
-# 属性计算组件：管理角色所有可被 Buff 影响的属性
+# BuffStatComponent管理角色所有可被 Buff 影响的属性
+# 角色自己定义BuffStatComponent，决定可以调整的属性
+# 然后角色把定义好的BuffStatComponent交给BuffManager管理
+
+# 管理角色所有可被 Buff 影响的属性
 # 三层公式：最终值 = (基础值 + ΣFLAT_ADD) × (1 + ΣPERCENT_ADD) × Π(1 + MULTIPLY)
-# 采用 dirty 标记 + 缓存：Buff 变动时标记脏，下次取值时才重算
-# 兼容旧接口 final(stat, default, min)，便于逐步替换 StatusManager
+# 采用 dirty 标记 + 缓存：标记未脏时，取值才会从新计算，否则直接取用缓存
 
 #region 信号
 signal stat_changed(stat_name: StringName, old_value: float, new_value: float)
@@ -12,7 +15,9 @@ signal stat_changed(stat_name: StringName, old_value: float, new_value: float)
 
 #region 成员变量
 var _owner: Node = null                       # 所属角色（用于事件回调）
+# 记录基础值同时也负责管理可被修改的属性名集合
 var _base_stats: Dictionary = {}              # 属性名 -> 基础值
+# 按属性记录对该属性的修改器数组
 var _modifiers: Dictionary = {}               # 属性名 -> Array[BuffModifier]（修改器缓存）
 var _cached_values: Dictionary = {}           # 属性名 -> 最终值（计算结果缓存）
 var _dirty_stats: Dictionary = {}             # 属性名 -> bool（是否需要重算）
@@ -31,6 +36,7 @@ func register_stat(stat_name: StringName, base_value: float) -> void:
 #endregion
 
 #region 基础值管理
+# 通常是角色使用
 func set_base_value(stat_name: StringName, value: float) -> void:
 	if not _base_stats.has(stat_name):
 		push_error("BuffStatComponent: 未注册的属性 %s" % stat_name)
@@ -43,6 +49,7 @@ func get_base_value(stat_name: StringName) -> float:
 #endregion
 
 #region Modifier 管理
+# effect使用
 func add_modifier(modifier: BuffModifier) -> void:
 	if not _modifiers.has(modifier.stat_name):
 		_modifiers[modifier.stat_name] = []
@@ -84,11 +91,6 @@ func get_final_value(stat_name: StringName) -> float:
 		_recalculate(stat_name)
 	return _cached_values[stat_name]
 
-# 兼容旧 StatusManager.final(stat, default, min) 接口
-func final(stat_name: StringName, default_value: float = 0.0, min_value: float = -INF) -> float:
-	if not _base_stats.has(stat_name):
-		return default_value
-	return max(get_final_value(stat_name), min_value)
 #endregion
 
 #region 内部计算

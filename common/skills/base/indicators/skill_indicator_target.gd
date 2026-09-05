@@ -54,7 +54,7 @@ func _find_target_at(mouse_pos:Vector2)->Node2D:
     var nearest_dist:float = INF
     for result in results:
         var body:Node2D =  result.collider
-        if body.is_in_group("enemy") and is_instance_valid(body):
+        if is_instance_valid(body):
             var dist:=body.global_position.distance_to(mouse_pos)
             if dist <  nearest_dist:
                 nearest_dist = dist

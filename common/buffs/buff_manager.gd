@@ -15,6 +15,7 @@ signal buff_stacks_changed(buff_id: StringName, stacks: int)
 var owner_character: Node = null               # 所属角色
 var stat_component: BuffStatComponent = null   # 属性计算组件（由角色注入）
 var _buffs: Array[BuffInstance] = []           # 所有生效中的 Buff 实例
+# 接管属性的buff
 var _override_map: Dictionary = {}             # 属性名 -> Array[BuffInstance]（按优先级降序）
 var _active_tags: Dictionary = {}           # tag -> int（引用计数）
 var self_velocity: Vector2 = Vector2.ZERO   # 自主移动速度（角色每帧设置）
@@ -25,6 +26,7 @@ var forced_velocity: Vector2 = Vector2.ZERO   # 硬直强制位移（击退 Effe
 #region 构造与初始化
 func _init(p_owner: Node = null, p_stat_component: BuffStatComponent = null) -> void:
 	owner_character = p_owner
+	# 注入包含可修改属性和基础值的属性计算组件
 	stat_component = p_stat_component
 #endregion
 

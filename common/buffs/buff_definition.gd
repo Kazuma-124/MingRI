@@ -83,10 +83,6 @@ func apply_stack_policy_under(existing: BuffInstance, new_caster: Node, new_dyna
 			existing.caster = new_caster
 			existing.remaining_time = base_duration
 			on_refresh(existing, manager)
-		BuffEnums.StackPolicy.RESET_STACKS:
-			existing.stacks = 1
-			existing.remaining_time = base_duration
-			on_refresh(existing, manager)
 		BuffEnums.StackPolicy.CUSTOM:
 			on_custom_stack_under(existing, new_caster, new_dynamic_values, manager)
 
@@ -105,10 +101,6 @@ func apply_stack_policy_full(existing: BuffInstance, new_caster: Node, new_dynam
 		BuffEnums.StackPolicy.OVERRIDE:
 			existing.dynamic_values = new_dynamic_values
 			existing.caster = new_caster
-			existing.remaining_time = base_duration
-			on_refresh(existing, manager)
-		BuffEnums.StackPolicy.RESET_STACKS:
-			existing.stacks = 1
 			existing.remaining_time = base_duration
 			on_refresh(existing, manager)
 		BuffEnums.StackPolicy.CUSTOM:

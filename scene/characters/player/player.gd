@@ -50,6 +50,8 @@ func get_mp(attr: AttributeTypes.Type) -> float:
     return _state.get_mp(attr)
 func take_damage(amount: float) -> void:
     _state.take_damage(amount)
+func heal(amount:float)->void:
+    _state.heal(amount)
 
 func set_other_facing(dir:Vector2)->void:
     _other_facing = dir.normalized()
