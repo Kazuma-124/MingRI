@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://c4n4deqq1k56"]
+
+[ext_resource type="Script" uid="uid://bgq4gs37bc7fi" path="res://common/skills/sword_qi/skill_sword_qi.gd" id="1_bt1hr"]
+
+[node name="SkillSwordQi" type="Node2D" unique_id=499338290]
+script = ExtResource("1_bt1hr")

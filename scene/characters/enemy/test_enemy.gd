@@ -98,7 +98,7 @@ func _physics_process(delta: float) -> void:
 #region 属性计算
 func _update_base_status(_delta:float)->void:
 	_update_super_state(_delta)
-	status_manager.set_self_velocity(velocity)
+	buff_manager.set_self_velocity(velocity)
 func _post_movement(_delta:float)->void:
 	_on_movement_result()
 #endregion

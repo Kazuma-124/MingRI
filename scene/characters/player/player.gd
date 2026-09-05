@@ -1,5 +1,4 @@
 # 修改玩家数据机制
-
 extends CharacterBase
 
 #region 信号
@@ -115,7 +114,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _update_base_status(delta:float)->void:
     _update_dir_status()
     _update_skill_status(delta)
-    status_manager.set_self_velocity(_move_dir*_move_speed)
+    buff_manager.set_self_velocity(_move_dir*_move_speed)
 
 func _try_toggle_lock()->void:
     var mouse_pos := get_global_mouse_position()

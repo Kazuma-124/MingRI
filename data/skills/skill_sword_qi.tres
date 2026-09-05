@@ -3,7 +3,7 @@
 [ext_resource type="Script" uid="uid://drdab2am7qe0" path="res://data/skills/skill_data_direction.gd" id="1_au3a7"]
 [ext_resource type="Script" uid="uid://ccaaxbkdtl7ih" path="res://data/skills/indicator_shapes/sector_indicator_shape.gd" id="1_plpaa"]
 [ext_resource type="Texture2D" uid="uid://indy2osocith" path="res://assets/icons/sword_qi.tres" id="1_vv7g3"]
-[ext_resource type="PackedScene" uid="uid://c4n4deqq1k56" path="res://skills/sword_qi/skill_sword_qi.tscn" id="3_kg1j0"]
+[ext_resource type="PackedScene" uid="uid://c4n4deqq1k56" path="res://common/skills/sword_qi/skill_sword_qi.tscn" id="3_kg1j0"]
 
 [sub_resource type="Resource" id="Resource_au3a7"]
 script = ExtResource("1_plpaa")

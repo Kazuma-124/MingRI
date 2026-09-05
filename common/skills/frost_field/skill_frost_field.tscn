@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://dib5w404s1sna"]
+
+[ext_resource type="Script" uid="uid://c1jv47puy4nw3" path="res://common/skills/frost_field/skill_frost_field.gd" id="1_xgdbk"]
+
+[node name="SkillFrostField" type="Node2D" unique_id=1845817095]
+script = ExtResource("1_xgdbk")

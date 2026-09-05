@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://drdab2am7qe0" path="res://data/skills/skill_data_direction.gd" id="1_0luw2"]
 [ext_resource type="Texture2D" uid="uid://bma61y1ws1upl" path="res://assets/skill_fireball.tres" id="1_gxqoo"]
-[ext_resource type="PackedScene" uid="uid://d3jcja4881vpl" path="res://skills/fireball/skill_fireball.tscn" id="2_gxqoo"]
+[ext_resource type="PackedScene" uid="uid://d3jcja4881vpl" path="res://common/skills/fireball/skill_fireball.tscn" id="2_gxqoo"]
 
 [resource]
 script = ExtResource("1_0luw2")
