@@ -143,21 +143,57 @@ func _unhandled_input(event:InputEvent)->void:
                 _cancel_cast()
                 get_viewport().set_input_as_handled()
 
+func _quick_cast(skill_id:StringName,skill_data:SkillData,target:Node2D)->void:
+    if not is_instance_valid(target):
+        return
+    var state = _caster.get_state()
+    # can_cast在一开始进行过判断了
+    if not state.confirm_cast(skill_id):
+        return
+    var ctx := CastContext.new()
+    ctx.caster = _caster
+    match skill_data.targeting_type:
+        SkillData.TargetingType.INSTANT:
+            var instant_data:=skill_data as SkillDataInstant
+            if instant_data and instant_data.direction_mode==SkillDataInstant.DirectionMode.NONE:
+                ctx.direction = Vector2.ZERO
+            else:
+                ctx.direction = (target.global_position-_caster.global_position).normalized()
+        SkillData.TargetingType.DIRECTION:
+            ctx.direction = (target.global_position-_caster.global_position).normalized()
+        SkillData.TargetingType.POSITION:
+            ctx.position = target.global_position
+            ctx.shape_rotation = 0.0
+        SkillData.TargetingType.TARGET:
+            ctx.target = target
+
+    # 生成技能实例
+    if skill_data.scene:
+        var instance = skill_data.scene.instantiate()
+        if instance.has_method("setup"):
+            instance.setup(skill_data,ctx)
+        # 先setup，再加入场景树，因为_ready()可能用到一些setup设定的数据
+        _caster.get_parent().add_child(instance)
+
+    cast_executed.emit(skill_id,ctx) 
+
 func _confirm_cast()->void:
     # 指示器无效则视为取消
     if not _indicator or not _indicator.get_is_valid():
         _cancel_cast()
         return
 
-    # 消耗能量 + 开始冷却
+    # 从指示器取最终瞄准数据，补全施法者信息
+    var ctx:CastContext = _indicator.generate_castcontext()
+    ctx.caster = _caster
+
+    _exit_aiming()
+
+    # 尝试施法，消耗能量 + 开始冷却
     var state = _caster.get_state()
     if not state.confirm_cast(_aiming_skill_id):
         _cancel_cast()
         return
-
-    # 从指示器取最终瞄准数据，补全施法者信息
-    var ctx:CastContext = _indicator.generate_castcontext()
-    ctx.caster = _caster
 
     # 生成技能实例
     if _aiming_skill.scene:
@@ -167,8 +203,8 @@ func _confirm_cast()->void:
         _caster.get_parent().add_child(instance)
 
     cast_executed.emit(_aiming_skill_id,ctx)
-    cast_confirmed.emit(_aiming_skill_id)
-    _exit_aiming()
+
+    # cast_confirmed.emit(_aiming_skill_id)
 
 func _cancel_cast()->void:
     cast_cancelled.emit(_aiming_skill_id)
@@ -197,33 +233,5 @@ func _is_target_in_cast_range(skill_data:SkillData,target:Node2D)->bool:
         _: # INSTANT / DIRECTION 无施法距离限制
             return true
 
-func _quick_cast(skill_id:StringName,skill_data:SkillData,target:Node2D)->void:
-    var state = _caster.get_state()
-    # can_cast在一开始进行过判断了
-    if not state.confirm_cast(skill_id):
-        return
-    var ctx := CastContext.new()
-    ctx.caster = _caster
-    match skill_data.targeting_type:
-        SkillData.TargetingType.INSTANT:
-            var instant_data:=skill_data as SkillDataInstant
-            if instant_data and instant_data.direction_mode==SkillDataInstant.DirectionMode.NONE:
-                ctx.direction = Vector2.ZERO
-            else:
-                ctx.direction = (target.global_position-_caster.global_position).normalized()
-        SkillData.TargetingType.DIRECTION:
-            ctx.direction = (target.global_position-_caster.global_position).normalized()
-        SkillData.TargetingType.POSITION:
-            ctx.position = target.global_position
-            ctx.shape_rotation = 0.0
-        SkillData.TargetingType.TARGET:
-            ctx.target = target
-    if skill_data.scene:
-        var instance = skill_data.scene.instantiate()
-        if instance.has_method("setup"):
-            instance.setup(skill_data,ctx)
-        # 先setup，再加入场景树，因为_ready()可能用到一些setup设定的数据
-        _caster.get_parent().add_child(instance)
-    cast_executed.emit(skill_id,ctx) 
 
 #endregion

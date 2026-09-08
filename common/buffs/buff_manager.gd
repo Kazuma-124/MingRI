@@ -41,7 +41,7 @@ func add_buff(definition: BuffDefinition, caster: Node = null, dynamic_values: D
 	var existing: BuffInstance = _find_buff(definition.buff_id)
 
 	if existing == null:
-		# 全新 buff
+		# 全新 bufe
 		var instance := BuffInstance.new(definition, caster, dynamic_values)
 		_buffs.append(instance)
 		definition.on_add(instance, self)
@@ -239,10 +239,11 @@ func _recalculate_suppression(attribute: StringName) -> void:
 	var list: Array = _override_map.get(attribute, [])
 	for i in range(list.size()):
 		var instance: BuffInstance = list[i]
+		# 第一个buff设定为启动状态，其它buff设定为被抑制状态
 		if i == 0:
 			if instance.is_suppressed:
 				instance.is_suppressed = false
-				_restore_instance(instance)
+				_restore_instance(instance)# 恢复buff
 				instance.definition.on_restored(instance, self)
 		else:
 			if not instance.is_suppressed:
@@ -260,8 +261,6 @@ func _suppress_instance(suppressed: BuffInstance, suppressor: BuffDefinition) ->
 			suppressed.pause_tick()
 		BuffEnums.SuppressionPolicy.RESET_STACKS:
 			suppressed.stacks = 0
-		BuffEnums.SuppressionPolicy.REDUCE_DURATION:
-			suppressed.time_scale = 2.0
 		_:
 			pass  # NORMAL_TICK：时间和 tick 都正常，仅效果被撤掉
 	suppressed.definition.on_remove(suppressed, self)
@@ -270,7 +269,6 @@ func _suppress_instance(suppressed: BuffInstance, suppressor: BuffDefinition) ->
 func _restore_instance(instance: BuffInstance) -> void:
 	instance.resume_duration()
 	instance.resume_tick()
-	instance.time_scale = 1.0
 	instance.definition.on_apply(instance, self)
 #endregion
 

@@ -49,9 +49,11 @@ func on_stack_added(instance: BuffInstance, manager: BuffManager) -> void:
 			effect.on_stack_changed(instance, manager)
 
 func on_remove(instance: BuffInstance, manager: BuffManager) -> void:
+	# 移除效果
 	for effect in effects:
 		effect.remove(instance, manager)
 
+# buff被移除
 func on_expire(instance: BuffInstance, manager: BuffManager) -> void:
 	on_remove(instance, manager)
 

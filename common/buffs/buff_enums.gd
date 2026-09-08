@@ -20,7 +20,6 @@ enum SuppressionPolicy {
 	PAUSE_DURATION,  # 暂停持续时间计时
 	PAUSE_TICK,      # 暂停 tick，持续时间继续走
 	RESET_STACKS,    # 重置层数为 0
-	REDUCE_DURATION, # 加速时间流逝（配合 time_scale）
 }
 #endregion
 

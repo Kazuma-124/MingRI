@@ -11,8 +11,7 @@ var remaining_time: float                    # 剩余持续时间
 var stacks: int = 1                          # 当前层数
 var caster: Node = null                      # 施法者引用（伤害归因，使用前需 is_instance_valid）
 var tick_accumulator: float = 0.0            # tick 计时器
-var is_suppressed: bool = false              # 是否被高优先级 buff 抑制
-var time_scale: float = 1.0                  # 时间流逝倍率（抑制策略 REDUCE_DURATION 用）
+var is_suppressed: bool = false              # 当前是否被高优先级 buff 抑制
 var dynamic_values: Dictionary = {}          # 施加时传入的动态数值覆盖（技能等级决定的伤害等）
 var custom_state: Variant = null             # buff 特有的内部状态（连击计数、已触发次数等）
 var _duration_paused: bool = false           # 持续时间是否暂停（抑制策略 PAUSE_DURATION 用）
@@ -31,14 +30,14 @@ func _init(p_definition: BuffDefinition, p_caster: Node = null, p_dynamic_values
 func tick(delta: float, manager: Object) -> bool:
 	# 1. 持续时间计时（永久 buff 或暂停时跳过）
 	if definition.base_duration > 0.0 and not _duration_paused:
-		remaining_time -= delta * time_scale
+		remaining_time -= delta
 		if remaining_time <= 0.0:
 			definition.on_expire(self, manager)
 			return false
 
 	# 2. tick 触发（tick 暂停或无 tick 时跳过；is_suppressed 不阻止 on_tick 调用，由 Effect 自行判断是否产出生效）
 	if definition.tick_interval > 0.0 and not _tick_paused:
-		tick_accumulator += delta * time_scale
+		tick_accumulator += delta
 		while tick_accumulator >= definition.tick_interval:
 			tick_accumulator -= definition.tick_interval
 			definition.on_tick(self, manager)
