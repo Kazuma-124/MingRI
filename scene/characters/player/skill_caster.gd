@@ -187,22 +187,23 @@ func _confirm_cast()->void:
     var ctx:CastContext = _indicator.generate_castcontext()
     ctx.caster = _caster
 
+    var skill_id:StringName = _aiming_skill_id
+    var skill_data:SkillData = _aiming_skill
     _exit_aiming()
 
     # 尝试施法，消耗能量 + 开始冷却
     var state = _caster.get_state()
-    if not state.confirm_cast(_aiming_skill_id):
-        _cancel_cast()
+    if not state.confirm_cast(skill_id):
         return
 
     # 生成技能实例
-    if _aiming_skill.scene:
-        var instance = _aiming_skill.scene.instantiate()
+    if skill_data.scene:
+        var instance = skill_data.scene.instantiate()
         if instance.has_method("setup"):
-            instance.setup(_aiming_skill, ctx)
+            instance.setup(skill_data, ctx)
         _caster.get_parent().add_child(instance)
 
-    cast_executed.emit(_aiming_skill_id,ctx)
+    cast_executed.emit(skill_id,ctx)
 
     # cast_confirmed.emit(_aiming_skill_id)
 

@@ -7,7 +7,7 @@ extends Node2D
 #region export
 @export var effect_duration: float = 4.0      # 领域持续时间
 @export var tick_interval: float = 0.5        # 伤害间隔
-@export var slow_factor: float = 0.8          # 减速乘率（0.8=速度变为80%）
+@export var slow_factor: float = 0.2
 @export var slow_duration: float = 1.0         # 减速持续时间
 @export var border_min_width: float = 2.0      # 边缘最小宽度
 @export var border_max_width: float = 4.0      # 边缘最大宽度
@@ -76,7 +76,7 @@ func _check_hits(is_damage_tick: bool) -> void:
     for result in results:
         var body: Node2D = result.collider
         # 减速：每帧施加，buff 系统的叠加策略自动处理刷新/加层
-        body.add_buff(SlowBuffDefinition.new(1.0 - slow_factor, slow_duration, 3), _caster, {})
+        body.add_buff(SlowBuff.new(slow_factor, slow_duration, 3), _caster)
         if is_damage_tick and not _current_tick_hits.has(body):
             if body.has_method("take_damage"):
                 body.take_damage(_data.damage)

@@ -136,21 +136,17 @@ func drain_mp(attr:AttributeTypes.Type,amount:float)->float:
     emit_mp_changed(attr,mp[attr])
     return actual
 
-# 吸收某属性能量
+# 吸收某属性能量, 超出上限时的逸散交给周期性的检查
 func absorb_mp(attr: AttributeTypes.Type, amount: float) -> void:
-    # 1. 先加上
     mp[attr]+=amount
-    
-    # 2. 检查是否超出上限
-    var total = get_total_mp()
-    if total <= max_mp:
-        emit_mp_changed(attr,mp[attr])
-        return  # 没超，不用消散
-    
-    # 3. 超出了，迭代消散
-    var overflow = total - max_mp
-    _dissipate_overflow(overflow)
     emit_mp_all_changed() 
+
+func dissipate_if_overflow()->void:
+    var total:=get_total_mp()
+    if total<=max_mp:
+        return
+    _dissipate_overflow(total-max_mp)
+    emit_mp_all_changed()
 
 # 迭代消散超出的能量
 func _dissipate_overflow(overflow: float) -> void:

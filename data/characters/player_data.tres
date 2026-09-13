@@ -2,12 +2,12 @@
 
 [ext_resource type="Script" uid="uid://b4ng7uinnlfag" path="res://data/skills/skill_data.gd" id="1_2qvq0"]
 [ext_resource type="Script" uid="uid://5qwocjh76bce" path="res://data/characters/player_data.gd" id="1_lkx0q"]
-[ext_resource type="Resource" uid="uid://bpktdpbw1hqn3" path="res://data/skills/skill_empty_hand.tres" id="2_o1ct4"]
-[ext_resource type="Resource" uid="uid://c5q6u8c0uieb8" path="res://data/skills/skill_fireball.tres" id="3_px370"]
-[ext_resource type="Resource" uid="uid://dy36xqfguweab" path="res://data/skills/skill_forst_field.tres" id="6_bh2cd"]
-[ext_resource type="Resource" uid="uid://c36qrvjwqryxw" path="res://data/skills/skill_shockwave.tres" id="6_bxli4"]
-[ext_resource type="Resource" uid="uid://dh4aq7qwuxtph" path="res://data/skills/skill_heal.tres" id="7_1rs8g"]
-[ext_resource type="Resource" uid="uid://bcdyy14v5qfik" path="res://data/skills/skill_sword_qi.tres" id="7_bh2cd"]
+[ext_resource type="Resource" uid="uid://bpktdpbw1hqn3" path="res://data/skills/skills/skill_empty_hand.tres" id="2_o1ct4"]
+[ext_resource type="Resource" uid="uid://c5q6u8c0uieb8" path="res://data/skills/skills/skill_fireball.tres" id="3_px370"]
+[ext_resource type="Resource" uid="uid://dy36xqfguweab" path="res://data/skills/skills/skill_forst_field.tres" id="6_bh2cd"]
+[ext_resource type="Resource" uid="uid://c36qrvjwqryxw" path="res://data/skills/skills/skill_shockwave.tres" id="6_bxli4"]
+[ext_resource type="Resource" uid="uid://dh4aq7qwuxtph" path="res://data/skills/skills/skill_heal.tres" id="7_1rs8g"]
+[ext_resource type="Resource" uid="uid://bcdyy14v5qfik" path="res://data/skills/skills/skill_sword_qi.tres" id="7_bh2cd"]
 
 [resource]
 script = ExtResource("1_lkx0q")

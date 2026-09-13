@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="SkillDataTarget" format=3 uid="uid://dh4aq7qwuxtph"]
+
+[ext_resource type="Texture2D" uid="uid://bp6fi5qup1y6p" path="res://assets/icons/heal.tres" id="1_d5lrt"]
+[ext_resource type="PackedScene" uid="uid://6axjmsm117ou" path="res://common/skills/heal/skill_heal.tscn" id="2_5t4dl"]
+[ext_resource type="Script" uid="uid://n0mv7fisc5yh" path="res://data/skills/skill_data_target.gd" id="3_tn5r3"]
+
+[resource]
+script = ExtResource("3_tn5r3")
+cast_range = 500.0
+can_target_self = true
+id = &"heal"
+name = "生息治愈"
+targeting_type = 3
+icon = ExtResource("1_d5lrt")
+scene = ExtResource("2_5t4dl")
+attribute_type = 1
+mp_cost = 10.0
+cooldown = 5.0
+metadata/_custom_type_script = "uid://n0mv7fisc5yh"

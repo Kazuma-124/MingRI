@@ -33,6 +33,9 @@ var _locked_target:Node2D = null
 @onready var _lock_indicator:CanvasItem = $LockIndicator
 #endregion
 
+
+
+
 #region 外部接口
 func init_hp_and_mp_signal()->void:
     _state.emit_hp_changed()
@@ -101,6 +104,15 @@ func _ready() -> void:
     EnemyManager.register_player(self)
     GameManager.set_player(self)
 
+func _update_passive_status(delta:float)->void:
+    _update_skill_status(delta)
+func _update_base_status(_delta:float)->void:
+    _update_dir_status()
+    attribute_system.set_base_value(StatusStats.MOVE_DIRECTION,_move_dir)
+    attribute_system.set_base_value(StatusStats.MOVE_SPEED,_move_speed)
+# func _update_final_status(_delta:float)->void:
+#     velocity = converter.get_final_velocity()
+
 
 func _unhandled_input(event: InputEvent) -> void:
     if _skill_caster.is_aiming():
@@ -113,10 +125,6 @@ func _unhandled_input(event: InputEvent) -> void:
         _try_toggle_lock()
         get_viewport().set_input_as_handled()
 
-func _update_base_status(delta:float)->void:
-    _update_dir_status()
-    _update_skill_status(delta)
-    buff_manager.set_self_velocity(_move_dir*_move_speed)
 
 func _try_toggle_lock()->void:
     var mouse_pos := get_global_mouse_position()
@@ -151,6 +159,7 @@ func _try_toggle_lock()->void:
 # 技能冷却
 func _update_skill_status(delta:float)->void:
     _state.update_skill_cooldowns(delta)
+    _state.dissipate_if_overflow()
 
 func _update_dir_status()->void:
     _update_mouse_dir()

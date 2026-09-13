@@ -28,6 +28,6 @@ func setup(skill_data:SkillDataTarget,ctx:CastContext)->void:
     if target.has_method("heal"):
         target.heal(initial_heal)
     if target.has_method("add_buff"):
-        target.add_buff(HealOverTimeBuffDefinition.new(hot_heap_per_tick,hot_duration,hot_tick_interval),_caster,{})
+        target.add_buff(HealOverTimeBuff.new(hot_heap_per_tick,hot_duration,hot_tick_interval),_caster)
     queue_free()
 #endregion

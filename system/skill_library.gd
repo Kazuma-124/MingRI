@@ -22,14 +22,14 @@ func get_skill(id:StringName)->SkillData:
 
 #region 内部函数
 func _load_all_skills()->void:
-	var dir = DirAccess.open("res://data/skills/")
+	var dir = DirAccess.open("res://data/skills/skills/")
 	if dir:
 		# 初始化流，该流可以通过get_next()逐个获取所有文件和目录
 		dir.list_dir_begin()
 		var file_name = dir.get_next()
 		while file_name!="":
 			if file_name.ends_with(".tres"):
-				var skill = load("res://data/skills/"+file_name) as SkillData
+				var skill = load("res://data/skills/skills/"+file_name) as SkillData
 				if skill:
 					_all_skills[skill.id] = skill
 			file_name = dir.get_next()

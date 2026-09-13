@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SkillDataPosition" format=3 uid="uid://dy36xqfguweab"]
+
+[ext_resource type="Texture2D" uid="uid://cfph73u17hotj" path="res://assets/icons/forst_field.tres" id="1_35js7"]
+[ext_resource type="Script" uid="uid://c1qa2xtwit8ut" path="res://data/skills/indicator_shapes/circle_indicator_shape.gd" id="2_gdvtu"]
+[ext_resource type="PackedScene" uid="uid://dib5w404s1sna" path="res://common/skills/frost_field/skill_frost_field.tscn" id="3_3ervj"]
+[ext_resource type="Script" uid="uid://cokbeup6wu41d" path="res://data/skills/skill_data_position.gd" id="4_btnsv"]
+
+[sub_resource type="Resource" id="Resource_e4ta2"]
+script = ExtResource("2_gdvtu")
+radius = 60.0
+metadata/_custom_type_script = "uid://c1qa2xtwit8ut"
+
+[resource]
+script = ExtResource("4_btnsv")
+indicator_shape = SubResource("Resource_e4ta2")
+cast_range = 800.0
+allow_rotation = false
+id = &"forst_field"
+name = "冰霜领域"
+targeting_type = 2
+icon = ExtResource("1_35js7")
+scene = ExtResource("3_3ervj")
+attribute_type = 2
+mp_cost = 10.0
+damage = 8.0
+cooldown = 5.0
+metadata/_custom_type_script = "uid://cokbeup6wu41d"

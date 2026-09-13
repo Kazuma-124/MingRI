@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="SkillDataDirection" format=3 uid="uid://bcdyy14v5qfik"]
+
+[ext_resource type="Texture2D" uid="uid://indy2osocith" path="res://assets/icons/sword_qi.tres" id="1_455j4"]
+[ext_resource type="Script" uid="uid://ccaaxbkdtl7ih" path="res://data/skills/indicator_shapes/sector_indicator_shape.gd" id="2_hbhpb"]
+[ext_resource type="PackedScene" uid="uid://c4n4deqq1k56" path="res://common/skills/sword_qi/skill_sword_qi.tscn" id="3_mh2uc"]
+[ext_resource type="Script" uid="uid://drdab2am7qe0" path="res://data/skills/skill_data_direction.gd" id="4_whq6r"]
+
+[sub_resource type="Resource" id="Resource_au3a7"]
+script = ExtResource("2_hbhpb")
+radius = 100.0
+angle_deg = 120.0
+segments = 16
+metadata/_custom_type_script = "uid://ccaaxbkdtl7ih"
+
+[resource]
+script = ExtResource("4_whq6r")
+indicator_shape = SubResource("Resource_au3a7")
+id = &"sword_qi"
+name = "剑气斩"
+targeting_type = 1
+icon = ExtResource("1_455j4")
+scene = ExtResource("3_mh2uc")
+attribute_type = 3
+mp_cost = 5.0
+damage = 20.0
+cooldown = 2.0
+metadata/_custom_type_script = "uid://drdab2am7qe0"
